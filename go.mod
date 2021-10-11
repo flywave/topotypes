@@ -1,4 +1,4 @@
-module github.com/flywave/gotopotypppes
+module github.com/flywave/topotypes
 
 go 1.16
 
