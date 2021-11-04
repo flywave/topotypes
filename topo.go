@@ -830,7 +830,9 @@ type TopoShapeBox struct {
 }
 
 func NewTopoShapeBox() *TopoShapeBox {
-	return &TopoShapeBox{}
+	return &TopoShapeBox{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_BOX),
+	}
 }
 
 type TopoShapeCone struct {
@@ -842,7 +844,9 @@ type TopoShapeCone struct {
 }
 
 func NewTopoShapeCone() *TopoShapeCone {
-	return &TopoShapeCone{}
+	return &TopoShapeCone{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_CONE),
+	}
 }
 
 type TopoShapeCylinder struct {
@@ -853,7 +857,9 @@ type TopoShapeCylinder struct {
 }
 
 func NewTopoShapeCylinder() *TopoShapeCylinder {
-	return &TopoShapeCylinder{}
+	return &TopoShapeCylinder{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_CYLINDER),
+	}
 }
 
 type TopoShapeRevolution struct {
@@ -865,7 +871,9 @@ type TopoShapeRevolution struct {
 }
 
 func NewTopoShapeRevolution() *TopoShapeRevolution {
-	return &TopoShapeRevolution{}
+	return &TopoShapeRevolution{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_REVOLUTION),
+	}
 }
 
 type TopoShapeSphere struct {
@@ -878,7 +886,9 @@ type TopoShapeSphere struct {
 }
 
 func NewTopoShapeSphere() *TopoShapeSphere {
-	return &TopoShapeSphere{}
+	return &TopoShapeSphere{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_SPHERE),
+	}
 }
 
 type TopoShapeTorus struct {
@@ -891,9 +901,12 @@ type TopoShapeTorus struct {
 }
 
 func NewTopoShapeTorus() *TopoShapeTorus {
-	return &TopoShapeTorus{}
+	return &TopoShapeTorus{
+		Type: TopoTypeToString(TOPO_SHAPE_MODE_TORUS),
+	}
 }
 
+// profiles
 type WedgeFaceLimit struct {
 	XMin float64 `json:"xmin"`
 	ZMin float64 `json:"zmin"`
@@ -967,6 +980,8 @@ func NewTopoPolygon() *TopoPolygon {
 	return &t
 }
 
+//profile end
+
 type TopoAnchorRef struct {
 	Ref string `json:"ref"`
 }
@@ -1016,6 +1031,12 @@ type TopoPipe struct {
 	TransitionMode string         `json:"transition_mode"`
 }
 
+func NewTopoPipe() *TopoPipe {
+	t := &TopoPipe{}
+	t.Type = TopoTypeToString(TOPO_TYPE_PIPE)
+	return t
+}
+
 func (sp *TopoPipe) IsTopoBoundy() bool {
 	return true
 }
@@ -1026,7 +1047,11 @@ type TopoShapePipe struct {
 }
 
 func NewTopoShapePipe() *TopoShapePipe {
-	return &TopoShapePipe{Shape: ShapeTypeToString(TOPO_SHAPE_MODE_PIPE)}
+	t := &TopoShapePipe{
+		Shape: ShapeTypeToString(TOPO_SHAPE_MODE_PIPE),
+	}
+	t.Type = TopoTypeToString(TOPO_TYPE_SHAPE)
+	return t
 }
 
 type TopoShapeWedge struct {
@@ -1039,6 +1064,7 @@ type TopoShapeWedge struct {
 func NewTopoShapeWedge() *TopoShapeWedge {
 	s := TopoShape{}
 	s.Shape = ShapeTypeToString(TOPO_SHAPE_MODE_WEDGE)
+	s.Type = TopoTypeToString(TOPO_TYPE_SHAPE)
 	return &TopoShapeWedge{}
 }
 
@@ -1070,6 +1096,7 @@ type TopoAreaLight struct {
 func NewTopoAreaLight() *TopoAreaLight {
 	l := TopoAreaLight{}
 	l.Light = LightTypeToString(TOPO_LIGHT_MODE_AREA)
+	l.Type = TopoTypeToString(TOPO_TYPE_LIGHT)
 	return &l
 }
 
@@ -1086,6 +1113,7 @@ type TopoDirectionalLight struct {
 func NewTopoDirectionalLight() *TopoDirectionalLight {
 	l := TopoDirectionalLight{}
 	l.Light = LightTypeToString(TOPO_LIGHT_MODE_DIRECTIONAL)
+	l.Type = TopoTypeToString(TOPO_TYPE_LIGHT)
 	return &l
 }
 
@@ -1097,6 +1125,7 @@ type TopoPointLight struct {
 func NewTopoPointLight() *TopoPointLight {
 	l := TopoPointLight{}
 	l.Light = LightTypeToString(TOPO_LIGHT_MODE_POINT)
+	l.Type = TopoTypeToString(TOPO_TYPE_LIGHT)
 	return &l
 }
 
@@ -1111,6 +1140,7 @@ type TopoSpotLight struct {
 func NewTopoSpotLight() *TopoSpotLight {
 	l := TopoSpotLight{}
 	l.Light = LightTypeToString(TOPO_LIGHT_MODE_SPOT)
+	l.Type = TopoTypeToString(TOPO_TYPE_LIGHT)
 	return &l
 }
 
@@ -1120,16 +1150,34 @@ type TopoCrossMultiPoint struct {
 	Objects []*TopoCrossPoint `json:"objects,omitempty"`
 }
 
+func NewTopoCrossMultiPoint() *TopoCrossMultiPoint {
+	t := &TopoCrossMultiPoint{}
+	t.Type = TopoTypeToString(TOPO_TYPE_CROSS_MULTI_POINT)
+	return t
+}
+
 type TopoCrossPointCollection struct {
 	Topos
 	Links   []TopoAnchorRef `json:"links,omitempty"`
 	Objects []interface{}   `json:"objects,omitempty"`
 }
 
+func NewTopoCrossPointCollection() *TopoCrossPointCollection {
+	t := &TopoCrossPointCollection{}
+	t.Type = TopoTypeToString(TOPO_TYPE_CROSS_POINT_COLLECTION)
+	return t
+}
+
 type TopoCrossPoint struct {
 	Topos
 	Model string       `json:"model"`
 	Links []TopoAnchor `json:"links,omitempty"`
+}
+
+func NewTopoCrossPoint() *TopoCrossPoint {
+	t := &TopoCrossPoint{}
+	t.Type = TopoTypeToString(TOPO_TYPE_CROSS_POINT)
+	return t
 }
 
 type CompoundObject struct {
@@ -1152,11 +1200,23 @@ type TopoCompound struct {
 	Groups  []CompoundGroup  `json:"groups,omitempty"`
 }
 
+func NewCompound() *TopoCompound {
+	t := &TopoCompound{}
+	t.Type = TopoTypeToString(TOPO_TYPE_COMPOUND)
+	return t
+}
+
 type TopoCustom struct {
 	TopoMaker
 	CenterMode string   `json:"mode"`
 	In         []string `json:"in-pipe-ids,omitempty"`
 	Out        []string `json:"out-pipe-ids,omitempty"`
+}
+
+func NewTopoCustom() *TopoCustom {
+	t := &TopoCustom{}
+	t.Type = TopoTypeToString(TOPO_TYPE_CUSTOM)
+	return t
 }
 
 type TopoMask struct {
@@ -1174,6 +1234,12 @@ type TopoPrism struct {
 	Direction [3]float64  `json:"direction"`
 }
 
+func NewTopoPrism() *TopoPrism {
+	t := &TopoPrism{}
+	t.Type = TopoTypeToString(TOPO_TYPE_PRISM)
+	return t
+}
+
 func (sp *TopoPrism) GetDirection() *[3]float64 {
 	return &sp.Direction
 }
@@ -1187,6 +1253,12 @@ type TopoRevol struct {
 	Profile interface{}   `json:"profile"`
 	Axis    [2][3]float64 `json:"axis"`
 	Angle   float64       `json:"angle"`
+}
+
+func NewTopoRevol() *TopoRevol {
+	t := &TopoRevol{}
+	t.Type = TopoTypeToString(TOPO_TYPE_REVOL)
+	return t
 }
 
 func (sp *TopoRevol) IsTopoBoundy() bool {
@@ -1204,13 +1276,21 @@ type TopoLeveledSurface struct {
 }
 
 func NewTopoLeveledSurface(lvlType int) *TopoLeveledSurface {
-	return &TopoLeveledSurface{Leveled: LeveledTypeToString(lvlType)}
+	t := &TopoLeveledSurface{Leveled: LeveledTypeToString(lvlType)}
+	t.Type = TopoTypeToString(TOPO_TYPE_LEVELED_SURFACE)
+	return t
 }
 
 type TopoSymbol struct {
 	Topos
 	Object    string `json:"object"`
 	Instanced bool   `json:"instanced"`
+}
+
+func NewTopoSymbol() *TopoSymbol {
+	t := &TopoSymbol{}
+	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL)
+	return t
 }
 
 type TopoSymbolPath struct {
@@ -1220,7 +1300,9 @@ type TopoSymbolPath struct {
 }
 
 func NewTopoSymbolPath(md int) *TopoSymbolPath {
-	return &TopoSymbolPath{Mode: PathModeToString(md)}
+	t := &TopoSymbolPath{Mode: PathModeToString(md)}
+	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL_PATH)
+	return t
 }
 
 type TopoSymbolSurface struct {
@@ -1231,7 +1313,9 @@ type TopoSymbolSurface struct {
 }
 
 func NewTopoSymbolSurface(md int) *TopoSymbolSurface {
-	return &TopoSymbolSurface{Mode: SurfaceModeToString(md)}
+	t := &TopoSymbolSurface{Mode: SurfaceModeToString(md)}
+	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL_SURFACE)
+	return t
 }
 
 type TopoCamera struct {
@@ -1246,7 +1330,9 @@ type TopoPyramid struct {
 }
 
 func NewTopoPyramid(md int) *TopoPyramid {
-	return &TopoPyramid{Mode: PyramidModeToString(md)}
+	t := &TopoPyramid{Mode: PyramidModeToString(md)}
+	t.Type = TopoTypeToString(TOPO_TYPE_PYRAMID)
+	return t
 }
 
 type BoundPath struct {
