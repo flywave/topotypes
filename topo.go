@@ -1170,8 +1170,8 @@ func NewTopoCrossPointCollection() *TopoCrossPointCollection {
 
 type TopoCrossPoint struct {
 	Topos
-	Model string       `json:"model"`
-	Links []TopoAnchor `json:"links,omitempty"`
+	Model string          `json:"model"`
+	Links []TopoAnchorRef `json:"links,omitempty"`
 }
 
 func NewTopoCrossPoint() *TopoCrossPoint {
@@ -1429,25 +1429,18 @@ func ShapeUnMarshal(js []byte) (interface{}, error) {
 	switch ty {
 	case TOPO_SHAPE_MODE_BOX:
 		inter = NewTopoShapeBox()
-		break
 	case TOPO_SHAPE_MODE_CYLINDER:
 		inter = NewTopoShapeCylinder()
-		break
 	case TOPO_SHAPE_MODE_CONE:
 		inter = NewTopoShapeCone()
-		break
 	case TOPO_SHAPE_MODE_SPHERE:
 		inter = NewTopoShapeSphere()
-		break
 	case TOPO_SHAPE_MODE_TORUS:
 		inter = NewTopoShapeTorus()
-		break
 	case TOPO_SHAPE_MODE_WEDGE:
 		inter = NewTopoShapeWedge()
-		break
 	case TOPO_SHAPE_MODE_REVOLUTION:
 		inter = NewTopoShapeRevolution()
-		break
 	case TOPO_SHAPE_MODE_PIPE:
 		p := NewTopoShapePipe()
 		tp, e := PipeUnMarshal(js)
