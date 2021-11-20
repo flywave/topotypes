@@ -806,7 +806,7 @@ type TopoTextureSurface struct {
 
 type TopoMultiBase struct {
 	Topos
-	Objects []string `json:"objects"`
+	Models []string `json:"models"`
 }
 
 type TopoBoundy interface {
@@ -1221,7 +1221,7 @@ func NewTopoCustom() *TopoCustom {
 
 type TopoMask struct {
 	Topos
-	Object string `json:"object"`
+	Model string `json:"model"`
 }
 
 type PrismInterface interface {
@@ -1283,7 +1283,7 @@ func NewTopoLeveledSurface(lvlType int) *TopoLeveledSurface {
 
 type TopoSymbol struct {
 	Topos
-	Object    string `json:"object"`
+	Model     string `json:"model"`
 	Instanced bool   `json:"instanced"`
 }
 
@@ -1307,9 +1307,9 @@ func NewTopoSymbolPath(md int) *TopoSymbolPath {
 
 type TopoSymbolSurface struct {
 	TopoSurface
-	Objects []string   `json:"objects"`
-	Mode    string     `json:"mode"`
-	Cell    [2]float64 `json:"cell"`
+	Models []string   `json:"models"`
+	Mode   string     `json:"mode"`
+	Cell   [2]float64 `json:"cell"`
 }
 
 func NewTopoSymbolSurface(md int) *TopoSymbolSurface {
@@ -1324,9 +1324,9 @@ type TopoCamera struct {
 
 type TopoPyramid struct {
 	Topos
-	Zoom   uint32 `json:"zoom"`
-	Object string `json:"object"`
-	Mode   string `json:"mode"`
+	Zoom  uint32 `json:"zoom"`
+	Model string `json:"model"`
+	Mode  string `json:"mode"`
 }
 
 func NewTopoPyramid(md int) *TopoPyramid {
@@ -1377,19 +1377,14 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 		switch pro_t {
 		case TOPO_PROFILE_TYPE_TRIANGLE:
 			pf = NewTopoTriangle()
-			break
 		case TOPO_PROFILE_TYPE_RECTANGLE:
 			pf = NewTopoRectangle()
-			break
 		case TOPO_PROFILE_TYPE_CIRC:
 			pf = NewTopoCirc()
-			break
 		case TOPO_PROFILE_TYPE_ELIPS:
 			pf = NewTopoElips()
-			break
 		case TOPO_PROFILE_TYPE_POLYGON:
 			pf = NewTopoPolygon()
-			break
 		default:
 			return nil, errors.New("profile type error")
 		}
@@ -1472,16 +1467,12 @@ func LightUnMarshal(js []byte) (interface{}, error) {
 	switch ty {
 	case TOPO_LIGHT_MODE_SPOT:
 		inter = NewTopoSpotLight()
-		break
 	case TOPO_LIGHT_MODE_POINT:
 		inter = NewTopoPointLight()
-		break
 	case TOPO_LIGHT_MODE_DIRECTIONAL:
 		inter = NewTopoDirectionalLight()
-		break
 	case TOPO_LIGHT_MODE_AREA:
 		inter = NewTopoAreaLight()
-		break
 	default:
 		return nil, errors.New("not support topo type")
 	}
@@ -1557,13 +1548,16 @@ func CompoundUnMarshal(js []byte) (*TopoCompound, error) {
 
 	for index, obj := range tc.Objects {
 		bt, e := json.Marshal(obj.Shape)
+		if e != nil {
+			return nil, e
+		}
 		inter, e := TopoUnMarshal(bt)
 		if e != nil {
-			return nil, errors.New(fmt.Sprintf("index %d: %s", index, e.Error()))
+			return nil, e
 		}
 		_, ok := inter.(TopoBoundy)
 		if !ok {
-			return nil, errors.New(fmt.Sprintf("index %d compound object must be Interface CompoundTopo", index))
+			return nil, fmt.Errorf("index %d compound object must be Interface CompoundTopo", index)
 		}
 		tc.Objects[index].Shape = inter
 	}
@@ -1581,9 +1575,12 @@ func CrossPointCollectionUnMarshal(js []byte) (*TopoCrossPointCollection, error)
 	}
 	for index, obj := range cpcl.Objects {
 		bt, e := json.Marshal(obj)
+		if e != nil {
+			return nil, e
+		}
 		inter, e := TopoUnMarshal(bt)
 		if e != nil {
-			return nil, errors.New(fmt.Sprintf("TopoCrossPointCollection index %d object: %s", index, e.Error()))
+			return nil, e
 		}
 		cpcl.Objects[index] = inter
 	}
@@ -1611,47 +1608,34 @@ func TopoUnMarshal(js []byte) (interface{}, error) {
 		return CompoundUnMarshal(js)
 	case TOPO_TYPE_CROSS_POINT:
 		inter = &TopoCrossPoint{}
-		break
 	case TOPO_TYPE_SYMBOL:
 		inter = &TopoSymbol{}
-		break
 	case TOPO_TYPE_SYMBOL_PATH:
 		inter = &TopoSymbolPath{}
-		break
 	case TOPO_TYPE_SYMBOL_SURFACE:
 		inter = &TopoSymbolSurface{}
-		break
 	case TOPO_TYPE_TEXTURE_SURFACE:
 		inter = &TopoTextureSurface{}
-		break
 	case TOPO_TYPE_MATERIAL_SURFACE:
 		inter = &TopoMaterialSurface{}
-		break
 	case TOPO_TYPE_MASK:
 		inter = &TopoMask{}
-		break
 	case TOPO_TYPE_LIGHT:
 		return LightUnMarshal(js)
 	case TOPO_TYPE_LEVELED_SURFACE:
 		inter = &TopoLeveledSurface{}
-		break
 	case TOPO_TYPE_CAMERA:
 		inter = &TopoCamera{}
-		break
 	case TOPO_TYPE_CUSTOM:
 		inter = &TopoCustom{}
-		break
 	case TOPO_TYPE_CROSS_MULTI_POINT:
 		inter = &TopoCrossMultiPoint{}
-		break
 	case TOPO_TYPE_CROSS_POINT_COLLECTION:
 		return CrossPointCollectionUnMarshal(js)
 	case TOPO_TYPE_FEATURE:
 		inter = &TopoFeature{}
-		break
 	case TOPO_TYPE_PYRAMID:
 		inter = &TopoPyramid{}
-		break
 	default:
 		return nil, errors.New("not support topo type")
 	}
