@@ -747,7 +747,7 @@ type ToposInterface interface {
 type Topos struct {
 	Type       string         `json:"type"`
 	Transform  *TopoTransform `json:"transform,omitempty"`
-	BBox       [2][3]float64  `json:"bbox"`
+	BBox       *[2][3]float64 `json:"bbox,omitempty"`
 	HeightMode string         `json:"height-mode,omitempty"`
 	Fusion     bool           `json:"fusion"`
 }
