@@ -1398,7 +1398,7 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 	}
 }
 
-func ShapeUnMarshal(js []byte) (interface{}, error) {
+func ShapeUnMarshal(js []byte) (ToposInterface, error) {
 	sp := make(map[string]interface{})
 	e := json.Unmarshal(js, &sp)
 	if e != nil {
@@ -1443,7 +1443,7 @@ func ShapeUnMarshal(js []byte) (interface{}, error) {
 			return nil, e
 		}
 		p.TopoPipe = *tp
-		return &p, nil
+		return p, nil
 	default:
 		return nil, errors.New("not support topo type")
 	}
@@ -1456,13 +1456,13 @@ func ShapeUnMarshal(js []byte) (interface{}, error) {
 	return res, nil
 }
 
-func LightUnMarshal(js []byte) (interface{}, error) {
+func LightUnMarshal(js []byte) (ToposInterface, error) {
 	lt := TopoLight{}
 	e := json.Unmarshal(js, &lt)
 	if e != nil {
 		return nil, e
 	}
-	var inter interface{}
+	var inter ToposInterface
 	ty := StringToLightType(lt.Light)
 	switch ty {
 	case TOPO_LIGHT_MODE_SPOT:
@@ -1587,13 +1587,13 @@ func CrossPointCollectionUnMarshal(js []byte) (*TopoCrossPointCollection, error)
 	return cpcl, nil
 }
 
-func TopoUnMarshal(js []byte) (interface{}, error) {
+func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	base := Topos{}
 	e := json.Unmarshal(js, &base)
 	if e != nil {
 		return nil, e
 	}
-	var inter interface{}
+	var inter ToposInterface
 	ty := StringToTopoType(base.Type)
 	switch ty {
 	case TOPO_TYPE_SHAPE:
