@@ -28,7 +28,6 @@ const (
 	TOPO_TYPE_CAMERA
 	TOPO_TYPE_CUSTOM
 	TOPO_TYPE_CROSS_MULTI_POINT
-	TOPO_TYPE_CROSS_POINT_COLLECTION
 	TOPO_TYPE_FEATURE
 	TOPO_TYPE_PYRAMID
 )
@@ -45,8 +44,6 @@ func TopoTypeToString(tp int) string {
 		return "cross-point"
 	case TOPO_TYPE_CROSS_MULTI_POINT:
 		return "cross-multi-point"
-	case TOPO_TYPE_CROSS_POINT_COLLECTION:
-		return "cross-point-collection"
 	case TOPO_TYPE_PIPE:
 		return "pipe"
 	case TOPO_TYPE_SYMBOL_PATH:
@@ -122,33 +119,39 @@ func StringToTopoType(tp string) int {
 }
 
 const (
-	TOPO_HEIGHT_MODE_ABSOLUTE = iota
-	TOPO_HEIGHT_MODE_RELATIVE
-	TOPO_HEIGHT_MODE_FOLLOW
+	TOPO_HEIGHT_MODE_UNKNOW = iota
+	TOPO_HEIGHT_MODE_HAE
+	TOPO_HEIGHT_MODE_EGM84
+	TOPO_HEIGHT_MODE_EGM96
+	TOPO_HEIGHT_MODE_EGM08
 )
 
 func HeightModeToString(tp int) string {
 	switch tp {
-	case TOPO_HEIGHT_MODE_ABSOLUTE:
-		return "absolute"
-	case TOPO_HEIGHT_MODE_RELATIVE:
-		return "relative"
-	case TOPO_HEIGHT_MODE_FOLLOW:
-		return "follow"
+	case TOPO_HEIGHT_MODE_HAE:
+		return "hae"
+	case TOPO_HEIGHT_MODE_EGM84:
+		return "egm84"
+	case TOPO_HEIGHT_MODE_EGM96:
+		return "egm96"
+	case TOPO_HEIGHT_MODE_EGM08:
+		return "egm08"
 	default:
 		return ""
 	}
 }
 
 func StringToHeightMode(tp string) int {
-	if strEquals(tp, "absolute") {
-		return TOPO_HEIGHT_MODE_ABSOLUTE
-	} else if strEquals(tp, "relative") {
-		return TOPO_HEIGHT_MODE_RELATIVE
-	} else if strEquals(tp, "follow") {
-		return TOPO_HEIGHT_MODE_FOLLOW
+	if strEquals(tp, "hae") {
+		return TOPO_HEIGHT_MODE_HAE
+	} else if strEquals(tp, "egm84") {
+		return TOPO_HEIGHT_MODE_EGM84
+	} else if strEquals(tp, "egm96") {
+		return TOPO_HEIGHT_MODE_EGM96
+	} else if strEquals(tp, "egm08") {
+		return TOPO_HEIGHT_MODE_EGM08
 	}
-	return TOPO_HEIGHT_MODE_FOLLOW
+	return TOPO_HEIGHT_MODE_UNKNOW
 }
 
 const (
@@ -742,6 +745,19 @@ type ToposInterface interface {
 	GetTransform() *TopoTransform
 	GetHeightMode() string
 	GetFusion() bool
+	ResetTransform()
+}
+
+const (
+	TOPO_SIMPLIFY_NONE   = "none"
+	TOPO_SIMPLIFY_LOW    = "low"
+	TOPO_SIMPLIFY_NORMAL = "normal"
+	TOPO_SIMPLIFY_HIGH   = "high"
+)
+
+type TopoZoom struct {
+	Simplify string `json:"simplify,omitempty"`
+	Zoom     uint32 `json:"zoom,omitempty"`
 }
 
 type Topos struct {
@@ -750,6 +766,11 @@ type Topos struct {
 	BBox       *[2][3]float64 `json:"bbox,omitempty"`
 	HeightMode string         `json:"height-mode,omitempty"`
 	Fusion     bool           `json:"fusion"`
+	ZoomRange  []*TopoZoom    `json:"zoom_range"`
+}
+
+func (tp *Topos) GetZoomRange() []*TopoZoom {
+	return tp.ZoomRange
 }
 
 func (tp *Topos) GetType() string {
@@ -760,10 +781,11 @@ func (tp *Topos) GetTransform() *TopoTransform {
 	return tp.Transform
 }
 
+func (tp *Topos) ResetTransform() {
+	tp.Transform = NewTopoTransform()
+}
+
 func (tp *Topos) GetHeightMode() string {
-	if tp.HeightMode == "" {
-		return "absolute"
-	}
 	return tp.HeightMode
 }
 
@@ -802,11 +824,6 @@ type TopoTextureSurface struct {
 	WarpT   string `json:"warp-t"`
 	Zoom    uint8  `json:"zoom"`
 	Texture string `json:"texture"`
-}
-
-type TopoMultiBase struct {
-	Topos
-	Models []string `json:"models"`
 }
 
 type TopoBoundy interface {
@@ -986,10 +1003,14 @@ type TopoAnchorRef struct {
 	Ref string `json:"ref"`
 }
 
+type TopoAnchorLink struct {
+	Link string `json:"link"`
+}
+
 type TopoAnchor struct {
 	Name     string     `json:"name"`
 	Position [3]float64 `json:"position"`
-	Link     *string    `json:"link,omitempty"`
+	Link     string     `json:"link,omitempty"`
 }
 
 const (
@@ -1025,7 +1046,6 @@ type TopoPipe struct {
 	TopoMaker
 	Wire           [][3]float64   `json:"-"`
 	Profile        interface{}    `json:"profile"`
-	Profile2       interface{}    `json:"profile2,omitempty"`
 	Anchors        [2]*TopoAnchor `json:"anchors"`
 	Smooth         string         `json:"smooth,omitempty"`
 	TransitionMode string         `json:"transition_mode"`
@@ -1146,7 +1166,7 @@ func NewTopoSpotLight() *TopoSpotLight {
 
 type TopoCrossMultiPoint struct {
 	Topos
-	Links   []TopoAnchorRef   `json:"links,omitempty"`
+	Refs    []TopoAnchorRef   `json:"links,omitempty"`
 	Objects []*TopoCrossPoint `json:"objects,omitempty"`
 }
 
@@ -1156,22 +1176,10 @@ func NewTopoCrossMultiPoint() *TopoCrossMultiPoint {
 	return t
 }
 
-type TopoCrossPointCollection struct {
-	Topos
-	Links   []TopoAnchorRef `json:"links,omitempty"`
-	Objects []interface{}   `json:"objects,omitempty"`
-}
-
-func NewTopoCrossPointCollection() *TopoCrossPointCollection {
-	t := &TopoCrossPointCollection{}
-	t.Type = TopoTypeToString(TOPO_TYPE_CROSS_POINT_COLLECTION)
-	return t
-}
-
 type TopoCrossPoint struct {
 	Topos
-	Model string          `json:"model"`
-	Links []TopoAnchorRef `json:"links,omitempty"`
+	Model string           `json:"model"`
+	Links []TopoAnchorLink `json:"links,omitempty"`
 }
 
 func NewTopoCrossPoint() *TopoCrossPoint {
@@ -1294,7 +1302,8 @@ func NewTopoSymbol() *TopoSymbol {
 }
 
 type TopoSymbolPath struct {
-	TopoMultiBase
+	Topos
+	Model   string  `json:"model"`
 	Mode    string  `json:"mode"`
 	Density float64 `json:"density"`
 }
@@ -1307,9 +1316,9 @@ func NewTopoSymbolPath(md int) *TopoSymbolPath {
 
 type TopoSymbolSurface struct {
 	TopoSurface
-	Models []string   `json:"models"`
-	Mode   string     `json:"mode"`
-	Cell   [2]float64 `json:"cell"`
+	Model string     `json:"model"`
+	Mode  string     `json:"mode"`
+	Cell  [2]float64 `json:"cell"`
 }
 
 func NewTopoSymbolSurface(md int) *TopoSymbolSurface {
@@ -1526,13 +1535,6 @@ func PipeUnMarshal(js []byte) (*TopoPipe, error) {
 		}
 		pipe.Profile = prof
 	}
-	if pipe.Profile2 != nil {
-		prof, er := ProfileUnMarshal(pipe.Profile2)
-		if er != nil {
-			return nil, er
-		}
-		pipe.Profile2 = prof
-	}
 	return &pipe, nil
 }
 
@@ -1562,29 +1564,6 @@ func CompoundUnMarshal(js []byte) (*TopoCompound, error) {
 		tc.Objects[index].Shape = inter
 	}
 	return tc, nil
-}
-
-func CrossPointCollectionUnMarshal(js []byte) (*TopoCrossPointCollection, error) {
-	cpcl := &TopoCrossPointCollection{}
-	e := json.Unmarshal(([]byte)(js), cpcl)
-	if e != nil {
-		return nil, e
-	}
-	if len(cpcl.Objects) == 0 {
-		return cpcl, nil
-	}
-	for index, obj := range cpcl.Objects {
-		bt, e := json.Marshal(obj)
-		if e != nil {
-			return nil, e
-		}
-		inter, e := TopoUnMarshal(bt)
-		if e != nil {
-			return nil, e
-		}
-		cpcl.Objects[index] = inter
-	}
-	return cpcl, nil
 }
 
 func TopoUnMarshal(js []byte) (ToposInterface, error) {
@@ -1630,8 +1609,6 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoCustom{}
 	case TOPO_TYPE_CROSS_MULTI_POINT:
 		inter = &TopoCrossMultiPoint{}
-	case TOPO_TYPE_CROSS_POINT_COLLECTION:
-		return CrossPointCollectionUnMarshal(js)
 	case TOPO_TYPE_FEATURE:
 		inter = &TopoFeature{}
 	case TOPO_TYPE_PYRAMID:
