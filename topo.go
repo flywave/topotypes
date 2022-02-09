@@ -749,15 +749,14 @@ type ToposInterface interface {
 }
 
 const (
-	TOPO_SIMPLIFY_NONE   = "none"
 	TOPO_SIMPLIFY_LOW    = "low"
 	TOPO_SIMPLIFY_NORMAL = "normal"
 	TOPO_SIMPLIFY_HIGH   = "high"
 )
 
 type TopoZoom struct {
-	Simplify string `json:"simplify,omitempty"`
-	Zoom     uint32 `json:"zoom,omitempty"`
+	Simplify  string    `json:"simplify,omitempty"`
+	ZoomRange [2]uint32 `json:"zoom_range,omitempty"`
 }
 
 type Topos struct {
@@ -766,11 +765,11 @@ type Topos struct {
 	BBox       *[2][3]float64 `json:"bbox,omitempty"`
 	HeightMode string         `json:"height-mode,omitempty"`
 	Fusion     bool           `json:"fusion"`
-	ZoomRange  []*TopoZoom    `json:"zoom_range"`
+	Zooms      []*TopoZoom    `json:"zooms"`
 }
 
-func (tp *Topos) GetZoomRange() []*TopoZoom {
-	return tp.ZoomRange
+func (tp *Topos) GetZooms() []*TopoZoom {
+	return tp.Zooms
 }
 
 func (tp *Topos) GetType() string {
@@ -1004,7 +1003,8 @@ type TopoAnchorRef struct {
 }
 
 type TopoAnchorLink struct {
-	Link string `json:"link"`
+	Link       string `json:"link"`
+	AnchorName string `json:"anchor_name"`
 }
 
 type TopoAnchor struct {
