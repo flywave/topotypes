@@ -1003,8 +1003,9 @@ type TopoAnchorRef struct {
 }
 
 type TopoAnchorLink struct {
-	Link       string `json:"link"`
-	AnchorName string `json:"anchor_name"`
+	Link           string `json:"link"`
+	AnchorName     string `json:"anchor_name"`
+	DestAnchorName string `json:"dest_anchor_name"`
 }
 
 type TopoAnchor struct {
