@@ -119,42 +119,6 @@ func StringToTopoType(tp string) int {
 }
 
 const (
-	TOPO_HEIGHT_MODE_UNKNOW = iota
-	TOPO_HEIGHT_MODE_HAE
-	TOPO_HEIGHT_MODE_EGM84
-	TOPO_HEIGHT_MODE_EGM96
-	TOPO_HEIGHT_MODE_EGM08
-)
-
-func HeightModeToString(tp int) string {
-	switch tp {
-	case TOPO_HEIGHT_MODE_HAE:
-		return "hae"
-	case TOPO_HEIGHT_MODE_EGM84:
-		return "egm84"
-	case TOPO_HEIGHT_MODE_EGM96:
-		return "egm96"
-	case TOPO_HEIGHT_MODE_EGM08:
-		return "egm08"
-	default:
-		return ""
-	}
-}
-
-func StringToHeightMode(tp string) int {
-	if strEquals(tp, "hae") {
-		return TOPO_HEIGHT_MODE_HAE
-	} else if strEquals(tp, "egm84") {
-		return TOPO_HEIGHT_MODE_EGM84
-	} else if strEquals(tp, "egm96") {
-		return TOPO_HEIGHT_MODE_EGM96
-	} else if strEquals(tp, "egm08") {
-		return TOPO_HEIGHT_MODE_EGM08
-	}
-	return TOPO_HEIGHT_MODE_UNKNOW
-}
-
-const (
 	TOPO_MESH_MODE_SOLID = iota
 	TOPO_MESH_MODE_SHELL
 )
@@ -743,7 +707,6 @@ func NewTopoTransform() *TopoTransform {
 type ToposInterface interface {
 	GetType() string
 	GetTransform() *TopoTransform
-	GetHeightMode() string
 	GetFusion() bool
 	ResetTransform()
 }
@@ -760,12 +723,11 @@ type TopoZoom struct {
 }
 
 type Topos struct {
-	Type       string         `json:"type"`
-	Transform  *TopoTransform `json:"transform,omitempty"`
-	BBox       *[2][3]float64 `json:"bbox,omitempty"`
-	HeightMode string         `json:"height-mode,omitempty"`
-	Fusion     bool           `json:"fusion"`
-	Zooms      []*TopoZoom    `json:"zooms"`
+	Type      string         `json:"type"`
+	Transform *TopoTransform `json:"transform,omitempty"`
+	BBox      *[2][3]float64 `json:"bbox,omitempty"`
+	Fusion    bool           `json:"fusion"`
+	Zooms     []*TopoZoom    `json:"zooms"`
 }
 
 func (tp *Topos) GetZooms() []*TopoZoom {
@@ -782,10 +744,6 @@ func (tp *Topos) GetTransform() *TopoTransform {
 
 func (tp *Topos) ResetTransform() {
 	tp.Transform = NewTopoTransform()
-}
-
-func (tp *Topos) GetHeightMode() string {
-	return tp.HeightMode
 }
 
 func (tp *Topos) GetFusion() bool {
