@@ -1006,6 +1006,7 @@ type TopoPipe struct {
 	Wire           [][3]float64   `json:"-"`
 	Profile        interface{}    `json:"profile"`
 	Anchors        [2]*TopoAnchor `json:"anchors"`
+	Customs        [2]*string     `json:"customs"`
 	Smooth         string         `json:"smooth,omitempty"`
 	TransitionMode string         `json:"transition_mode"`
 }
