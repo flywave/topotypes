@@ -967,9 +967,9 @@ type TopoAnchorLink struct {
 }
 
 type TopoAnchor struct {
-	Name     string     `json:"name"`
-	Position [3]float64 `json:"position"`
-	Link     string     `json:"link,omitempty"`
+	Name     string      `json:"name"`
+	Position *[3]float64 `json:"position,omitempty"`
+	Link     string      `json:"link,omitempty"`
 }
 
 const (
