@@ -1146,8 +1146,9 @@ func NewTopoCrossPoint() *TopoCrossPoint {
 }
 
 type CompoundObject struct {
-	Name  string         `json:"name"`
-	Shape ToposInterface `json:"shape"`
+	Name      string         `json:"name"`
+	Shape     ToposInterface `json:"shape"`
+	Transform *TopoTransform `json:"transform"`
 }
 
 type CompoundGroup struct {
