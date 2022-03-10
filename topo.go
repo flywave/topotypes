@@ -1042,10 +1042,7 @@ type TopoShapeWedge struct {
 }
 
 func NewTopoShapeWedge() *TopoShapeWedge {
-	s := TopoShape{}
-	s.Shape = ShapeTypeToString(TOPO_SHAPE_MODE_WEDGE)
-	s.Type = TopoTypeToString(TOPO_TYPE_SHAPE)
-	return &TopoShapeWedge{}
+	return &TopoShapeWedge{Type: TopoTypeToString(TOPO_TYPE_SHAPE)}
 }
 
 type TopoDraft struct {
