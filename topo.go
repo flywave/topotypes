@@ -30,6 +30,7 @@ const (
 	TOPO_TYPE_CROSS_MULTI_POINT
 	TOPO_TYPE_FEATURE
 	TOPO_TYPE_PYRAMID
+	TOPO_TYPE_SWEEP_LAYERS
 )
 
 func TopoTypeToString(tp int) string {
@@ -70,6 +71,8 @@ func TopoTypeToString(tp int) string {
 		return "feature"
 	case TOPO_TYPE_PYRAMID:
 		return "pyramid"
+	case TOPO_TYPE_SWEEP_LAYERS:
+		return "sweep-layers"
 	default:
 		return ""
 	}
@@ -114,6 +117,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_FEATURE
 	} else if strEquals(tp, "pyramid") {
 		return TOPO_TYPE_PYRAMID
+	} else if strEquals(tp, "sweep-layers") {
+		return TOPO_TYPE_SWEEP_LAYERS
 	}
 	return TOPO_TYPE_NONE
 }
@@ -130,7 +135,7 @@ func MeshModeToString(tp int) string {
 	case TOPO_MESH_MODE_SHELL:
 		return "shell"
 	default:
-		return ""
+		return "solid"
 	}
 }
 
@@ -380,7 +385,7 @@ func StringToCompoundMode(tp string) int {
 	} else if strEquals(tp, "cut") {
 		return TOPO_COMPOUND_MODE_CUT
 	}
-	return TOPO_COMPOUND_MODE_NONE
+	return TOPO_COMPOUND_MODE_FUSION
 }
 
 const (
@@ -758,7 +763,6 @@ type TopoMakerInterface interface {
 type TopoMaker struct {
 	Topos
 	MeshMode  string          `json:"mode"`
-	Thickness *float64        `json:"thickness"`
 	Materials []*TopoMaterial `json:"materials,omitempty"`
 	Instanced bool            `json:"instanced,omitempty"`
 }
@@ -888,15 +892,15 @@ type WedgeFaceLimit struct {
 	ZMax float64 `json:"zmax"`
 }
 
-type TopoProfile struct {
-	Type string `json:"type"`
+type TopoProfile interface {
 }
 
 type TopoTriangle struct {
 	TopoProfile
-	P1 [3]float64 `json:"p1"`
-	P2 [3]float64 `json:"p2"`
-	P3 [3]float64 `json:"p3"`
+	Type string     `json:"type"`
+	P1   [3]float64 `json:"p1"`
+	P2   [3]float64 `json:"p2"`
+	P3   [3]float64 `json:"p3"`
 }
 
 func NewTopoTriangle() *TopoTriangle {
@@ -907,8 +911,9 @@ func NewTopoTriangle() *TopoTriangle {
 
 type TopoRectangle struct {
 	TopoProfile
-	P1 [3]float64 `json:"p1"`
-	P2 [3]float64 `json:"p2"`
+	Type string     `json:"type"`
+	P1   [3]float64 `json:"p1"`
+	P2   [3]float64 `json:"p2"`
 }
 
 func NewTopoRectangle() *TopoRectangle {
@@ -919,6 +924,7 @@ func NewTopoRectangle() *TopoRectangle {
 
 type TopoCirc struct {
 	TopoProfile
+	Type   string     `json:"type"`
 	Center [3]float64 `json:"center"`
 	Norm   [3]float64 `json:"norm"`
 	Radius float64    `json:"radius"`
@@ -932,6 +938,7 @@ func NewTopoCirc() *TopoCirc {
 
 type TopoElips struct {
 	TopoProfile
+	Type   string     `json:"type"`
 	S1     [3]float64 `json:"s1"`
 	S2     [3]float64 `json:"s2"`
 	Center [3]float64 `json:"center"`
@@ -945,6 +952,7 @@ func NewTopoElips() *TopoElips {
 
 type TopoPolygon struct {
 	TopoProfile
+	Type  string       `json:"type"`
 	Edges [][3]float64 `json:"edges,omitempty"`
 }
 
@@ -1327,6 +1335,18 @@ type TopoFeature struct {
 	Bounds []FeatureBound `json:"bounds,omitempty"`
 }
 
+type TopoLayer struct {
+	Name    string      `json:"name,omitempty"`
+	Profile TopoProfile `json:"profile"`
+	Offset  [3]float64  `json:"offset,omitempty"`
+	// Boolean string      `json:"boolean,omitempty"`
+}
+
+type TopoSweepLayers struct {
+	TopoMaker
+	Layers []*TopoLayer `json:"layers,omitempty"`
+}
+
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 	switch pro := inter.(type) {
 	case map[string]interface{}:
@@ -1496,6 +1516,22 @@ func PipeUnMarshal(js []byte) (*TopoPipe, error) {
 	return &pipe, nil
 }
 
+func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
+	sl := TopoSweepLayers{}
+	e := json.Unmarshal(js, &sl)
+	if e != nil {
+		return nil, e
+	}
+	for _, l := range sl.Layers {
+		prof, er := ProfileUnMarshal(l.Profile)
+		if er != nil {
+			return nil, er
+		}
+		l.Profile = prof
+	}
+	return &sl, nil
+}
+
 func CompoundUnMarshal(js []byte) (*TopoCompound, error) {
 	tc := &TopoCompound{}
 	e := json.Unmarshal(js, tc)
@@ -1541,6 +1577,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return RevolUnMarshal(js)
 	case TOPO_TYPE_PIPE:
 		return PipeUnMarshal(js)
+	case TOPO_TYPE_SWEEP_LAYERS:
+		return SweepLayersUnMarshal(js)
 	case TOPO_TYPE_COMPOUND:
 		return CompoundUnMarshal(js)
 	case TOPO_TYPE_CROSS_POINT:
