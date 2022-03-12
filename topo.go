@@ -1337,6 +1337,7 @@ type TopoFeature struct {
 
 type TopoLayer struct {
 	Name    string      `json:"name,omitempty"`
+	Width   float32     `json:"width"`
 	Profile TopoProfile `json:"profile"`
 	Offset  [3]float64  `json:"offset,omitempty"`
 	Texture string      `json:"texture"`
