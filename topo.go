@@ -1350,20 +1350,19 @@ type TopoLayer struct {
 type TopoSweepLayers struct {
 	TopoMaker
 	Layers []*TopoLayer `json:"layers,omitempty"`
+	Decals []*TopoDecal `json:"decals,omitempty"`
+}
+
+type Rectangle struct {
+	Ul [3]float64 `json:"ul"`
+	Ur [3]float64 `json:"ur"`
+	Bl [3]float64 `json:"bl"`
+	Br [3]float64 `json:"br"`
 }
 
 type TopoDecal struct {
-	Topos
-	Width    int
-	Height   int
-	Texture  string
-	Position [3]float64
-}
-
-func NewTopoDecal(md int) *TopoDecal {
-	t := &TopoDecal{}
-	t.Type = TopoTypeToString(TOPO_TYPE_DECAL)
-	return t
+	Texture   string     `json:"texture"`
+	Rectangle *Rectangle `json:"rectangle"`
 }
 
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
@@ -1628,8 +1627,6 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoFeature{}
 	case TOPO_TYPE_PYRAMID:
 		inter = &TopoPyramid{}
-	case TOPO_TYPE_DECAL:
-		inter = &TopoDecal{}
 	default:
 		return nil, errors.New("not support topo type")
 	}
