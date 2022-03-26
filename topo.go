@@ -1339,18 +1339,19 @@ type TopoFeature struct {
 }
 
 type TopoLayer struct {
-	Name    string      `json:"name,omitempty"`
-	Width   float32     `json:"width"`
-	Profile TopoProfile `json:"profile"`
-	Offset  [3]float64  `json:"offset,omitempty"`
-	Texture string      `json:"texture,omitempty"`
+	Name     string      `json:"name,omitempty"`
+	Width    float32     `json:"width"`
+	Profile  TopoProfile `json:"profile"`
+	Texture  string      `json:"texture,omitempty"`
+	Finished bool        `json:"finished"`
 	// Boolean string      `json:"boolean,omitempty"`
 }
 
 type TopoSweepLayers struct {
 	TopoMaker
-	Layers []*TopoLayer `json:"layers,omitempty"`
-	Decals []*TopoDecal `json:"decals,omitempty"`
+	SideLayers   []*TopoLayer `json:"side-layers,omitempty"`
+	CenterLayers []*TopoLayer `json:"center-layers,omitempty"`
+	Decals       []*TopoDecal `json:"decals,omitempty"`
 }
 
 type Rectangle struct {
@@ -1363,6 +1364,16 @@ type Rectangle struct {
 type TopoDecal struct {
 	Texture   string     `json:"texture"`
 	Rectangle *Rectangle `json:"rectangle"`
+}
+
+type LayerGroup struct {
+	In  string `json:"in,omitempty"`
+	Out string `json:"out,omitempty"`
+}
+
+type TopoSweepLayersIntersection struct {
+	TopoMaker
+	LayerGroups []LayerGroup `json:"sweep-lines"`
 }
 
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
@@ -1540,7 +1551,16 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 	if e != nil {
 		return nil, e
 	}
-	for _, l := range sl.Layers {
+
+	for _, l := range sl.SideLayers {
+		prof, er := ProfileUnMarshal(l.Profile)
+		if er != nil {
+			return nil, er
+		}
+		l.Profile = prof
+	}
+
+	for _, l := range sl.CenterLayers {
 		prof, er := ProfileUnMarshal(l.Profile)
 		if er != nil {
 			return nil, er
