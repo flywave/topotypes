@@ -31,6 +31,7 @@ const (
 	TOPO_TYPE_FEATURE
 	TOPO_TYPE_PYRAMID
 	TOPO_TYPE_SWEEP_LAYERS
+	TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	TOPO_TYPE_DECAL
 )
 
@@ -74,6 +75,8 @@ func TopoTypeToString(tp int) string {
 		return "pyramid"
 	case TOPO_TYPE_SWEEP_LAYERS:
 		return "sweep-layers"
+	case TOPO_TYPE_SWEEP_LAYERS_INTERSECTION:
+		return "sweep-layers-intersection"
 	case TOPO_TYPE_DECAL:
 		return "decal"
 	default:
@@ -122,6 +125,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_PYRAMID
 	} else if strEquals(tp, "sweep-layers") {
 		return TOPO_TYPE_SWEEP_LAYERS
+	} else if strEquals(tp, "sweep-layers-intersection") {
+		return TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	}
 	return TOPO_TYPE_NONE
 }
@@ -1341,6 +1346,7 @@ type TopoFeature struct {
 type TopoLayer struct {
 	Name     string      `json:"name,omitempty"`
 	Width    float32     `json:"width"`
+	Height   float32     `json:"height"`
 	Profile  TopoProfile `json:"profile"`
 	Texture  string      `json:"texture,omitempty"`
 	Finished bool        `json:"finished"`
@@ -1373,7 +1379,7 @@ type LayerGroup struct {
 
 type TopoSweepLayersIntersection struct {
 	TopoMaker
-	LayerGroups []LayerGroup `json:"sweep-lines"`
+	LayerGroups []*LayerGroup `json:"sweep-lines"`
 }
 
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
@@ -1617,6 +1623,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return PipeUnMarshal(js)
 	case TOPO_TYPE_SWEEP_LAYERS:
 		return SweepLayersUnMarshal(js)
+	case TOPO_TYPE_SWEEP_LAYERS_INTERSECTION:
+		inter = &TopoSweepLayersIntersection{}
 	case TOPO_TYPE_COMPOUND:
 		return CompoundUnMarshal(js)
 	case TOPO_TYPE_CROSS_POINT:
