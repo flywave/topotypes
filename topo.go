@@ -1379,7 +1379,8 @@ type LayerGroup struct {
 
 type TopoSweepLayersIntersection struct {
 	TopoMaker
-	LayerGroups []*LayerGroup `json:"sweep-lines"`
+	LayerGroups []*LayerGroup  `json:"sweep-lines"`
+	Textures    map[int]string `json:"textures,omitempty"`
 }
 
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
