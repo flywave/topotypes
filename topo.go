@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	mst "github.com/flywave/go-mst"
+	"github.com/flywave/go3d/float64/quaternion"
+	"github.com/flywave/go3d/float64/vec3"
 )
 
 const (
@@ -638,6 +640,22 @@ func StringToPyramidMode(tp string) int {
 		return TOPO_PYRAMID_MODE_FLAT
 	}
 	return TOPO_PYRAMID_MODE_FLAT
+}
+
+type Anchor struct {
+	Center vec3.T  `json:"center"`
+	Name   string  `json:"name"`
+	NameZh string  `json:"name_zh"`
+	Normal vec3.T  `json:"normal"`
+	Unit   float64 `json:"unit"`
+}
+
+type CrossTopology struct {
+	Scale       float64      `json:"scale"`
+	Rotation    quaternion.T `json:"rotation"`
+	Offset      vec3.T       `json:"offset"`
+	Anchors     []*Anchor    `json:"anchors"`
+	AnchorCount int          `json:"anchorcount"`
 }
 
 type TopoMaterial struct {
