@@ -3,25 +3,55 @@ package topotypes
 import (
 	"encoding/json"
 	"errors"
+
+	"github.com/flywave/topotypes/profile"
+	"github.com/flywave/topotypes/utils"
 )
 
-type WedgeFaceLimit struct {
-	XMin float64 `json:"xmin"`
-	ZMin float64 `json:"zmin"`
-	XMax float64 `json:"xmax"`
-	ZMax float64 `json:"zmax"`
+const (
+	TOPO_PROFILE_TYPE_NONE      = profile.TYPE_NONE
+	TOPO_PROFILE_TYPE_TRIANGLE  = profile.TYPE_TRIANGLE
+	TOPO_PROFILE_TYPE_RECTANGLE = profile.TYPE_RECTANGLE
+	TOPO_PROFILE_TYPE_CIRC      = profile.TYPE_CIRC
+	TOPO_PROFILE_TYPE_ELIPS     = profile.TYPE_ELIPS
+	TOPO_PROFILE_TYPE_POLYGON   = profile.TYPE_POLYGON
+)
+
+func ProfileTypeToString(tp int) string {
+	switch tp {
+	case TOPO_PROFILE_TYPE_TRIANGLE:
+		return "triangle"
+	case TOPO_PROFILE_TYPE_RECTANGLE:
+		return "rectangle"
+	case TOPO_PROFILE_TYPE_CIRC:
+		return "circ"
+	case TOPO_PROFILE_TYPE_ELIPS:
+		return "ellipse"
+	case TOPO_PROFILE_TYPE_POLYGON:
+		return "polygon"
+	default:
+		return ""
+	}
 }
 
-type TopoProfile interface {
+func StringToProfileType(tp string) int {
+	if utils.StrEquals(tp, "triangle") {
+		return TOPO_PROFILE_TYPE_TRIANGLE
+	} else if utils.StrEquals(tp, "rectangle") {
+		return TOPO_PROFILE_TYPE_RECTANGLE
+	} else if utils.StrEquals(tp, "circ") {
+		return TOPO_PROFILE_TYPE_CIRC
+	} else if utils.StrEquals(tp, "ellipse") {
+		return TOPO_PROFILE_TYPE_ELIPS
+	} else if utils.StrEquals(tp, "polygon") {
+		return TOPO_PROFILE_TYPE_POLYGON
+	}
+	return TOPO_PROFILE_TYPE_NONE
 }
 
-type TopoTriangle struct {
-	TopoProfile
-	Type string     `json:"type"`
-	P1   [3]float64 `json:"p1"`
-	P2   [3]float64 `json:"p2"`
-	P3   [3]float64 `json:"p3"`
-}
+type TopoProfile profile.Profile
+
+type TopoTriangle profile.Triangle
 
 func NewTopoTriangle() *TopoTriangle {
 	t := TopoTriangle{}
@@ -29,12 +59,7 @@ func NewTopoTriangle() *TopoTriangle {
 	return &t
 }
 
-type TopoRectangle struct {
-	TopoProfile
-	Type string     `json:"type"`
-	P1   [3]float64 `json:"p1"`
-	P2   [3]float64 `json:"p2"`
-}
+type TopoRectangle profile.Rectangle
 
 func NewTopoRectangle() *TopoRectangle {
 	t := TopoRectangle{}
@@ -42,13 +67,7 @@ func NewTopoRectangle() *TopoRectangle {
 	return &t
 }
 
-type TopoCirc struct {
-	TopoProfile
-	Type   string     `json:"type"`
-	Center [3]float64 `json:"center"`
-	Norm   [3]float64 `json:"norm"`
-	Radius float64    `json:"radius"`
-}
+type TopoCirc profile.Circ
 
 func NewTopoCirc() *TopoCirc {
 	t := TopoCirc{}
@@ -56,13 +75,7 @@ func NewTopoCirc() *TopoCirc {
 	return &t
 }
 
-type TopoElips struct {
-	TopoProfile
-	Type   string     `json:"type"`
-	S1     [3]float64 `json:"s1"`
-	S2     [3]float64 `json:"s2"`
-	Center [3]float64 `json:"center"`
-}
+type TopoElips profile.Elips
 
 func NewTopoElips() *TopoElips {
 	t := TopoElips{}
@@ -70,11 +83,7 @@ func NewTopoElips() *TopoElips {
 	return &t
 }
 
-type TopoPolygon struct {
-	TopoProfile
-	Type  string       `json:"type"`
-	Edges [][3]float64 `json:"edges,omitempty"`
-}
+type TopoPolygon profile.Polygon
 
 func NewTopoPolygon() *TopoPolygon {
 	t := TopoPolygon{}

@@ -3,6 +3,8 @@ package topotypes
 import (
 	"encoding/json"
 	"errors"
+
+	"github.com/flywave/topotypes/shape"
 )
 
 type TopoBoundy interface {
@@ -19,93 +21,58 @@ func (sp *TopoShape) IsTopoBoundy() bool {
 	return true
 }
 
-type TopoShapeBox struct {
-	Type   string
-	Point1 [3]float64 `json:"point1"`
-	Point2 [3]float64 `json:"point2"`
-}
+type TopoShapeBox shape.Box
 
 func NewTopoShapeBox() *TopoShapeBox {
 	return &TopoShapeBox{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_BOX),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_BOX),
 	}
 }
 
-type TopoShapeCone struct {
-	Type    string   `json:"type"`
-	Radius1 float64  `json:"radius1"`
-	Radius2 float64  `json:"radius2"`
-	Height  float64  `json:"height"`
-	Angle   *float64 `json:"angle,omitempty"`
-}
+type TopoShapeCone shape.Cone
 
 func NewTopoShapeCone() *TopoShapeCone {
 	return &TopoShapeCone{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_CONE),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_CONE),
 	}
 }
 
-type TopoShapeCylinder struct {
-	Type   string   `json:"type"`
-	Radius float64  `json:"radius"`
-	Height float64  `json:"height"`
-	Angle  *float64 `json:"angle,omitempty"`
-}
+type TopoShapeCylinder shape.Cylinder
 
 func NewTopoShapeCylinder() *TopoShapeCylinder {
 	return &TopoShapeCylinder{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_CYLINDER),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_CYLINDER),
 	}
 }
 
-type TopoShapeRevolution struct {
-	Type     string
-	Meridian [][3]float64 `json:"meridian"`
-	Angle    *float64     `json:"angle,omitempty"`
-	Max      *float64     `json:"max,omitempty"`
-	Min      *float64     `json:"min,omitempty"`
-}
+type TopoShapeRevolution shape.Revolution
 
 func NewTopoShapeRevolution() *TopoShapeRevolution {
 	return &TopoShapeRevolution{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_REVOLUTION),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_REVOLUTION),
 	}
 }
 
-type TopoShapeSphere struct {
-	Type   string
-	Center *[3]float64 `json:"center,omitempty"`
-	Radius float64     `json:"radius"`
-	Angle1 *float64    `json:"angle1,omitempty"`
-	Angle2 *float64    `json:"angle2,omitempty"`
-	Angle  *float64    `json:"angle,omitempty"`
-}
+type TopoShapeSphere shape.Sphere
 
 func NewTopoShapeSphere() *TopoShapeSphere {
 	return &TopoShapeSphere{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_SPHERE),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_SPHERE),
 	}
 }
 
-type TopoShapeTorus struct {
-	Type    string
-	Radius1 float64  `json:"radius1"`
-	Radius2 float64  `json:"radius2"`
-	Angle1  *float64 `json:"angle1,omitempty"`
-	Angle2  *float64 `json:"angle2,omitempty"`
-	Angle   *float64 `json:"angle,omitempty"`
-}
+type TopoShapeTorus shape.Torus
 
 func NewTopoShapeTorus() *TopoShapeTorus {
 	return &TopoShapeTorus{
-		Type: TopoTypeToString(TOPO_SHAPE_MODE_TORUS),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_TORUS),
 	}
 }
 
 const (
-	TransitionModeRight = "right"
-	TransitionModeRound = "round"
-	TransitionModeTrans = "trans"
+	TransitionModeRight = shape.TransitionModeRight
+	TransitionModeRound = shape.TransitionModeRound
+	TransitionModeTrans = shape.TransitionModeTrans
 )
 
 func TransitionModeToInt(m string) int {
@@ -131,25 +98,16 @@ func TransitionModeToString(m int) string {
 	return TransitionModeTrans
 }
 
-type TopoShapePipe struct {
-	TopoPipe
-	Shape string
-}
+type TopoShapePipe shape.Pipe
 
 func NewTopoShapePipe() *TopoShapePipe {
 	t := &TopoShapePipe{
-		Shape: ShapeTypeToString(TOPO_SHAPE_MODE_PIPE),
+		Type: ShapeTypeToString(TOPO_SHAPE_MODE_PIPE),
 	}
-	t.Type = TopoTypeToString(TOPO_TYPE_SHAPE)
 	return t
 }
 
-type TopoShapeWedge struct {
-	Type  string
-	Edge  [3]float64      `json:"edge"`
-	Limit *WedgeFaceLimit `json:"limit,omitempty"`
-	Ltx   *float64        `json:"ltx,omitempty"`
-}
+type TopoShapeWedge shape.Wedge
 
 func NewTopoShapeWedge() *TopoShapeWedge {
 	return &TopoShapeWedge{Type: TopoTypeToString(TOPO_TYPE_SHAPE)}
@@ -194,13 +152,7 @@ func ShapeUnMarshal(js []byte) (ToposInterface, error) {
 	case TOPO_SHAPE_MODE_REVOLUTION:
 		inter = NewTopoShapeRevolution()
 	case TOPO_SHAPE_MODE_PIPE:
-		p := NewTopoShapePipe()
-		tp, e := PipeUnMarshal(js)
-		if e != nil {
-			return nil, e
-		}
-		p.TopoPipe = *tp
-		return p, nil
+		inter = NewTopoShapePipe()
 	default:
 		return nil, errors.New("not support topo type")
 	}

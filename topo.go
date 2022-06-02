@@ -3,7 +3,9 @@ package topotypes
 import (
 	"encoding/json"
 	"errors"
-	"strings"
+
+	"github.com/flywave/topotypes/shape"
+	"github.com/flywave/topotypes/utils"
 )
 
 const (
@@ -78,46 +80,42 @@ func TopoTypeToString(tp int) string {
 	}
 }
 
-func strEquals(t1, t2 string) bool {
-	return strings.ToLower(t1) == strings.ToLower(t2)
-}
-
 func StringToTopoType(tp string) int {
-	if strEquals(tp, "shape") {
+	if utils.StrEquals(tp, "shape") {
 		return TOPO_TYPE_SHAPE
-	} else if strEquals(tp, "prism") {
+	} else if utils.StrEquals(tp, "prism") {
 		return TOPO_TYPE_PRISM
-	} else if strEquals(tp, "revol") {
+	} else if utils.StrEquals(tp, "revol") {
 		return TOPO_TYPE_REVOL
-	} else if strEquals(tp, "cross-point") {
+	} else if utils.StrEquals(tp, "cross-point") {
 		return TOPO_TYPE_CROSS_POINT
-	} else if strEquals(tp, "pipe") {
+	} else if utils.StrEquals(tp, "pipe") {
 		return TOPO_TYPE_PIPE
-	} else if strEquals(tp, "symbol-path") {
+	} else if utils.StrEquals(tp, "symbol-path") {
 		return TOPO_TYPE_SYMBOL_PATH
-	} else if strEquals(tp, "material-surface") {
+	} else if utils.StrEquals(tp, "material-surface") {
 		return TOPO_TYPE_MATERIAL_SURFACE
-	} else if strEquals(tp, "symbol-surface") {
+	} else if utils.StrEquals(tp, "symbol-surface") {
 		return TOPO_TYPE_SYMBOL_SURFACE
-	} else if strEquals(tp, "texture-surface") {
+	} else if utils.StrEquals(tp, "texture-surface") {
 		return TOPO_TYPE_TEXTURE_SURFACE
-	} else if strEquals(tp, "leveled-surface") {
+	} else if utils.StrEquals(tp, "leveled-surface") {
 		return TOPO_TYPE_LEVELED_SURFACE
-	} else if strEquals(tp, "symbol") {
+	} else if utils.StrEquals(tp, "symbol") {
 		return TOPO_TYPE_SYMBOL
-	} else if strEquals(tp, "mask") {
+	} else if utils.StrEquals(tp, "mask") {
 		return TOPO_TYPE_MASK
-	} else if strEquals(tp, "light") {
+	} else if utils.StrEquals(tp, "light") {
 		return TOPO_TYPE_LIGHT
-	} else if strEquals(tp, "compound") {
+	} else if utils.StrEquals(tp, "compound") {
 		return TOPO_TYPE_COMPOUND
-	} else if strEquals(tp, "custom") {
+	} else if utils.StrEquals(tp, "custom") {
 		return TOPO_TYPE_CUSTOM
-	} else if strEquals(tp, "feature") {
+	} else if utils.StrEquals(tp, "feature") {
 		return TOPO_TYPE_FEATURE
-	} else if strEquals(tp, "sweep-layers") {
+	} else if utils.StrEquals(tp, "sweep-layers") {
 		return TOPO_TYPE_SWEEP_LAYERS
-	} else if strEquals(tp, "sweep-layers-intersection") {
+	} else if utils.StrEquals(tp, "sweep-layers-intersection") {
 		return TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	}
 	return TOPO_TYPE_NONE
@@ -140,9 +138,9 @@ func MeshModeToString(tp int) string {
 }
 
 func StringToMeshMode(tp string) int {
-	if strEquals(tp, "solid") {
+	if utils.StrEquals(tp, "solid") {
 		return TOPO_MESH_MODE_SOLID
-	} else if strEquals(tp, "shell") {
+	} else if utils.StrEquals(tp, "shell") {
 		return TOPO_MESH_MODE_SHELL
 	}
 	return TOPO_MESH_MODE_SOLID
@@ -165,9 +163,9 @@ func QuadCoordModeToString(tp int) string {
 }
 
 func StringToQuadCoordMode(tp string) int {
-	if strEquals(tp, "local") {
+	if utils.StrEquals(tp, "local") {
 		return TOPO_QUAD_COORD_MODE_LOCAl
-	} else if strEquals(tp, "mercator") {
+	} else if utils.StrEquals(tp, "mercator") {
 		return TOPO_QUAD_COORD_MODE_MERCATOR
 	}
 	return TOPO_QUAD_COORD_MODE_MERCATOR
@@ -197,13 +195,13 @@ func PathModeToString(tp int) string {
 }
 
 func StringToPathMode(tp string) int {
-	if strEquals(tp, "repeat") {
+	if utils.StrEquals(tp, "repeat") {
 		return TOPO_PATH_MODE_REPEAT
-	} else if strEquals(tp, "spacing") {
+	} else if utils.StrEquals(tp, "spacing") {
 		return TOPO_PATH_MODE_SPACING
-	} else if strEquals(tp, "random") {
+	} else if utils.StrEquals(tp, "random") {
 		return TOPO_PATH_MODE_RANDOM
-	} else if strEquals(tp, "center") {
+	} else if utils.StrEquals(tp, "center") {
 		return TOPO_PATH_MODE_CENTER
 	}
 	return TOPO_PATH_MODE_NONE
@@ -230,26 +228,26 @@ func SurfaceModeToString(tp int) string {
 }
 
 func StringToSurfaceMode(tp string) int {
-	if strEquals(tp, "grid") {
+	if utils.StrEquals(tp, "grid") {
 		return TOPO_SURFACE_MODE_GRID
-	} else if strEquals(tp, "random") {
+	} else if utils.StrEquals(tp, "random") {
 		return TOPO_SURFACE_MODE_RANDOM
-	} else if strEquals(tp, "center") {
+	} else if utils.StrEquals(tp, "center") {
 		return TOPO_SURFACE_MODE_CENTER
 	}
 	return TOPO_SURFACE_MODE_NONE
 }
 
 const (
-	TOPO_SHAPE_MODE_NONE = iota
-	TOPO_SHAPE_MODE_BOX
-	TOPO_SHAPE_MODE_CYLINDER
-	TOPO_SHAPE_MODE_CONE
-	TOPO_SHAPE_MODE_SPHERE
-	TOPO_SHAPE_MODE_TORUS
-	TOPO_SHAPE_MODE_WEDGE
-	TOPO_SHAPE_MODE_REVOLUTION
-	TOPO_SHAPE_MODE_PIPE
+	TOPO_SHAPE_MODE_NONE       = shape.MODE_NONE
+	TOPO_SHAPE_MODE_BOX        = shape.MODE_BOX
+	TOPO_SHAPE_MODE_CYLINDER   = shape.MODE_CYLINDER
+	TOPO_SHAPE_MODE_CONE       = shape.MODE_CONE
+	TOPO_SHAPE_MODE_SPHERE     = shape.MODE_SPHERE
+	TOPO_SHAPE_MODE_TORUS      = shape.MODE_TORUS
+	TOPO_SHAPE_MODE_WEDGE      = shape.MODE_WEDGE
+	TOPO_SHAPE_MODE_REVOLUTION = shape.MODE_REVOLUTION
+	TOPO_SHAPE_MODE_PIPE       = shape.MODE_PIPE
 )
 
 func ShapeTypeToString(tp int) string {
@@ -276,21 +274,21 @@ func ShapeTypeToString(tp int) string {
 }
 
 func StringToShapeType(tp string) int {
-	if strEquals(tp, "box") {
+	if utils.StrEquals(tp, "box") {
 		return TOPO_SHAPE_MODE_BOX
-	} else if strEquals(tp, "cylinder") {
+	} else if utils.StrEquals(tp, "cylinder") {
 		return TOPO_SHAPE_MODE_CYLINDER
-	} else if strEquals(tp, "cone") {
+	} else if utils.StrEquals(tp, "cone") {
 		return TOPO_SHAPE_MODE_CONE
-	} else if strEquals(tp, "sphere") {
+	} else if utils.StrEquals(tp, "sphere") {
 		return TOPO_SHAPE_MODE_SPHERE
-	} else if strEquals(tp, "torus") {
+	} else if utils.StrEquals(tp, "torus") {
 		return TOPO_SHAPE_MODE_TORUS
-	} else if strEquals(tp, "wedge") {
+	} else if utils.StrEquals(tp, "wedge") {
 		return TOPO_SHAPE_MODE_WEDGE
-	} else if strEquals(tp, "revolution") {
+	} else if utils.StrEquals(tp, "revolution") {
 		return TOPO_SHAPE_MODE_REVOLUTION
-	} else if strEquals(tp, "pipe") {
+	} else if utils.StrEquals(tp, "pipe") {
 		return TOPO_SHAPE_MODE_PIPE
 	}
 	return TOPO_SHAPE_MODE_NONE
@@ -310,51 +308,10 @@ func SmoothTypeToString(tp int) string {
 }
 
 func StringToSmoothType(tp string) int {
-	if strEquals(tp, "bspline") {
+	if utils.StrEquals(tp, "bspline") {
 		return TOPO_SMOOTH_TYPE_BSPLINE
 	}
 	return TOPO_SMOOTH_TYPE_BSPLINE
-}
-
-const (
-	TOPO_PROFILE_TYPE_NONE = iota
-	TOPO_PROFILE_TYPE_TRIANGLE
-	TOPO_PROFILE_TYPE_RECTANGLE
-	TOPO_PROFILE_TYPE_CIRC
-	TOPO_PROFILE_TYPE_ELIPS
-	TOPO_PROFILE_TYPE_POLYGON
-)
-
-func ProfileTypeToString(tp int) string {
-	switch tp {
-	case TOPO_PROFILE_TYPE_TRIANGLE:
-		return "triangle"
-	case TOPO_PROFILE_TYPE_RECTANGLE:
-		return "rectangle"
-	case TOPO_PROFILE_TYPE_CIRC:
-		return "circ"
-	case TOPO_PROFILE_TYPE_ELIPS:
-		return "ellipse"
-	case TOPO_PROFILE_TYPE_POLYGON:
-		return "polygon"
-	default:
-		return ""
-	}
-}
-
-func StringToProfileType(tp string) int {
-	if strEquals(tp, "triangle") {
-		return TOPO_PROFILE_TYPE_TRIANGLE
-	} else if strEquals(tp, "rectangle") {
-		return TOPO_PROFILE_TYPE_RECTANGLE
-	} else if strEquals(tp, "circ") {
-		return TOPO_PROFILE_TYPE_CIRC
-	} else if strEquals(tp, "ellipse") {
-		return TOPO_PROFILE_TYPE_ELIPS
-	} else if strEquals(tp, "polygon") {
-		return TOPO_PROFILE_TYPE_POLYGON
-	}
-	return TOPO_PROFILE_TYPE_NONE
 }
 
 const (
@@ -378,11 +335,11 @@ func CompoundModeToString(tp int) string {
 }
 
 func StringToCompoundMode(tp string) int {
-	if strEquals(tp, "fusion") {
+	if utils.StrEquals(tp, "fusion") {
 		return TOPO_COMPOUND_MODE_FUSION
-	} else if strEquals(tp, "common") {
+	} else if utils.StrEquals(tp, "common") {
 		return TOPO_COMPOUND_MODE_COMMON
-	} else if strEquals(tp, "cut") {
+	} else if utils.StrEquals(tp, "cut") {
 		return TOPO_COMPOUND_MODE_CUT
 	}
 	return TOPO_COMPOUND_MODE_FUSION
@@ -412,13 +369,13 @@ func LightTypeToString(tp int) string {
 }
 
 func StringToLightType(tp string) int {
-	if strEquals(tp, "spot") {
+	if utils.StrEquals(tp, "spot") {
 		return TOPO_LIGHT_MODE_SPOT
-	} else if strEquals(tp, "point") {
+	} else if utils.StrEquals(tp, "point") {
 		return TOPO_LIGHT_MODE_POINT
-	} else if strEquals(tp, "directional") {
+	} else if utils.StrEquals(tp, "directional") {
 		return TOPO_LIGHT_MODE_DIRECTIONAL
-	} else if strEquals(tp, "area") {
+	} else if utils.StrEquals(tp, "area") {
 		return TOPO_LIGHT_MODE_AREA
 	}
 	return TOPO_LIGHT_MODE_NONE
@@ -444,11 +401,11 @@ func ShadowTypeToString(tp int) string {
 }
 
 func StringToShadowType(tp string) int {
-	if strEquals(tp, "hard") {
+	if utils.StrEquals(tp, "hard") {
 		return TOPO_SHADOW_TYPE_HARD
-	} else if strEquals(tp, "soft") {
+	} else if utils.StrEquals(tp, "soft") {
 		return TOPO_SHADOW_TYPE_SOFT
-	} else if strEquals(tp, "none") {
+	} else if utils.StrEquals(tp, "none") {
 		return TOPO_SHADOW_TYPE_NONE
 	}
 	return TOPO_SHADOW_TYPE_NONE
@@ -477,13 +434,13 @@ func LeveledTypeToString(tp int) string {
 }
 
 func StringToLeveledType(tp string) int {
-	if strEquals(tp, "absolute") {
+	if utils.StrEquals(tp, "absolute") {
 		return TOPO_LEVELED_TYPE_ABSOLUTE
-	} else if strEquals(tp, "avg") {
+	} else if utils.StrEquals(tp, "avg") {
 		return TOPO_LEVELED_TYPE_AVG
-	} else if strEquals(tp, "max") {
+	} else if utils.StrEquals(tp, "max") {
 		return TOPO_LEVELED_TYPE_MAX
-	} else if strEquals(tp, "min") {
+	} else if utils.StrEquals(tp, "min") {
 		return TOPO_LEVELED_TYPE_MIN
 	}
 	return TOPO_LEVELED_TYPE_ABSOLUTE
@@ -510,11 +467,11 @@ func MaterialTypeToString(tp int) string {
 }
 
 func StringToMaterialType(tp string) int {
-	if strEquals(tp, "pbr") {
+	if utils.StrEquals(tp, "pbr") {
 		return TOPO_MATERIAL_TYPE_PBR
-	} else if strEquals(tp, "lambert") {
+	} else if utils.StrEquals(tp, "lambert") {
 		return TOPO_MATERIAL_TYPE_LAMBERT
-	} else if strEquals(tp, "phong") {
+	} else if utils.StrEquals(tp, "phong") {
 		return TOPO_MATERIAL_TYPE_PHONG
 	}
 	return TOPO_MATERIAL_TYPE_NONE
@@ -538,9 +495,9 @@ func WarpTypeToString(tp int) string {
 }
 
 func StringToWarpType(tp string) int {
-	if strEquals(tp, "repeat") {
+	if utils.StrEquals(tp, "repeat") {
 		return TOPO_WARP_TYPE_REPEAT
-	} else if strEquals(tp, "clamp") {
+	} else if utils.StrEquals(tp, "clamp") {
 		return TOPO_WARP_TYPE_CLAMP
 	}
 	return TOPO_WARP_TYPE_NONE
@@ -570,13 +527,13 @@ func FeatureBoundTypeToString(tp int) string {
 }
 
 func StringToFeatureBoundType(tp string) int {
-	if strEquals(tp, "bbox") {
+	if utils.StrEquals(tp, "bbox") {
 		return TOPO_FEATURE_BOUND_TYPE_BBOX
-	} else if strEquals(tp, "bsphere") {
+	} else if utils.StrEquals(tp, "bsphere") {
 		return TOPO_FEATURE_BOUND_TYPE_BSPHERE
-	} else if strEquals(tp, "bpath") {
+	} else if utils.StrEquals(tp, "bpath") {
 		return TOPO_FEATURE_BOUND_TYPE_BPATH
-	} else if strEquals(tp, "bpolygon") {
+	} else if utils.StrEquals(tp, "bpolygon") {
 		return TOPO_FEATURE_BOUND_TYPE_BPOLYGON
 	}
 	return TOPO_FEATURE_BOUND_TYPE_NONE
@@ -599,9 +556,9 @@ func CenterModeToString(tp int) string {
 }
 
 func StringToCenterMode(tp string) int {
-	if strEquals(tp, "box") {
+	if utils.StrEquals(tp, "box") {
 		return TOPO_CENTER_MODE_BOX
-	} else if strEquals(tp, "sphere") {
+	} else if utils.StrEquals(tp, "sphere") {
 		return TOPO_CENTER_MODE_SPHERE
 	}
 	return TOPO_CENTER_MODE_SPHERE
@@ -624,9 +581,9 @@ func PyramidModeToString(tp int) string {
 }
 
 func StringToPyramidMode(tp string) int {
-	if strEquals(tp, "tiled") {
+	if utils.StrEquals(tp, "tiled") {
 		return TOPO_PYRAMID_MODE_TILED
-	} else if strEquals(tp, "flat") {
+	} else if utils.StrEquals(tp, "flat") {
 		return TOPO_PYRAMID_MODE_FLAT
 	}
 	return TOPO_PYRAMID_MODE_FLAT
