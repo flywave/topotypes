@@ -1,18 +1,5 @@
 package topotypes
 
-import (
-	"github.com/flywave/go3d/float64/vec3"
-	"github.com/flywave/go3d/quaternion"
-)
-
-type CrossTopology struct {
-	Scale       float64      `json:"scale"`
-	Rotation    quaternion.T `json:"rotation"`
-	Offset      vec3.T       `json:"offset"`
-	Anchors     []*Anchor    `json:"anchors"`
-	AnchorCount int          `json:"anchorcount"`
-}
-
 type TopoCrossMultiPoint struct {
 	Topos
 	Refs    []TopoAnchorRef   `json:"links,omitempty"`
