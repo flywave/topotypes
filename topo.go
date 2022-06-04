@@ -31,6 +31,7 @@ const (
 	TOPO_TYPE_SWEEP_LAYERS
 	TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	TOPO_TYPE_DECAL
+	TOPO_TYPE_CATENARY
 )
 
 func TopoTypeToString(tp int) string {
@@ -75,6 +76,8 @@ func TopoTypeToString(tp int) string {
 		return "sweep-layers-intersection"
 	case TOPO_TYPE_DECAL:
 		return "decal"
+	case TOPO_TYPE_CATENARY:
+		return "catenary"
 	default:
 		return ""
 	}
@@ -117,6 +120,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_SWEEP_LAYERS
 	} else if utils.StrEquals(tp, "sweep-layers-intersection") {
 		return TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
+	} else if utils.StrEquals(tp, "catenary") {
+		return TOPO_TYPE_CATENARY
 	}
 	return TOPO_TYPE_NONE
 }
@@ -684,6 +689,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoCrossMultiPoint{}
 	case TOPO_TYPE_FEATURE:
 		inter = &TopoFeature{}
+	case TOPO_TYPE_CATENARY:
+		inter = &TopoCatenary{}
 	default:
 		return nil, errors.New("not support topo type")
 	}

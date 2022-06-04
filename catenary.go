@@ -3,7 +3,7 @@ package topotypes
 import "github.com/flywave/topotypes/catenary"
 
 type TopoCatenary struct {
-	Topos
+	TopoMaker
 	Anchors [2]*TopoAnchor `json:"anchors"`
 	catenary.Catenary
 }
