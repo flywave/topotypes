@@ -1,9 +1,29 @@
 package topotypes
 
-import "github.com/flywave/topotypes/catenary"
+import (
+	"encoding/json"
+
+	"github.com/flywave/topotypes/catenary"
+)
 
 type TopoCatenary struct {
 	TopoMaker
 	Anchors [2]*TopoAnchor `json:"anchors"`
 	catenary.Catenary
+}
+
+func CatenaryUnMarshal(js []byte) (*TopoCatenary, error) {
+	catenary := TopoCatenary{}
+	e := json.Unmarshal(js, &catenary)
+	if e != nil {
+		return nil, e
+	}
+	if catenary.Profile != nil {
+		prof, er := ProfileUnMarshal(catenary.Profile)
+		if er != nil {
+			return nil, er
+		}
+		catenary.Profile = prof
+	}
+	return &catenary, nil
 }

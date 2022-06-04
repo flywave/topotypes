@@ -690,7 +690,7 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	case TOPO_TYPE_FEATURE:
 		inter = &TopoFeature{}
 	case TOPO_TYPE_CATENARY:
-		inter = &TopoCatenary{}
+		return CatenaryUnMarshal(js)
 	default:
 		return nil, errors.New("not support topo type")
 	}
