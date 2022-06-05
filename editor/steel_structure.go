@@ -1,6 +1,8 @@
 package editor
 
 import (
+	"encoding/json"
+
 	"github.com/flywave/topotypes/material"
 	"github.com/flywave/topotypes/profile"
 )
@@ -14,4 +16,22 @@ type Structure struct {
 type SteelStructure struct {
 	BaseComponent
 	Structures []Structure `json:"structures"`
+}
+
+func SteelStructureUnMarshal(js []byte) (*SteelStructure, error) {
+	ss := SteelStructure{}
+	e := json.Unmarshal(js, &ss)
+	if e != nil {
+		return nil, e
+	}
+	for i := range ss.Structures {
+		if ss.Structures[i].Profile != nil {
+			prof, er := ProfileUnMarshal(ss.Structures[i].Profile)
+			if er != nil {
+				return nil, er
+			}
+			ss.Structures[i].Profile = prof
+		}
+	}
+	return &ss, nil
 }
