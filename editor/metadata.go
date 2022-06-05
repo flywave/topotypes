@@ -11,5 +11,7 @@ type Metadata struct {
 	Offset      vec3.T       `json:"offset"`
 	Anchors     []*Anchor    `json:"anchors"`
 	AnchorCount int          `json:"anchorcount"`
+	Boards      []*Board     `json:"boards"`
+	BoardCount  int          `json:"boardcount"`
 	Components  []*Component `json:"components,omitempty"`
 }

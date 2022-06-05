@@ -107,6 +107,22 @@ func NewTopoShapePipe() *TopoShapePipe {
 	return t
 }
 
+func TopoShapePipeUnMarshal(js []byte) (*TopoShapePipe, error) {
+	pipe := TopoShapePipe{}
+	e := json.Unmarshal(js, &pipe)
+	if e != nil {
+		return nil, e
+	}
+	if pipe.Profile != nil {
+		prof, er := ProfileUnMarshal(pipe.Profile)
+		if er != nil {
+			return nil, er
+		}
+		pipe.Profile = prof
+	}
+	return &pipe, nil
+}
+
 type TopoShapeWedge shape.Wedge
 
 func NewTopoShapeWedge() *TopoShapeWedge {
@@ -152,7 +168,10 @@ func ShapeUnMarshal(js []byte) (ToposInterface, error) {
 	case TOPO_SHAPE_MODE_REVOLUTION:
 		inter = NewTopoShapeRevolution()
 	case TOPO_SHAPE_MODE_PIPE:
-		inter = NewTopoShapePipe()
+		var err error
+		if inter, err = TopoShapePipeUnMarshal(js); err != nil {
+			return nil, err
+		}
 	default:
 		return nil, errors.New("not support topo type")
 	}
