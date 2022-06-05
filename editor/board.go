@@ -44,7 +44,7 @@ func StringToBoardType(tp string) int {
 }
 
 type Board struct {
-	Layout string
+	Layout string     `json:"layout"`
 	Name   string     `json:"name"`
 	P1     [3]float64 `json:"p1"`
 	P2     [3]float64 `json:"p2"`
