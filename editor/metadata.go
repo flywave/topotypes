@@ -1,14 +1,14 @@
 package editor
 
 import (
-	"github.com/flywave/go3d/quaternion"
-	"github.com/flywave/go3d/vec3"
+	quatd "github.com/flywave/go3d/float64/quaternion"
+	vec3d "github.com/flywave/go3d/float64/vec3"
 )
 
 type Metadata struct {
 	Scale       float64      `json:"scale"`
-	Rotation    quaternion.T `json:"rotation"`
-	Offset      vec3.T       `json:"offset"`
+	Rotation    quatd.T      `json:"rotation"`
+	Offset      vec3d.T      `json:"offset"`
 	Anchors     []*Anchor    `json:"anchors"`
 	AnchorCount int          `json:"anchorcount"`
 	Boards      []*Board     `json:"boards"`
