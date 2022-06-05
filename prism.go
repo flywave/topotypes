@@ -10,9 +10,8 @@ type PrismInterface interface {
 
 type TopoPrism struct {
 	TopoMaker
-	Profile      interface{} `json:"profile,omitempty"`
-	UntilProfile interface{} `json:"until_profile,omitempty"`
-	Direction    [3]float64  `json:"direction"`
+	Profile   interface{} `json:"profile,omitempty"`
+	Direction [3]float64  `json:"direction"`
 }
 
 func NewTopoPrism() *TopoPrism {
@@ -41,13 +40,6 @@ func PrismUnMarshal(js []byte) (*TopoPrism, error) {
 			return nil, er
 		}
 		pris.Profile = prof
-	}
-	if pris.UntilProfile != nil {
-		prof, er := ProfileUnMarshal(pris.UntilProfile)
-		if er != nil {
-			return nil, er
-		}
-		pris.UntilProfile = prof
 	}
 	return &pris, nil
 }

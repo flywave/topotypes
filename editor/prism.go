@@ -1,6 +1,8 @@
 package editor
 
 import (
+	"encoding/json"
+
 	"github.com/flywave/topotypes/material"
 	"github.com/flywave/topotypes/profile"
 )
@@ -11,4 +13,27 @@ type Prism struct {
 	UntilProfile profile.Profile      `json:"until_profile,omitempty"`
 	Direction    [3]float64           `json:"direction"`
 	Materials    []*material.Material `json:"materials,omitempty"`
+}
+
+func PrismUnMarshal(js []byte) (*Prism, error) {
+	p := Prism{}
+	e := json.Unmarshal(js, &p)
+	if e != nil {
+		return nil, e
+	}
+	if p.Profile != nil {
+		prof, er := ProfileUnMarshal(p.Profile)
+		if er != nil {
+			return nil, er
+		}
+		p.Profile = prof
+	}
+	if p.UntilProfile != nil {
+		prof, er := ProfileUnMarshal(p.UntilProfile)
+		if er != nil {
+			return nil, er
+		}
+		p.UntilProfile = prof
+	}
+	return &p, nil
 }

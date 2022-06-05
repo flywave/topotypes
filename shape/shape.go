@@ -1,6 +1,12 @@
 package shape
 
-import "github.com/flywave/topotypes/utils"
+import (
+	"encoding/json"
+	"errors"
+
+	"github.com/flywave/topotypes/profile"
+	"github.com/flywave/topotypes/utils"
+)
 
 const (
 	MODE_NONE = iota
@@ -188,6 +194,22 @@ func NewPipe() *Pipe {
 	return t
 }
 
+func PipeUnMarshal(js []byte) (*Pipe, error) {
+	pipe := Pipe{}
+	e := json.Unmarshal(js, &pipe)
+	if e != nil {
+		return nil, e
+	}
+	if pipe.Profile != nil {
+		prof, er := profile.ProfileUnMarshal(pipe.Profile)
+		if er != nil {
+			return nil, er
+		}
+		pipe.Profile = prof
+	}
+	return &pipe, nil
+}
+
 type WedgeFaceLimit struct {
 	XMin float64 `json:"xmin"`
 	ZMin float64 `json:"zmin"`
@@ -204,4 +226,51 @@ type Wedge struct {
 
 func NewWedge() *Wedge {
 	return &Wedge{Type: ShapeTypeToString(MODE_WEDGE)}
+}
+
+func ShapeUnMarshal(inter interface{}) (interface{}, error) {
+	switch pro := inter.(type) {
+	case map[string]interface{}:
+		v, ok := pro["type"]
+		t, ok2 := v.(string)
+		if !ok || !ok2 {
+			return nil, errors.New("profile type error")
+		}
+		pro_t := StringToShapeType(t)
+		js, er := json.Marshal(inter)
+		if er != nil {
+			return nil, er
+		}
+		var pf interface{}
+		switch pro_t {
+		case MODE_BOX:
+			inter = NewBox()
+		case MODE_CYLINDER:
+			inter = NewCylinder()
+		case MODE_CONE:
+			inter = NewCone()
+		case MODE_SPHERE:
+			inter = NewSphere()
+		case MODE_TORUS:
+			inter = NewTorus()
+		case MODE_WEDGE:
+			inter = NewWedge()
+		case MODE_REVOLUTION:
+			inter = NewRevolution()
+		case MODE_PIPE:
+			var err error
+			if inter, err = PipeUnMarshal(js); err != nil {
+				return nil, err
+			}
+		default:
+			return nil, errors.New("profile type error")
+		}
+		e := json.Unmarshal(([]byte)(js), pf)
+		if e != nil {
+			return nil, e
+		}
+		return pf, nil
+	default:
+		return nil, errors.New("profile type error")
+	}
 }
