@@ -37,19 +37,49 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 			var c interface{}
 			switch com_t {
 			case COMPONENT_TYPE_SHAPE:
-				c = &Shape{}
+				var err error
+				c, err = ShapeUnMarshal(js)
+				if err != nil {
+					return nil, err
+				}
+				base.Components[i] = c
+				continue
 			case COMPONENT_TYPE_PRISM:
-				c = &Prism{}
+				var err error
+				c, err = PrismUnMarshal(js)
+				if err != nil {
+					return nil, err
+				}
+				base.Components[i] = c
+				continue
 			case COMPONENT_TYPE_REVOL:
-				c = &Revol{}
+				var err error
+				c, err = RevolUnMarshal(js)
+				if err != nil {
+					return nil, err
+				}
+				base.Components[i] = c
+				continue
 			case COMPONENT_TYPE_SOLID:
 				c = &Solid{}
 			case COMPONENT_TYPE_MODEL:
 				c = &Model{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
-				c = &SteelStructure{}
+				var err error
+				c, err = SteelStructureUnMarshal(js)
+				if err != nil {
+					return nil, err
+				}
+				base.Components[i] = c
+				continue
 			case COMPONENT_TYPE_CATENARY:
-				c = &Catenary{}
+				var err error
+				c, err = CatenaryUnMarshal(js)
+				if err != nil {
+					return nil, err
+				}
+				base.Components[i] = c
+				continue
 			}
 			e := json.Unmarshal(([]byte)(js), c)
 			if e != nil {
