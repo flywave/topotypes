@@ -37,6 +37,7 @@ func StringToMaterialType(tp string) int {
 }
 
 type Material struct {
+	Name             string   `json:"name,omitempty"`
 	Type             string   `json:"type"`
 	Color            [3]byte  `json:"color"`
 	Transparency     float64  `json:"transparency"`
@@ -49,10 +50,11 @@ type Material struct {
 	Metallic         *float64 `json:"metallic,omitempty"`
 	Reflectance      *float64 `json:"reflectance,omitempty"`
 	AmbientOcclusion *float64 `json:"ambient-occlusion,omitempty"`
+	Texture          string   `json:"texture,omitempty"`
 }
 
 func (m *Material) HasTexture() bool {
-	return false
+	return m.Texture != ""
 }
 
 func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {

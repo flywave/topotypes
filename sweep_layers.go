@@ -14,7 +14,6 @@ type TopoLayer struct {
 	Width    float32     `json:"width"`
 	Height   float32     `json:"height"`
 	Profile  TopoProfile `json:"profile"`
-	Texture  string      `json:"texture,omitempty"`
 	Finished bool        `json:"finished"`
 	// Boolean string      `json:"boolean,omitempty"`
 }
