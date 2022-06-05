@@ -2,8 +2,9 @@ package topotypes
 
 type TopoSymbol struct {
 	Topos
-	Model     string `json:"model"`
-	Instanced bool   `json:"instanced"`
+	Model     string             `json:"model"`
+	Boards    []TopoBoardTexture `json:"boards,omitempty"`
+	Instanced bool               `json:"instanced"`
 }
 
 func NewTopoSymbol() *TopoSymbol {
