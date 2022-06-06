@@ -12,10 +12,10 @@ type Metadata struct {
 	Scale       float64     `json:"scale"`
 	Rotation    quatd.T     `json:"rotation"`
 	Offset      vec3d.T     `json:"offset"`
-	Anchors     []*Anchor   `json:"anchors"`
-	AnchorCount int         `json:"anchorcount"`
-	Boards      []*Board    `json:"boards"`
-	BoardCount  int         `json:"boardcount"`
+	Anchors     []*Anchor   `json:"anchors,omitempty"`
+	AnchorCount int         `json:"anchorcount,omitempty"`
+	Boards      []*Board    `json:"boards,omitempty"`
+	BoardCount  int         `json:"boardcount,omitempty"`
 	Components  []Component `json:"components,omitempty"`
 }
 
