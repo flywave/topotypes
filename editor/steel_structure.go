@@ -8,7 +8,7 @@ import (
 )
 
 type Structure struct {
-	Wire      [][3]float64         `json:"wire"`
+	Wire      [][][3]float64       `json:"wire"`
 	Profile   profile.Profile      `json:"profile"`
 	Materials []*material.Material `json:"materials,omitempty"`
 }

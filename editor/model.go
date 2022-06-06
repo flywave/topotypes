@@ -3,9 +3,9 @@ package editor
 type AnchorLinkType string
 
 const (
-	ANCHOR_LINK_LINKED   = "linked"
-	ANCHOR_LINK_DISABLED = "disabled"
-	ANCHOR_LINK_OPENED   = "opened"
+	ANCHOR_LINK_LINKED   AnchorLinkType = "linked"
+	ANCHOR_LINK_DISABLED AnchorLinkType = "disabled"
+	ANCHOR_LINK_OPENED   AnchorLinkType = "opened"
 )
 
 type ComponentAnchorLink struct {
