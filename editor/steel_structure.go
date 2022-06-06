@@ -8,14 +8,15 @@ import (
 )
 
 type Structure struct {
-	Wire      [][][3]float64       `json:"wire"`
-	Profile   profile.Profile      `json:"profile"`
-	Materials []*material.Material `json:"materials,omitempty"`
+	Wire     [][][3]float64  `json:"wire"`
+	Profile  profile.Profile `json:"profile"`
+	Material string          `json:"mtl,omitempty"`
 }
 
 type SteelStructure struct {
 	BaseComponent
-	Structures []Structure `json:"structures"`
+	Structures []Structure          `json:"structures"`
+	Materials  []*material.Material `json:"materials,omitempty"`
 }
 
 func SteelStructureUnMarshal(js []byte) (*SteelStructure, error) {
