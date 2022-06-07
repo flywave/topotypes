@@ -12,10 +12,10 @@ type Metadata struct {
 	Scale       float64     `json:"scale"`
 	Rotation    quatd.T     `json:"rotation"`
 	Offset      vec3d.T     `json:"offset"`
-	Anchors     []*Anchor   `json:"anchors"`
-	AnchorCount int         `json:"anchorcount"`
-	Boards      []*Board    `json:"boards"`
-	BoardCount  int         `json:"boardcount"`
+	Anchors     []*Anchor   `json:"anchors,omitempty"`
+	AnchorCount int         `json:"anchorcount,omitempty"`
+	Boards      []*Board    `json:"boards,omitempty"`
+	BoardCount  int         `json:"boardcount,omitempty"`
 	Components  []Component `json:"components,omitempty"`
 }
 
@@ -33,12 +33,13 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 			if !ok || !ok2 {
 				return nil, errors.New("components type error")
 			}
+			js2, _ := json.Marshal(base.Components[i])
 			com_t := StringToComponentType(t)
 			var c interface{}
 			switch com_t {
 			case COMPONENT_TYPE_SHAPE:
 				var err error
-				c, err = ShapeUnMarshal(js)
+				c, err = ShapeUnMarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -46,7 +47,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				continue
 			case COMPONENT_TYPE_PRISM:
 				var err error
-				c, err = PrismUnMarshal(js)
+				c, err = PrismUnMarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -54,7 +55,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				continue
 			case COMPONENT_TYPE_REVOL:
 				var err error
-				c, err = RevolUnMarshal(js)
+				c, err = RevolUnMarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -66,7 +67,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				c = &Model{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
 				var err error
-				c, err = SteelStructureUnMarshal(js)
+				c, err = SteelStructureUnMarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -74,14 +75,14 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				continue
 			case COMPONENT_TYPE_CATENARY:
 				var err error
-				c, err = CatenaryUnMarshal(js)
+				c, err = CatenaryUnMarshal(js2)
 				if err != nil {
 					return nil, err
 				}
 				base.Components[i] = c
 				continue
 			}
-			e := json.Unmarshal(([]byte)(js), c)
+			e := json.Unmarshal(([]byte)(js2), c)
 			if e != nil {
 				return nil, e
 			}

@@ -228,20 +228,19 @@ func NewWedge() *Wedge {
 	return &Wedge{Type: ShapeTypeToString(MODE_WEDGE)}
 }
 
-func ShapeUnMarshal(inter interface{}) (interface{}, error) {
+func ShapeUnMarshal(inter interface{}) (interface{}, string, error) {
 	switch pro := inter.(type) {
 	case map[string]interface{}:
 		v, ok := pro["type"]
 		t, ok2 := v.(string)
 		if !ok || !ok2 {
-			return nil, errors.New("profile type error")
+			return nil, "", errors.New("profile type error")
 		}
 		pro_t := StringToShapeType(t)
 		js, er := json.Marshal(inter)
 		if er != nil {
-			return nil, er
+			return nil, "", er
 		}
-		var pf interface{}
 		switch pro_t {
 		case MODE_BOX:
 			inter = NewBox()
@@ -260,17 +259,18 @@ func ShapeUnMarshal(inter interface{}) (interface{}, error) {
 		case MODE_PIPE:
 			var err error
 			if inter, err = PipeUnMarshal(js); err != nil {
-				return nil, err
+				return nil, "", err
 			}
+			return inter, ShapeTypeToString(pro_t), nil
 		default:
-			return nil, errors.New("profile type error")
+			return nil, "", errors.New("profile type error")
 		}
-		e := json.Unmarshal(([]byte)(js), pf)
+		e := json.Unmarshal(([]byte)(js), inter)
 		if e != nil {
-			return nil, e
+			return nil, "", e
 		}
-		return pf, nil
+		return inter, ShapeTypeToString(pro_t), nil
 	default:
-		return nil, errors.New("profile type error")
+		return nil, "", errors.New("profile type error")
 	}
 }

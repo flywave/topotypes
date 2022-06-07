@@ -4,14 +4,16 @@ import (
 	"encoding/json"
 
 	"github.com/flywave/topotypes/catenary"
+	"github.com/flywave/topotypes/material"
 )
 
 type Catenary struct {
 	BaseComponent
 	catenary.Catenary
-	P1        [3]float64 `json:"p1"`
-	P2        [3]float64 `json:"p2"`
-	Direction [3]float64 `json:"direction"`
+	Materials []*material.Material `json:"materials,omitempty"`
+	P1        [3]float64           `json:"p1"`
+	P2        [3]float64           `json:"p2"`
+	Direction [3]float64           `json:"direction"`
 }
 
 func CatenaryUnMarshal(js []byte) (*Catenary, error) {

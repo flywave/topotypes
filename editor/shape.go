@@ -21,11 +21,12 @@ func ShapeUnMarshal(js []byte) (*Shape, error) {
 		return nil, e
 	}
 	if r.ShapeModel != nil {
-		shp, er := shape.ShapeUnMarshal(r.ShapeModel)
+		shp, tp, er := shape.ShapeUnMarshal(r.ShapeModel)
 		if er != nil {
 			return nil, er
 		}
 		r.ShapeModel = shp
+		r.Shape = tp
 	}
 	return &r, nil
 }
