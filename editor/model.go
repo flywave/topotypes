@@ -17,6 +17,7 @@ type ComponentAnchorLink struct {
 
 type Model struct {
 	BaseComponent
+	Root  bool                  `json:"root"`
 	Model string                `json:"model"`
 	Links []ComponentAnchorLink `json:"links,omitempty"`
 }
