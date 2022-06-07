@@ -27,12 +27,5 @@ func PrismUnMarshal(js []byte) (*Prism, error) {
 		}
 		p.Profile = prof
 	}
-	if p.UntilProfile != nil {
-		prof, er := ProfileUnMarshal(p.UntilProfile)
-		if er != nil {
-			return nil, er
-		}
-		p.UntilProfile = prof
-	}
 	return &p, nil
 }
