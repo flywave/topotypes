@@ -9,9 +9,9 @@ import (
 )
 
 type Metadata struct {
-	Scale       float64     `json:"scale"`
-	Rotation    quatd.T     `json:"rotation"`
-	Offset      vec3d.T     `json:"offset"`
+	Scale       float64     `json:"scale,omitempty"`
+	Rotation    quatd.T     `json:"rotation,omitempty"`
+	Offset      vec3d.T     `json:"offset,omitempty"`
 	Anchors     []*Anchor   `json:"anchors,omitempty"`
 	AnchorCount int         `json:"anchorcount,omitempty"`
 	Boards      []*Board    `json:"boards,omitempty"`
@@ -90,6 +90,12 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 		default:
 			return nil, errors.New("components type error")
 		}
+	}
+	if base.Scale == 0 {
+		base.Scale = 1
+	}
+	if base.Rotation == [4]float64{0, 0, 0, 0} {
+		base.Rotation = quatd.Ident
 	}
 	return &base, nil
 }
