@@ -17,6 +17,7 @@ func TopoMtlToMeshMtl(mtl *TopoMaterial) mst.MeshMaterial {
 type TopoMaterialMap map[string]*TopoMaterial
 
 func (mk *TopoMaterialMap) UnmarshalJSON(data []byte) error {
+	*mk = make(map[string]*TopoMaterial)
 	var tmp interface{}
 	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
@@ -29,6 +30,9 @@ func (mk *TopoMaterialMap) UnmarshalJSON(data []byte) error {
 		json.Unmarshal(dt, &mtls)
 		*mk = mtls
 	case []interface{}:
+		if len(t) == 0 {
+			return nil
+		}
 		mtls := make(map[string]*TopoMaterial)
 		dt, _ := json.Marshal(t)
 		ary := []*TopoMaterial{}

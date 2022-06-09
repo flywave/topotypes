@@ -19,6 +19,9 @@ func (t *TopoMaker) IsInstance() bool {
 }
 
 func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
+	if t.Materials == nil {
+		return map[string]*TopoMaterial{}
+	}
 	return (map[string]*TopoMaterial)(*t.Materials)
 }
 
