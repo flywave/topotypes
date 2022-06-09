@@ -36,21 +36,57 @@ func StringToMaterialType(tp string) int {
 	return TYPE_NONE
 }
 
+const (
+	TextureCube = iota
+	TextureNormal
+	TextureNormalAutoScale
+)
+
+func TxtureMapToString(tp int) string {
+	switch tp {
+	case TextureCube:
+		return "cube"
+	case TextureNormal:
+		return "normal"
+	case TextureNormalAutoScale:
+		return "normal-auto-scale"
+	default:
+		return ""
+	}
+}
+
+func StringToTxtureMap(tp string) int {
+	if utils.StrEquals(tp, "cube") {
+		return TextureCube
+	} else if utils.StrEquals(tp, "normal") {
+		return TextureNormal
+	} else if utils.StrEquals(tp, "normal-auto-scale") {
+		return TextureNormalAutoScale
+	}
+	return TYPE_NONE
+}
+
 type Material struct {
-	Name             string   `json:"name,omitempty"`
-	Type             string   `json:"type"`
-	Color            [3]byte  `json:"color"`
-	Transparency     float64  `json:"transparency"`
-	Ambient          [3]byte  `json:"ambient"`
-	Emissive         [3]byte  `json:"emissive"`
-	Specular         [3]byte  `json:"specular"`
-	Shininess        *float64 `json:"shininess,omitempty"`
-	Specularity      *float64 `json:"specularity,omitempty"`
-	Roughness        *float64 `json:"roughness,omitempty"`
-	Metallic         *float64 `json:"metallic,omitempty"`
-	Reflectance      *float64 `json:"reflectance,omitempty"`
-	AmbientOcclusion *float64 `json:"ambient-occlusion,omitempty"`
-	Texture          string   `json:"texture,omitempty"`
+	Name             string      `json:"name,omitempty"`
+	Type             string      `json:"type"`
+	Color            [3]byte     `json:"color"`
+	Transparency     float64     `json:"transparency"`
+	Ambient          [3]byte     `json:"ambient"`
+	Emissive         [3]byte     `json:"emissive"`
+	Specular         [3]byte     `json:"specular"`
+	Shininess        *float64    `json:"shininess,omitempty"`
+	Specularity      *float64    `json:"specularity,omitempty"`
+	Roughness        *float64    `json:"roughness,omitempty"`
+	Metallic         *float64    `json:"metallic,omitempty"`
+	Reflectance      *float64    `json:"reflectance,omitempty"`
+	AmbientOcclusion *float64    `json:"ambient-occlusion,omitempty"`
+	Texture          string      `json:"texture,omitempty"`
+	TextureScale     *[2]float64 `json:"texture-scale,omitempty"`
+	TextureOrigin    *[2]float64 `json:"texture-origin,omitempty"`
+	TextureRepeat    *[2]float64 `json:"texture-repeat,omitempty"`
+	TextureAutoScale *[2]float64 `json:"texture-auto-scale,omitempty"`
+	TxtureMap        *string     `json:"texture-map,omitempty"`
+	TextureAngle     *float64    `json:"texture-angle,omitempty"`
 }
 
 func (m *Material) HasTexture() bool {
