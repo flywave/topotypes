@@ -14,7 +14,6 @@ const (
 	TOPO_TYPE_PRISM
 	TOPO_TYPE_REVOL
 	TOPO_TYPE_PIPE
-	TOPO_TYPE_COMPOUND
 	TOPO_TYPE_CROSS_POINT
 	TOPO_TYPE_SYMBOL
 	TOPO_TYPE_SYMBOL_PATH
@@ -64,8 +63,6 @@ func TopoTypeToString(tp int) string {
 		return "mask"
 	case TOPO_TYPE_LIGHT:
 		return "light"
-	case TOPO_TYPE_COMPOUND:
-		return "compound"
 	case TOPO_TYPE_CUSTOM:
 		return "custom"
 	case TOPO_TYPE_FEATURE:
@@ -110,8 +107,6 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_MASK
 	} else if utils.StrEquals(tp, "light") {
 		return TOPO_TYPE_LIGHT
-	} else if utils.StrEquals(tp, "compound") {
-		return TOPO_TYPE_COMPOUND
 	} else if utils.StrEquals(tp, "custom") {
 		return TOPO_TYPE_CUSTOM
 	} else if utils.StrEquals(tp, "feature") {
@@ -317,37 +312,6 @@ func StringToSmoothType(tp string) int {
 		return TOPO_SMOOTH_TYPE_BSPLINE
 	}
 	return TOPO_SMOOTH_TYPE_BSPLINE
-}
-
-const (
-	TOPO_COMPOUND_MODE_NONE = iota
-	TOPO_COMPOUND_MODE_FUSION
-	TOPO_COMPOUND_MODE_COMMON
-	TOPO_COMPOUND_MODE_CUT
-)
-
-func CompoundModeToString(tp int) string {
-	switch tp {
-	case TOPO_COMPOUND_MODE_FUSION:
-		return "fusion"
-	case TOPO_COMPOUND_MODE_COMMON:
-		return "common"
-	case TOPO_COMPOUND_MODE_CUT:
-		return "cut"
-	default:
-		return ""
-	}
-}
-
-func StringToCompoundMode(tp string) int {
-	if utils.StrEquals(tp, "fusion") {
-		return TOPO_COMPOUND_MODE_FUSION
-	} else if utils.StrEquals(tp, "common") {
-		return TOPO_COMPOUND_MODE_COMMON
-	} else if utils.StrEquals(tp, "cut") {
-		return TOPO_COMPOUND_MODE_CUT
-	}
-	return TOPO_COMPOUND_MODE_FUSION
 }
 
 const (
@@ -569,31 +533,6 @@ func StringToCenterMode(tp string) int {
 	return TOPO_CENTER_MODE_SPHERE
 }
 
-const (
-	TOPO_PYRAMID_MODE_TILED = iota
-	TOPO_PYRAMID_MODE_FLAT
-)
-
-func PyramidModeToString(tp int) string {
-	switch tp {
-	case TOPO_PYRAMID_MODE_TILED:
-		return "tiled"
-	case TOPO_PYRAMID_MODE_FLAT:
-		return "flat"
-	default:
-		return ""
-	}
-}
-
-func StringToPyramidMode(tp string) int {
-	if utils.StrEquals(tp, "tiled") {
-		return TOPO_PYRAMID_MODE_TILED
-	} else if utils.StrEquals(tp, "flat") {
-		return TOPO_PYRAMID_MODE_FLAT
-	}
-	return TOPO_PYRAMID_MODE_FLAT
-}
-
 type ToposInterface interface {
 	GetType() string
 	GetTransform() *TopoTransform
@@ -661,8 +600,6 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return SweepLayersUnMarshal(js)
 	case TOPO_TYPE_SWEEP_LAYERS_INTERSECTION:
 		inter = &TopoSweepLayersIntersection{}
-	case TOPO_TYPE_COMPOUND:
-		return CompoundUnMarshal(js)
 	case TOPO_TYPE_CROSS_POINT:
 		inter = &TopoCrossPoint{}
 	case TOPO_TYPE_SYMBOL:
