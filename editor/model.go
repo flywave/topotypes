@@ -9,10 +9,10 @@ const (
 )
 
 type ComponentAnchorLink struct {
-	AnchorName     string         `json:"anchor_name"`
-	Link           string         `json:"link"`
-	DestAnchorName string         `json:"dest_anchor_name"`
-	Type           AnchorLinkType `json:"type"`
+	AnchorId     string         `json:"anchor_id"`
+	Link         string         `json:"link"`
+	DestAnchorId string         `json:"dest_anchor_id"`
+	Type         AnchorLinkType `json:"type"`
 }
 
 type Model struct {

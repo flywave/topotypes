@@ -5,13 +5,13 @@ type TopoAnchorRef struct {
 }
 
 type TopoAnchorLink struct {
-	Link           string `json:"link"`
-	AnchorName     string `json:"anchor_name"`
-	DestAnchorName string `json:"dest_anchor_name"`
+	Link         string `json:"link"`
+	AnchorId     string `json:"anchor_id"`
+	DestAnchorId string `json:"dest_anchor_id"`
 }
 
 type TopoAnchor struct {
-	Name     string      `json:"name"`
+	Id       string      `json:"id"`
 	Position *[3]float64 `json:"position,omitempty"`
 	Link     string      `json:"link,omitempty"`
 }
