@@ -27,3 +27,11 @@ func CatenaryUnMarshal(js []byte) (*TopoCatenary, error) {
 	}
 	return &catenary, nil
 }
+
+func (sp *TopoCatenary) GetAnchor() [2]*TopoAnchor {
+	return sp.Anchors
+}
+
+func (sp *TopoCatenary) GetProfile() TopoProfile {
+	return sp.Profile
+}

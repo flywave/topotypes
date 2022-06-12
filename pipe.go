@@ -5,7 +5,7 @@ import "encoding/json"
 type TopoPipe struct {
 	TopoMaker
 	Wire           [][3]float64   `json:"-"`
-	Profile        interface{}    `json:"profile"`
+	Profile        TopoProfile    `json:"profile"`
 	Anchors        [2]*TopoAnchor `json:"anchors"`
 	Customs        [2]*string     `json:"customs"`
 	Smooth         string         `json:"smooth,omitempty"`
@@ -20,6 +20,14 @@ func NewTopoPipe() *TopoPipe {
 
 func (sp *TopoPipe) IsTopoBoundy() bool {
 	return true
+}
+
+func (sp *TopoPipe) GetAnchor() [2]*TopoAnchor {
+	return sp.Anchors
+}
+
+func (sp *TopoPipe) GetProfile() TopoProfile {
+	return sp.Profile
 }
 
 func PipeUnMarshal(js []byte) (*TopoPipe, error) {
