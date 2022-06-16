@@ -3,15 +3,17 @@ package editor
 import (
 	"encoding/json"
 	"errors"
-
-	quatd "github.com/flywave/go3d/float64/quaternion"
-	vec3d "github.com/flywave/go3d/float64/vec3"
 )
 
 type Metadata struct {
-	Scale       float64     `json:"scale,omitempty"`
-	Rotation    quatd.T     `json:"rotation,omitempty"`
-	Offset      vec3d.T     `json:"offset,omitempty"`
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	Version   uint64 `json:"version"`
+	Transform *struct {
+		Rotation  *[4]float64 `json:"rotation,omitempty"`
+		Translate *[3]float64 `json:"translate,omitempty"`
+		Scale     *[3]float64 `json:"scale,omitempty"`
+	} `json:"transform,omitempty"`
 	Anchors     []*Anchor   `json:"anchors,omitempty"`
 	AnchorCount int         `json:"anchorcount,omitempty"`
 	Boards      []*Board    `json:"boards,omitempty"`
@@ -90,12 +92,6 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 		default:
 			return nil, errors.New("components type error")
 		}
-	}
-	if base.Scale == 0 {
-		base.Scale = 1
-	}
-	if base.Rotation == [4]float64{0, 0, 0, 0} {
-		base.Rotation = quatd.Ident
 	}
 	return &base, nil
 }

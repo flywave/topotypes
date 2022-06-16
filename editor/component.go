@@ -56,7 +56,8 @@ func StringToComponentType(tp string) int {
 type Component interface{}
 
 type BaseComponent struct {
-	Name      string `json:"name"`
+	Id        string `json:"id"`
+	Name      string `json:"name,omitempty"`
 	Type      string `json:"type"`
 	Transform *struct {
 		Rotation  *[4]float64 `json:"rotation,omitempty"`
