@@ -14,9 +14,8 @@ func NewTopoCrossMultiPoint() *TopoCrossMultiPoint {
 
 type TopoCrossPoint struct {
 	Topos
-	Model  string             `json:"model"`
-	Boards []TopoBoardTexture `json:"boards,omitempty"`
-	Links  []TopoAnchorLink   `json:"links,omitempty"`
+	Model string           `json:"model"`
+	Links []TopoAnchorLink `json:"links,omitempty"`
 }
 
 func NewTopoCrossPoint() *TopoCrossPoint {

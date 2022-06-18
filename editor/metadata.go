@@ -3,6 +3,8 @@ package editor
 import (
 	"encoding/json"
 	"errors"
+
+	"github.com/flywave/topotypes/board"
 )
 
 type Metadata struct {
@@ -14,11 +16,11 @@ type Metadata struct {
 		Translate *[3]float64 `json:"translate,omitempty"`
 		Scale     *[3]float64 `json:"scale,omitempty"`
 	} `json:"transform,omitempty"`
-	Anchors     []*Anchor   `json:"anchors,omitempty"`
-	AnchorCount int         `json:"anchorcount,omitempty"`
-	Boards      []*Board    `json:"boards,omitempty"`
-	BoardCount  int         `json:"boardcount,omitempty"`
-	Components  []Component `json:"components,omitempty"`
+	Anchors     []*Anchor      `json:"anchors,omitempty"`
+	AnchorCount int            `json:"anchorcount,omitempty"`
+	Boards      []*board.Board `json:"boards,omitempty"`
+	BoardCount  int            `json:"boardcount,omitempty"`
+	Components  []Component    `json:"components,omitempty"`
 }
 
 func MetadataUnMarshal(js []byte) (*Metadata, error) {

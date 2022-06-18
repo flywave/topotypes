@@ -1,4 +1,4 @@
-package editor
+package board
 
 import (
 	"github.com/flywave/topotypes/utils"
