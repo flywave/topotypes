@@ -1,6 +1,8 @@
 package editor
 
-import "github.com/flywave/topotypes/utils"
+import (
+	"github.com/flywave/topotypes/utils"
+)
 
 const (
 	BOARD_LAYOUT_NONE = iota
@@ -44,9 +46,10 @@ func StringToBoardType(tp string) int {
 }
 
 type Board struct {
-	Layout string     `json:"layout"`
-	Name   string     `json:"name"`
-	P1     [3]float64 `json:"p1"`
-	P2     [3]float64 `json:"p2"`
-	Dir    [3]float64 `json:"dir"`
+	Name    string     `json:"name"`
+	P1      [3]float64 `json:"p1"`
+	P2      [3]float64 `json:"p2"`
+	Dir     [3]float64 `json:"dir"`
+	Layout  string     `json:"layout"`
+	Texture string     `json:"texture,omitempty"`
 }
