@@ -29,15 +29,23 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 	if e != nil {
 		return nil, e
 	}
-	for i := range base.Components {
-		switch pro := base.Components[i].(type) {
+	base.Components, e = ComponentsUnMarshal(base.Components)
+	if e != nil {
+		return nil, e
+	}
+	return &base, nil
+}
+
+func ComponentsUnMarshal(components []Component) ([]Component, error) {
+	for i := range components {
+		switch pro := components[i].(type) {
 		case map[string]interface{}:
 			v, ok := pro["type"]
 			t, ok2 := v.(string)
 			if !ok || !ok2 {
 				return nil, errors.New("components type error")
 			}
-			js2, _ := json.Marshal(base.Components[i])
+			js2, _ := json.Marshal(components[i])
 			com_t := StringToComponentType(t)
 			var c interface{}
 			switch com_t {
@@ -47,7 +55,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				if err != nil {
 					return nil, err
 				}
-				base.Components[i] = c
+				components[i] = c
 				continue
 			case COMPONENT_TYPE_PRISM:
 				var err error
@@ -55,7 +63,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				if err != nil {
 					return nil, err
 				}
-				base.Components[i] = c
+				components[i] = c
 				continue
 			case COMPONENT_TYPE_REVOL:
 				var err error
@@ -63,7 +71,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				if err != nil {
 					return nil, err
 				}
-				base.Components[i] = c
+				components[i] = c
 				continue
 			case COMPONENT_TYPE_SOLID:
 				c = &Solid{}
@@ -75,7 +83,7 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				if err != nil {
 					return nil, err
 				}
-				base.Components[i] = c
+				components[i] = c
 				continue
 			case COMPONENT_TYPE_CATENARY:
 				var err error
@@ -83,17 +91,18 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 				if err != nil {
 					return nil, err
 				}
-				base.Components[i] = c
+				components[i] = c
 				continue
 			}
 			e := json.Unmarshal(([]byte)(js2), c)
 			if e != nil {
 				return nil, e
 			}
-			base.Components[i] = c
+			components[i] = c
 		default:
 			return nil, errors.New("components type error")
 		}
 	}
-	return &base, nil
+
+	return components, nil
 }
