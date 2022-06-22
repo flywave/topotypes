@@ -3,8 +3,6 @@ package component
 import (
 	"encoding/json"
 	"errors"
-
-	"github.com/flywave/topotypes/board"
 )
 
 type Metadata struct {
@@ -16,11 +14,9 @@ type Metadata struct {
 		Translate *[3]float64 `json:"translate,omitempty"`
 		Scale     *[3]float64 `json:"scale,omitempty"`
 	} `json:"transform,omitempty"`
-	Anchors     []*Anchor      `json:"anchors,omitempty"`
-	AnchorCount int            `json:"anchorcount,omitempty"`
-	Boards      []*board.Board `json:"boards,omitempty"`
-	BoardCount  int            `json:"boardcount,omitempty"`
-	Components  []Component    `json:"components,omitempty"`
+	Anchors     []*Anchor   `json:"anchors,omitempty"`
+	AnchorCount int         `json:"anchorcount,omitempty"`
+	Components  []Component `json:"components,omitempty"`
 }
 
 func MetadataUnMarshal(js []byte) (*Metadata, error) {
@@ -77,6 +73,8 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &Solid{}
 			case COMPONENT_TYPE_MODEL:
 				c = &Model{}
+			case COMPONENT_TYPE_BOARD:
+				c = &Board{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
 				var err error
 				c, err = SteelStructureUnMarshal(js2)
