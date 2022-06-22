@@ -1,4 +1,4 @@
-package editor
+package component
 
 import vec3d "github.com/flywave/go3d/float64/vec3"
 
