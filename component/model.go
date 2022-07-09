@@ -1,4 +1,4 @@
-package editor
+package component
 
 type AnchorLinkType string
 
