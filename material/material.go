@@ -10,6 +10,7 @@ const (
 	TYPE_PBR
 	TYPE_LAMBERT
 	TYPE_PHONG
+	TYPE_BASE
 )
 
 func MaterialTypeToString(tp int) string {
@@ -20,6 +21,8 @@ func MaterialTypeToString(tp int) string {
 		return "lambert"
 	case TYPE_PHONG:
 		return "phong"
+	case TYPE_BASE:
+		return "base"
 	default:
 		return ""
 	}
@@ -32,6 +35,8 @@ func StringToMaterialType(tp string) int {
 		return TYPE_LAMBERT
 	} else if utils.StrEquals(tp, "phong") {
 		return TYPE_PHONG
+	} else if utils.StrEquals(tp, "base") {
+		return TYPE_BASE
 	}
 	return TYPE_NONE
 }
@@ -96,6 +101,10 @@ func (m *Material) HasTexture() bool {
 func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 	ty := StringToMaterialType(mtl.Type)
 	switch ty {
+	case TYPE_BASE:
+		mt := &mst.TextureMaterial{}
+		mt.Color = mtl.Color
+		return mt
 	case TYPE_PBR:
 		mt := &mst.PbrMaterial{}
 		mt.Color = mtl.Color
