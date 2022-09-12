@@ -38,11 +38,15 @@ func (p *TopoProjector) GetTransform() *TopoTransform {
 }
 
 type TopoDecal struct {
-	TopoProjector
-	Type    string         `json:"type"`
-	Texture string         `json:"texture"`
-	Refs    []TopoDecalRef `json:"targets,omitempty"`
-	Fusion  bool           `json:"fusion"`
+	Projector TopoProjector  `json:"projector"`
+	Type      string         `json:"type"`
+	Texture   string         `json:"texture"`
+	Refs      []TopoDecalRef `json:"targets,omitempty"`
+	Fusion    bool           `json:"fusion"`
+}
+
+func (tp *TopoDecal) GetTransform() *TopoTransform {
+	return tp.Projector.GetTransform()
 }
 
 func (tp *TopoDecal) GetType() string {
