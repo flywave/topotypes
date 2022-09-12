@@ -58,5 +58,5 @@ func (tp *TopoDecal) GetFusion() bool {
 }
 
 func (tp *TopoDecal) ResetTransform() {
-	tp.TopoProjector = TopoProjector{}
+	tp.Projector = TopoProjector{}
 }
