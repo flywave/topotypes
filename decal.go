@@ -10,7 +10,7 @@ type TopoDecalRef struct {
 
 type TopoProjector struct {
 	Orientation *[3]float64 `json:"orientation"`
-	Size        *[3]float64 `json:"size"`
+	Size        *[2]float64 `json:"size"`
 }
 
 func (p *TopoProjector) GetTransform() *TopoTransform {
