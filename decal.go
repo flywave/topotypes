@@ -11,3 +11,9 @@ type TopoDecal struct {
 	Texture string         `json:"texture"`
 	Refs    []TopoDecalRef `json:"targets,omitempty"`
 }
+
+func NewTopoDecal() *TopoDecal {
+	t := &TopoDecal{}
+	t.Type = TopoTypeToString(TOPO_TYPE_DECAL)
+	return t
+}

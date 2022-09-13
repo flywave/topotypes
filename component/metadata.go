@@ -75,6 +75,8 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &Model{}
 			case COMPONENT_TYPE_DECAL:
 				c = &Decal{}
+			case COMPONENT_TYPE_BOARD:
+				c = &Board{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
 				var err error
 				c, err = SteelStructureUnMarshal(js2)
