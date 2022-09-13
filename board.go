@@ -1,0 +1,14 @@
+package topotypes
+
+type TopoBoard struct {
+	TopoMaker
+	Size    *[2]float64 `json:"size"`
+	Depth   *float64    `json:"depth"`
+	Texture string      `json:"texture"`
+}
+
+func NewTopoBoard() *TopoBoard {
+	t := &TopoBoard{}
+	t.Type = TopoTypeToString(TOPO_TYPE_BOARD)
+	return t
+}
