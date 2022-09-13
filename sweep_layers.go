@@ -10,19 +10,19 @@ type Rectangle struct {
 }
 
 type TopoLayer struct {
-	Name     string      `json:"name,omitempty"`
-	Width    float32     `json:"width"`
-	Height   float32     `json:"height"`
-	Profile  TopoProfile `json:"profile"`
-	Finished bool        `json:"finished"`
+	Name      string      `json:"name,omitempty"`
+	Width     float32     `json:"width"`
+	Height    float32     `json:"height"`
+	Profile   TopoProfile `json:"profile"`
+	Finished  bool        `json:"finished"`
+	Mtl       string      `json:"mtl,omitempty`
+	IsSurface bool        `json:"is_surface,omitempty"`
 	// Boolean string      `json:"boolean,omitempty"`
 }
 
 type TopoSweepLayers struct {
 	TopoMaker
-	SideLayers   []*TopoLayer `json:"side-layers,omitempty"`
-	CenterLayers []*TopoLayer `json:"center-layers,omitempty"`
-	Decals       []*TopoDecal `json:"decals,omitempty"`
+	Layers []*TopoLayer `json:"layers,omitempty"`
 }
 
 type LayerGroup struct {
@@ -43,15 +43,7 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 		return nil, e
 	}
 
-	for _, l := range sl.SideLayers {
-		prof, er := ProfileUnMarshal(l.Profile)
-		if er != nil {
-			return nil, er
-		}
-		l.Profile = prof
-	}
-
-	for _, l := range sl.CenterLayers {
+	for _, l := range sl.Layers {
 		prof, er := ProfileUnMarshal(l.Profile)
 		if er != nil {
 			return nil, er
@@ -59,4 +51,14 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 		l.Profile = prof
 	}
 	return &sl, nil
+}
+
+func (t *TopoSweepLayers) GetMaterialIds() []string {
+	ids := []string{}
+	for _, l := range t.Layers {
+		if l.Finished {
+			ids = append(ids, l.Mtl)
+		}
+	}
+	return ids
 }
