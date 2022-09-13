@@ -3,7 +3,7 @@ package topotypes
 type TopoMakerInterface interface {
 	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
-	GetMaterialId() string
+	GetMaterialIds() []string
 }
 
 type TopoMaker struct {
@@ -25,6 +25,6 @@ func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
 	return (map[string]*TopoMaterial)(*t.Materials)
 }
 
-func (t *TopoMaker) GetMaterialId() string {
-	return t.MaterialId
+func (t *TopoMaker) GetMaterialIds() []string {
+	return []string{t.MaterialId}
 }
