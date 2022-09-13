@@ -23,7 +23,6 @@ type TopoLayer struct {
 type TopoSweepLayers struct {
 	TopoMaker
 	Layers []*TopoLayer `json:"layers,omitempty"`
-	Decals []*TopoDecal `json:"decals,omitempty"`
 }
 
 type LayerGroup struct {
