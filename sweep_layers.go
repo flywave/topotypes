@@ -14,7 +14,6 @@ type TopoLayer struct {
 	Width     float32     `json:"width"`
 	Height    float32     `json:"height"`
 	Profile   TopoProfile `json:"profile"`
-	Finished  bool        `json:"finished"`
 	Mtl       string      `json:"mtl,omitempty`
 	IsSurface bool        `json:"is_surface,omitempty"`
 	// Boolean string      `json:"boolean,omitempty"`
@@ -56,9 +55,7 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 func (t *TopoSweepLayers) GetMaterialIds() []string {
 	ids := []string{}
 	for _, l := range t.Layers {
-		if l.Finished {
-			ids = append(ids, l.Mtl)
-		}
+		ids = append(ids, l.Mtl)
 	}
 	return ids
 }
