@@ -26,11 +26,6 @@ type TopoSweepLayers struct {
 	Decals []*TopoDecal `json:"decals,omitempty"`
 }
 
-type TopoDecal struct {
-	Texture   string     `json:"texture"`
-	Rectangle *Rectangle `json:"rectangle"`
-}
-
 type LayerGroup struct {
 	In  string `json:"in,omitempty"`
 	Out string `json:"out,omitempty"`
