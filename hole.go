@@ -2,10 +2,8 @@ package topotypes
 
 type TopoHole struct {
 	TopoMaker
-	Depth           *float64 `json:"depth"`
-	Texture         string   `json:"texture"`
-	InnerTopFillet  *float64 `json:"inner-top-fillet"`
-	InnerDownFillet *float64 `json:"inner-down-fillet"`
+	Depth  *float64    `json:"depth"`
+	Fillet *[4]float64 `json:"fillet"`
 }
 
 func NewTopoHole() *TopoHole {
