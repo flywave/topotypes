@@ -32,6 +32,7 @@ const (
 	TOPO_TYPE_DECAL
 	TOPO_TYPE_CATENARY
 	TOPO_TYPE_BOARD
+	TOPO_TYPE_HOLE
 )
 
 func TopoTypeToString(tp int) string {
@@ -78,6 +79,8 @@ func TopoTypeToString(tp int) string {
 		return "catenary"
 	case TOPO_TYPE_BOARD:
 		return "board"
+	case TOPO_TYPE_HOLE:
+		return "hole"
 	default:
 		return ""
 	}
@@ -124,6 +127,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_DECAL
 	} else if utils.StrEquals(tp, "board") {
 		return TOPO_TYPE_BOARD
+	} else if utils.StrEquals(tp, "hole") {
+		return TOPO_TYPE_HOLE
 	}
 	return TOPO_TYPE_NONE
 }
@@ -637,6 +642,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoDecal{}
 	case TOPO_TYPE_BOARD:
 		inter = &TopoBoard{}
+	case TOPO_TYPE_HOLE:
+		inter = &TopoHole{}
 	case TOPO_TYPE_CATENARY:
 		return CatenaryUnMarshal(js)
 	default:
