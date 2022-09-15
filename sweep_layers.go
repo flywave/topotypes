@@ -16,7 +16,7 @@ type TopoLayer struct {
 	Profile   TopoProfile `json:"profile"`
 	Mtl       string      `json:"mtl,omitempty"`
 	IsSurface bool        `json:"is_surface,omitempty"`
-	// Boolean string      `json:"boolean,omitempty"`
+	LineIndex int         `json:"line_index"`
 }
 
 type TopoSweepLayers struct {
