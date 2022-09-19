@@ -10,6 +10,7 @@ type TopoDecal struct {
 	Depth   *float64       `json:"depth,omitempty"`
 	Texture string         `json:"texture"`
 	Refs    []TopoDecalRef `json:"targets,omitempty"`
+	Density *float64       `json:"density,omitempty"`
 }
 
 func NewTopoDecal() *TopoDecal {
