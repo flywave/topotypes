@@ -21,7 +21,7 @@ type TopoLayer struct {
 
 type TopoSweepLayers struct {
 	TopoMaker
-	Layers map[string][]*TopoLayer `json:"layers,omitempty"`
+	Layers []*TopoLayer `json:"layers,omitempty"`
 }
 
 type LayerGroup struct {
@@ -42,14 +42,12 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 		return nil, e
 	}
 
-	for _, ly := range sl.Layers {
-		for _, l := range ly {
-			prof, er := ProfileUnMarshal(l.Profile)
-			if er != nil {
-				return nil, er
-			}
-			l.Profile = prof
+	for _, l := range sl.Layers {
+		prof, er := ProfileUnMarshal(l.Profile)
+		if er != nil {
+			return nil, er
 		}
+		l.Profile = prof
 	}
 	return &sl, nil
 }
@@ -57,9 +55,7 @@ func SweepLayersUnMarshal(js []byte) (*TopoSweepLayers, error) {
 func (t *TopoSweepLayers) GetMaterialIds() []string {
 	ids := []string{}
 	for _, ly := range t.Layers {
-		for _, l := range ly {
-			ids = append(ids, l.Mtl)
-		}
+		ids = append(ids, ly.Mtl)
 	}
 	return ids
 }
