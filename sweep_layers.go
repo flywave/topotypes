@@ -8,6 +8,10 @@ type Rectangle struct {
 	Bl [3]float64 `json:"bl"`
 	Br [3]float64 `json:"br"`
 }
+type TopoLayerBoolean struct {
+	Type       string `json:"type"`
+	LayerIndex []int  `json:"layers"`
+}
 
 type TopoLayer struct {
 	Name      string      `json:"name,omitempty"`
@@ -21,7 +25,8 @@ type TopoLayer struct {
 
 type TopoSweepLayers struct {
 	TopoMaker
-	Layers []*TopoLayer `json:"layers,omitempty"`
+	Layers  []*TopoLayer             `json:"layers,omitempty"`
+	Boolean map[int]TopoLayerBoolean `json:"boolean"`
 }
 
 type LayerGroup struct {
