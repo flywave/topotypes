@@ -5,7 +5,7 @@ import (
 )
 
 type PrismInterface interface {
-	GetDirection() *[3]float64
+	GetTopoPrism() *TopoPrism
 }
 
 type TopoPrism struct {
@@ -20,8 +20,8 @@ func NewTopoPrism() *TopoPrism {
 	return t
 }
 
-func (sp *TopoPrism) GetDirection() *[3]float64 {
-	return &sp.Direction
+func (sp *TopoPrism) GetTopoPrism() *TopoPrism {
+	return sp
 }
 
 func (sp *TopoPrism) IsTopoBoundy() bool {

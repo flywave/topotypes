@@ -19,11 +19,3 @@ func NewTopoLeveledSurface(lvlType int) *TopoLeveledSurface {
 type TopoMaterialSurface struct {
 	TopoPrism
 }
-
-type TopoTextureSurface struct {
-	TopoPrism
-	WarpS   string `json:"warp-s"`
-	WarpT   string `json:"warp-t"`
-	Zoom    uint8  `json:"zoom"`
-	Texture string `json:"texture"`
-}

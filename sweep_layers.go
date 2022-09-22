@@ -2,25 +2,18 @@ package topotypes
 
 import "encoding/json"
 
-type Rectangle struct {
-	Ul [3]float64 `json:"ul"`
-	Ur [3]float64 `json:"ur"`
-	Bl [3]float64 `json:"bl"`
-	Br [3]float64 `json:"br"`
-}
 type TopoLayerBoolean struct {
 	Type       string `json:"type"`
 	LayerIndex []int  `json:"layers"`
 }
 
 type TopoLayer struct {
-	Name      string      `json:"name,omitempty"`
-	Width     float32     `json:"width"`
-	Height    float32     `json:"height"`
-	Profile   TopoProfile `json:"profile"`
-	Mtl       string      `json:"mtl,omitempty"`
-	IsSurface bool        `json:"is_surface,omitempty"`
-	LineIndex int         `json:"line_index"`
+	Name      string                 `json:"name,omitempty"`
+	Profile   TopoProfile            `json:"profile"`
+	Property  map[string]interface{} `json:"property,omitempty"`
+	Mtl       string                 `json:"mtl,omitempty"`
+	IsSurface bool                   `json:"is_surface,omitempty"`
+	LineIndex int                    `json:"line_index"`
 }
 
 type TopoSweepLayers struct {

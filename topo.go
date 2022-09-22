@@ -18,7 +18,6 @@ const (
 	TOPO_TYPE_SYMBOL
 	TOPO_TYPE_SYMBOL_PATH
 	TOPO_TYPE_SYMBOL_SURFACE
-	TOPO_TYPE_TEXTURE_SURFACE
 	TOPO_TYPE_MATERIAL_SURFACE
 	TOPO_TYPE_MASK
 	TOPO_TYPE_LIGHT
@@ -55,8 +54,6 @@ func TopoTypeToString(tp int) string {
 		return "material-surface"
 	case TOPO_TYPE_SYMBOL_SURFACE:
 		return "symbol-surface"
-	case TOPO_TYPE_TEXTURE_SURFACE:
-		return "texture-surface"
 	case TOPO_TYPE_LEVELED_SURFACE:
 		return "leveled-surface"
 	case TOPO_TYPE_SYMBOL:
@@ -103,8 +100,6 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_MATERIAL_SURFACE
 	} else if utils.StrEquals(tp, "symbol-surface") {
 		return TOPO_TYPE_SYMBOL_SURFACE
-	} else if utils.StrEquals(tp, "texture-surface") {
-		return TOPO_TYPE_TEXTURE_SURFACE
 	} else if utils.StrEquals(tp, "leveled-surface") {
 		return TOPO_TYPE_LEVELED_SURFACE
 	} else if utils.StrEquals(tp, "symbol") {
@@ -459,32 +454,6 @@ func StringToMaterialType(tp string) int {
 }
 
 const (
-	TOPO_WARP_TYPE_NONE = iota
-	TOPO_WARP_TYPE_REPEAT
-	TOPO_WARP_TYPE_CLAMP
-)
-
-func WarpTypeToString(tp int) string {
-	switch tp {
-	case TOPO_WARP_TYPE_REPEAT:
-		return "repeat"
-	case TOPO_WARP_TYPE_CLAMP:
-		return "clamp"
-	default:
-		return ""
-	}
-}
-
-func StringToWarpType(tp string) int {
-	if utils.StrEquals(tp, "repeat") {
-		return TOPO_WARP_TYPE_REPEAT
-	} else if utils.StrEquals(tp, "clamp") {
-		return TOPO_WARP_TYPE_CLAMP
-	}
-	return TOPO_WARP_TYPE_NONE
-}
-
-const (
 	TOPO_FEATURE_BOUND_TYPE_NONE = iota
 	TOPO_FEATURE_BOUND_TYPE_BBOX
 	TOPO_FEATURE_BOUND_TYPE_BSPHERE
@@ -620,10 +589,12 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoSymbolPath{}
 	case TOPO_TYPE_SYMBOL_SURFACE:
 		inter = &TopoSymbolSurface{}
-	case TOPO_TYPE_TEXTURE_SURFACE:
-		inter = &TopoTextureSurface{}
 	case TOPO_TYPE_MATERIAL_SURFACE:
-		inter = &TopoMaterialSurface{}
+		prs, err := PrismUnMarshal(js)
+		if err != nil {
+			return nil, err
+		}
+		inter = &TopoMaterialSurface{TopoPrism: *prs}
 	case TOPO_TYPE_MASK:
 		inter = &TopoMask{}
 	case TOPO_TYPE_LIGHT:
