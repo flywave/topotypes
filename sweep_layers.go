@@ -10,6 +10,7 @@ type TopoLayerBoolean struct {
 type TopoLayer struct {
 	Name      string                 `json:"name,omitempty"`
 	Profile   TopoProfile            `json:"profile"`
+	Width     float32                `json:"width"`
 	Property  map[string]interface{} `json:"property,omitempty"`
 	Mtl       string                 `json:"mtl,omitempty"`
 	IsSurface bool                   `json:"is_surface,omitempty"`
