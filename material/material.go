@@ -114,7 +114,6 @@ func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 		mt.Emissive[0] = mtl.Emissive[0]
 		mt.Emissive[1] = mtl.Emissive[1]
 		mt.Emissive[2] = mtl.Emissive[2]
-		mt.Emissive[3] = 1.0
 		if mtl.Roughness != nil {
 			mt.Roughness = float32(*mtl.Roughness)
 		}
