@@ -13,6 +13,8 @@ const (
 	COMPONENT_TYPE_STEEL_STRUCTURE
 	COMPONENT_TYPE_DECAL
 	COMPONENT_TYPE_BOARD
+	COMPONENT_TYPE_POLE
+	COMPONENT_TYPE_CONEPOLE
 )
 
 func ComponentTypeToString(tp int) string {
@@ -35,6 +37,10 @@ func ComponentTypeToString(tp int) string {
 		return "decal"
 	case COMPONENT_TYPE_BOARD:
 		return "board"
+	case COMPONENT_TYPE_POLE:
+		return "pole"
+	case COMPONENT_TYPE_CONEPOLE:
+		return "cone-pole"
 	default:
 		return ""
 	}
@@ -59,6 +65,10 @@ func StringToComponentType(tp string) int {
 		return COMPONENT_TYPE_DECAL
 	} else if utils.StrEquals(tp, "board") {
 		return COMPONENT_TYPE_BOARD
+	} else if utils.StrEquals(tp, "pole") {
+		return COMPONENT_TYPE_POLE
+	} else if utils.StrEquals(tp, "cone-pole") {
+		return COMPONENT_TYPE_CONEPOLE
 	}
 	return COMPONENT_TYPE_NONE
 }
