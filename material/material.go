@@ -123,6 +123,8 @@ func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 		mt.Emissive[2] = mtl.Emissive[2]
 		if mtl.Roughness != nil {
 			mt.Roughness = float32(*mtl.Roughness)
+		} else {
+			mt.Roughness = 1
 		}
 		if mtl.Reflectance != nil {
 			mt.Reflectance = float32(*mtl.Reflectance)
