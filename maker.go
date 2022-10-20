@@ -26,5 +26,8 @@ func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
 }
 
 func (t *TopoMaker) GetMaterialIds() []string {
+	if t.MaterialId == "" {
+		t.MaterialId = "mtl_0"
+	}
 	return []string{t.MaterialId}
 }
