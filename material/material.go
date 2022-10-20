@@ -74,7 +74,7 @@ func StringToTxtureMap(tp string) int {
 type Material struct {
 	Name             string      `json:"name,omitempty"`
 	Type             string      `json:"type"`
-	Color            [3]byte     `json:"color"`
+	Color            *[3]byte    `json:"color,omitempty"`
 	Transparency     float64     `json:"transparency"`
 	Ambient          [3]byte     `json:"ambient"`
 	Emissive         [3]byte     `json:"emissive"`
@@ -98,16 +98,23 @@ func (m *Material) HasTexture() bool {
 	return m.Texture != ""
 }
 
+func (m *Material) GetColor() [3]byte {
+	if m.Color != nil {
+		return *m.Color
+	}
+	return [3]byte{255, 255, 255}
+}
+
 func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 	ty := StringToMaterialType(mtl.Type)
 	switch ty {
 	case TYPE_BASE:
 		mt := &mst.TextureMaterial{}
-		mt.Color = mtl.Color
+		mt.Color = mtl.GetColor()
 		return mt
 	case TYPE_PBR:
 		mt := &mst.PbrMaterial{}
-		mt.Color = mtl.Color
+		mt.Color = mtl.GetColor()
 		if mtl.Metallic != nil {
 			mt.Metallic = float32(*mtl.Metallic)
 		}
@@ -128,13 +135,13 @@ func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 		mt := &mst.LambertMaterial{}
 		mt.Ambient = mtl.Ambient
 		mt.Emissive = mtl.Emissive
-		mt.Color = mtl.Color
+		mt.Color = mtl.GetColor()
 		return mt
 	case TYPE_PHONG:
 		mt := &mst.LambertMaterial{}
 		mt.Ambient = mtl.Ambient
 		mt.Emissive = mtl.Emissive
-		mt.Color = mtl.Color
+		mt.Color = mtl.GetColor()
 
 		mtp := &mst.PhongMaterial{LambertMaterial: *mt}
 		mtp.Specular = mtl.Specular
