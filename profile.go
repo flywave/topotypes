@@ -116,6 +116,8 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = NewTopoElips()
 		case TOPO_PROFILE_TYPE_POLYGON:
 			pf = NewTopoPolygon()
+		case profile.TYPE_L_STEEL:
+			pf = profile.NewLShape()
 		default:
 			return nil, errors.New("profile type error")
 		}
