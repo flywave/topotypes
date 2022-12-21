@@ -130,7 +130,7 @@ type LShape struct {
 	YDir [3]float64 `json:"ydir"`
 
 	Width  float64 `json:"width"`
-	Height float64 `json:"height"`
+	Height float64 `json:"thickness"`
 }
 
 func NewLShape() *LShape {
