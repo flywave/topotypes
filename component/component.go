@@ -15,6 +15,7 @@ const (
 	COMPONENT_TYPE_BOARD
 	COMPONENT_TYPE_POLE
 	COMPONENT_TYPE_CONEPOLE
+	COMPONENT_TYPE_SPEC
 )
 
 func ComponentTypeToString(tp int) string {
@@ -41,6 +42,8 @@ func ComponentTypeToString(tp int) string {
 		return "pole"
 	case COMPONENT_TYPE_CONEPOLE:
 		return "cone-pole"
+	case COMPONENT_TYPE_SPEC:
+		return "spec"
 	default:
 		return ""
 	}
@@ -69,6 +72,8 @@ func StringToComponentType(tp string) int {
 		return COMPONENT_TYPE_POLE
 	} else if utils.StrEquals(tp, "cone-pole") {
 		return COMPONENT_TYPE_CONEPOLE
+	} else if utils.StrEquals(tp, "spec") {
+		return COMPONENT_TYPE_SPEC
 	}
 	return COMPONENT_TYPE_NONE
 }
