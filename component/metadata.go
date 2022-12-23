@@ -81,6 +81,8 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &ConePole{}
 			case COMPONENT_TYPE_POLE:
 				c = &Pole{}
+			case COMPONENT_TYPE_SPEC:
+				c = &Spec{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
 				var err error
 				c, err = SteelStructureUnMarshal(js2)
