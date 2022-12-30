@@ -1,6 +1,4 @@
 github.com/flywave/go-mst v0.0.0-20210524052845-1ca7cc6c246f h1:BvZEL12yMzzx1yH7juy+gj5v9ppAhSJmutW3rd9HIrY=
 github.com/flywave/go-mst v0.0.0-20210524052845-1ca7cc6c246f/go.mod h1:mdJ5VMpy1BtnDy0u/UL9w2AURmgCGTnxpoJ4uKKdUSA=
-github.com/flywave/go3d v0.0.0-20211005091456-f6cf94b6f807 h1:r6Lk0xD9g7QORUVPoje8zL7FAoNe3JDAsjxO5/xtuTM=
-github.com/flywave/go3d v0.0.0-20211005091456-f6cf94b6f807/go.mod h1:0/K6WtaMwhhVJb84xWStt+ALQl2EdvzW2oJqz+330GU=
 github.com/flywave/go3d v0.0.0-20220728100441-e65a6f6f7288 h1:/SaifXhSj3ivL+5Yh22Dah0hWu77YYZr3UrJy8QRg78=
 github.com/flywave/go3d v0.0.0-20220728100441-e65a6f6f7288/go.mod h1:bvblxPT+cF0zgDi71CuusPPWCwqU0SikE9ySl2NzeQw=
