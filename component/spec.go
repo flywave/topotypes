@@ -8,6 +8,6 @@ const (
 
 type Spec struct {
 	BaseComponent
-	Type  SpecType    `json:"type"`
+	Spec  SpecType    `json:"spec"`
 	Model interface{} `json:"model"`
 }
