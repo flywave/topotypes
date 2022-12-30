@@ -78,7 +78,8 @@ func StringToComponentType(tp string) int {
 	return COMPONENT_TYPE_NONE
 }
 
-type Component interface{}
+type Component interface {
+}
 
 type BaseComponent struct {
 	Id        string `json:"id"`
@@ -90,4 +91,8 @@ type BaseComponent struct {
 		Scale     *[3]float64 `json:"scale,omitempty"`
 	} `json:"transform,omitempty"`
 	BBox *[2][3]float64 `json:"bbox,omitempty"`
+}
+
+func (b *BaseComponent) GetId() string {
+	return b.Id
 }

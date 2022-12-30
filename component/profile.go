@@ -32,6 +32,8 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = profile.NewElips()
 		case profile.TYPE_POLYGON:
 			pf = profile.NewPolygon()
+		case profile.TYPE_L_STEEL:
+			pf = profile.NewLShape()
 		default:
 			return nil, errors.New("profile type error")
 		}
