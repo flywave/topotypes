@@ -92,7 +92,3 @@ type BaseComponent struct {
 	} `json:"transform,omitempty"`
 	BBox *[2][3]float64 `json:"bbox,omitempty"`
 }
-
-func (b *BaseComponent) GetId() string {
-	return b.Id
-}
