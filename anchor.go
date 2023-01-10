@@ -11,7 +11,7 @@ type TopoAnchorLink struct {
 }
 
 type TopoAnchor struct {
-	Id       string      `json:"id"`
-	Position *[3]float64 `json:"position,omitempty"`
-	Link     string      `json:"link,omitempty"`
+	Id       string     `json:"id"`
+	Position [3]float64 `json:"position,omitempty"`
+	Link     string     `json:"link,omitempty"`
 }
