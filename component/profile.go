@@ -27,7 +27,12 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 		case profile.TYPE_RECTANGLE:
 			pf = profile.NewRectangle()
 		case profile.TYPE_CIRC:
-			pf = profile.NewCirc()
+			cc := profile.NewCirc()
+			if w, ok := pro["width"]; ok {
+				cc.Radius = w.(float64)
+				return cc, nil
+			}
+			pf = cc
 		case profile.TYPE_ELIPS:
 			pf = profile.NewElips()
 		case profile.TYPE_POLYGON:
