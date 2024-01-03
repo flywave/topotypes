@@ -106,6 +106,9 @@ func (m *Material) GetColor() [3]byte {
 }
 
 func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
+	if mtl == nil {
+		return nil
+	}
 	ty := StringToMaterialType(mtl.Type)
 	switch ty {
 	case TYPE_BASE:
