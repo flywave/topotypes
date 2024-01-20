@@ -6,6 +6,7 @@ type TopoPipe struct {
 	TopoMaker
 	Wire           [][3]float64   `json:"-"`
 	Profile        TopoProfile    `json:"profile"`
+	InnerProfile   TopoProfile    `json:"inner_profile,omitempty"`
 	Anchors        [2]*TopoAnchor `json:"anchors"`
 	Smooth         string         `json:"smooth,omitempty"`
 	TransitionMode string         `json:"transition_mode"`
@@ -41,6 +42,14 @@ func PipeUnMarshal(js []byte) (*TopoPipe, error) {
 			return nil, er
 		}
 		pipe.Profile = prof
+	}
+
+	if pipe.InnerProfile != nil {
+		prof, er := ProfileUnMarshal(pipe.InnerProfile)
+		if er != nil {
+			return nil, er
+		}
+		pipe.InnerProfile = prof
 	}
 	return &pipe, nil
 }
