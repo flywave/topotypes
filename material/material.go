@@ -90,7 +90,7 @@ type Material struct {
 	TextureOrigin    *[2]float64 `json:"texture-origin,omitempty"`
 	TextureRepeat    *[2]float64 `json:"texture-repeat,omitempty"`
 	TextureAutoScale *[2]float64 `json:"texture-auto-scale,omitempty"`
-	TxtureMap        *string     `json:"texture-map,omitempty"`
+	TextureMap       *string     `json:"texture-map,omitempty"`
 	TextureAngle     *float64    `json:"texture-angle,omitempty"`
 }
 
