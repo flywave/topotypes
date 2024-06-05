@@ -519,6 +519,7 @@ type ToposInterface interface {
 	GetTransform() *TopoTransform
 	GetFusion() bool
 	ResetTransform()
+	IsBoundy() bool
 }
 
 const (
@@ -538,6 +539,21 @@ type Topos struct {
 	BBox      *[2][3]float64 `json:"bbox,omitempty"`
 	Fusion    bool           `json:"fusion"`
 	Zooms     []*TopoZoom    `json:"zooms"`
+}
+
+func (tp *Topos) IsBoundy() bool {
+	ty := StringToTopoType(tp.Type)
+	switch ty {
+	case TOPO_TYPE_CROSS_POINT,
+		TOPO_TYPE_CROSS_MULTI_POINT,
+		TOPO_TYPE_SYMBOL,
+		TOPO_TYPE_SYMBOL_PATH,
+		TOPO_TYPE_FEATURE,
+		TOPO_TYPE_LIGHT:
+		return false
+	default:
+		return true
+	}
 }
 
 func (tp *Topos) GetZooms() []*TopoZoom {
