@@ -542,7 +542,11 @@ type Topos struct {
 }
 
 func (tp *Topos) IsBoundy() bool {
-	ty := StringToTopoType(tp.Type)
+	return IsBoundy(tp.Type)
+}
+
+func IsBoundy(t string) bool {
+	ty := StringToTopoType(t)
 	switch ty {
 	case TOPO_TYPE_CROSS_POINT,
 		TOPO_TYPE_CROSS_MULTI_POINT,
