@@ -32,6 +32,19 @@ func MetadataUnMarshal(js []byte) (*Metadata, error) {
 	return &base, nil
 }
 
+func ComponentsUnMarshalMetadata(js []byte) (*Metadata, error) {
+	var cmps []Component
+	err := json.Unmarshal(js, &cmps)
+	if err != nil {
+		return nil, err
+	}
+	cmps, err = ComponentsUnMarshal(cmps)
+	if err != nil {
+		return nil, err
+	}
+	return &Metadata{Components: cmps}, nil
+}
+
 func ComponentsUnMarshal(components []Component) ([]Component, error) {
 	for i := range components {
 		switch pro := components[i].(type) {
