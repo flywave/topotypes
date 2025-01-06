@@ -126,6 +126,18 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			return nil, e
 		}
 		return pf, nil
+	case []interface{}:
+		var pros []interface{}
+		for _, p := range pro {
+			if p != nil {
+				p, err := ProfileUnMarshal(p)
+				if err != nil {
+					return nil, err
+				}
+				pros = append(pros, p)
+			}
+		}
+		return pros, nil
 	default:
 		return nil, errors.New("profile type error")
 	}
