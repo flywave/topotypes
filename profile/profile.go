@@ -15,6 +15,7 @@ const (
 	TYPE_ELIPS
 	TYPE_POLYGON
 	TYPE_L_STEEL
+	TYPE_ARC
 )
 
 func ProfileTypeToString(tp int) string {
@@ -31,6 +32,8 @@ func ProfileTypeToString(tp int) string {
 		return "polygon"
 	case TYPE_L_STEEL:
 		return "l-steel"
+	case TYPE_ARC:
+		return "arc"
 	default:
 		return ""
 	}
@@ -49,6 +52,8 @@ func StringToProfileType(tp string) int {
 		return TYPE_POLYGON
 	} else if utils.StrEquals(tp, "l-steel") {
 		return TYPE_L_STEEL
+	} else if utils.StrEquals(tp, "arc") {
+		return TYPE_ARC
 	}
 	return TYPE_NONE
 }
@@ -94,6 +99,20 @@ type Circ struct {
 func NewCirc() *Circ {
 	t := Circ{}
 	t.Type = ProfileTypeToString(TYPE_CIRC)
+	return &t
+}
+
+type ArcCircle struct {
+	Profile
+	Type   string     `json:"type"`
+	S1     [3]float64 `json:"s1"`
+	S2     [3]float64 `json:"s2"`
+	Center [3]float64 `json:"center"`
+}
+
+func NewArcCircle() *ArcCircle {
+	t := ArcCircle{}
+	t.Type = ProfileTypeToString(TYPE_ARC)
 	return &t
 }
 
@@ -171,6 +190,8 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = NewPolygon()
 		case TYPE_L_STEEL:
 			pf = NewLShape()
+		case TYPE_ARC:
+			pf = NewArcCircle()
 		default:
 			return nil, errors.New("profile type error")
 		}
