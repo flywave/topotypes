@@ -2,6 +2,13 @@ package topotypes
 
 import "encoding/json"
 
+const (
+	SMOOTH_NONE   = ""
+	SMOOTH_SPLINE = "spline"
+	SMOOTH_BEZIER = "bezier"
+	SMOOTH_ARC    = "arc"
+)
+
 type TopoPipe struct {
 	TopoMaker
 	Wire           [][3]float64   `json:"-"`
@@ -13,7 +20,7 @@ type TopoPipe struct {
 }
 
 func NewTopoPipe() *TopoPipe {
-	t := &TopoPipe{}
+	t := &TopoPipe{Smooth: SMOOTH_NONE}
 	t.Type = TopoTypeToString(TOPO_TYPE_PIPE)
 	return t
 }
