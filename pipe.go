@@ -3,10 +3,10 @@ package topotypes
 import "encoding/json"
 
 const (
-	SMOOTH_NONE   = ""
-	SMOOTH_SPLINE = "spline"
-	SMOOTH_BEZIER = "bezier"
-	SMOOTH_ARC    = "arc"
+	SMOOTH_NONE    = ""
+	SMOOTH_BSPLINE = "bspline"
+	SMOOTH_BEZIER  = "bezier"
+	SMOOTH_ARC     = "arc"
 )
 
 type TopoPipe struct {
