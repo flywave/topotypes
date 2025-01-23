@@ -15,6 +15,9 @@ const (
 	TOPO_PROFILE_TYPE_CIRC      = profile.TYPE_CIRC
 	TOPO_PROFILE_TYPE_ELIPS     = profile.TYPE_ELIPS
 	TOPO_PROFILE_TYPE_POLYGON   = profile.TYPE_POLYGON
+	TOPO_PROFILE_TYPE_L_STEEL   = profile.TYPE_L_STEEL
+	TOPO_PROFILE_TYPE_ARC       = profile.TYPE_ARC
+	TOPO_PROFILE_TYPE_EDGE      = profile.TYPE_EDGE
 )
 
 func ProfileTypeToString(tp int) string {
@@ -29,6 +32,12 @@ func ProfileTypeToString(tp int) string {
 		return "ellipse"
 	case TOPO_PROFILE_TYPE_POLYGON:
 		return "polygon"
+	case TOPO_PROFILE_TYPE_L_STEEL:
+		return "lsteel"
+	case TOPO_PROFILE_TYPE_ARC:
+		return "arc"
+	case TOPO_PROFILE_TYPE_EDGE:
+		return "edge"
 	default:
 		return ""
 	}
@@ -45,6 +54,12 @@ func StringToProfileType(tp string) int {
 		return TOPO_PROFILE_TYPE_ELIPS
 	} else if utils.StrEquals(tp, "polygon") {
 		return TOPO_PROFILE_TYPE_POLYGON
+	} else if utils.StrEquals(tp, "lsteel") {
+		return TOPO_PROFILE_TYPE_L_STEEL
+	} else if utils.StrEquals(tp, "arc") {
+		return TOPO_PROFILE_TYPE_ARC
+	} else if utils.StrEquals(tp, "edge") {
+		return TOPO_PROFILE_TYPE_EDGE
 	}
 	return TOPO_PROFILE_TYPE_NONE
 }
@@ -120,6 +135,8 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = profile.NewLShape()
 		case profile.TYPE_ARC:
 			pf = profile.NewArcCircle()
+		case profile.TYPE_EDGE:
+			pf = profile.NewEdge()
 		default:
 			return nil, errors.New("profile type error")
 		}
