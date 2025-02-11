@@ -15,8 +15,6 @@ const (
 	TYPE_ELIPS
 	TYPE_POLYGON
 	TYPE_L_STEEL
-	TYPE_ARC
-	TYPE_EDGE
 )
 
 func ProfileTypeToString(tp int) string {
@@ -33,10 +31,6 @@ func ProfileTypeToString(tp int) string {
 		return "polygon"
 	case TYPE_L_STEEL:
 		return "l-steel"
-	case TYPE_ARC:
-		return "arc"
-	case TYPE_EDGE:
-		return "edge"
 	default:
 		return ""
 	}
@@ -55,10 +49,6 @@ func StringToProfileType(tp string) int {
 		return TYPE_POLYGON
 	} else if utils.StrEquals(tp, "l-steel") {
 		return TYPE_L_STEEL
-	} else if utils.StrEquals(tp, "arc") {
-		return TYPE_ARC
-	} else if utils.StrEquals(tp, "edge") {
-		return TYPE_EDGE
 	}
 	return TYPE_NONE
 }
@@ -104,33 +94,6 @@ type Circ struct {
 func NewCirc() *Circ {
 	t := Circ{}
 	t.Type = ProfileTypeToString(TYPE_CIRC)
-	return &t
-}
-
-type ArcCircle struct {
-	Profile
-	Type   string     `json:"type"`
-	S1     [3]float64 `json:"s1"`
-	S2     [3]float64 `json:"s2"`
-	Center [3]float64 `json:"center"`
-}
-
-func NewArcCircle() *ArcCircle {
-	t := ArcCircle{}
-	t.Type = ProfileTypeToString(TYPE_ARC)
-	return &t
-}
-
-type Edge struct {
-	Profile
-	Type string     `json:"type"`
-	P1   [3]float64 `json:"p1"`
-	P2   [3]float64 `json:"p2"`
-}
-
-func NewEdge() *Edge {
-	t := Edge{}
-	t.Type = ProfileTypeToString(TYPE_EDGE)
 	return &t
 }
 
@@ -208,10 +171,6 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = NewPolygon()
 		case TYPE_L_STEEL:
 			pf = NewLShape()
-		case TYPE_ARC:
-			pf = NewArcCircle()
-		case TYPE_EDGE:
-			pf = NewEdge()
 		default:
 			return nil, errors.New("profile type error")
 		}
@@ -232,6 +191,7 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			}
 		}
 		return pros, nil
+
 	default:
 		return nil, errors.New("profile type error")
 	}
