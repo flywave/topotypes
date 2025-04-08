@@ -24,3 +24,7 @@ type TopoFeature struct {
 	Topos
 	Bounds []FeatureBound `json:"bounds,omitempty"`
 }
+
+func (sp *TopoFeature) GetModel() string {
+	return ""
+}

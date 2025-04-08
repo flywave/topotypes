@@ -17,6 +17,10 @@ type TopoShape struct {
 	ShapeModel interface{} `json:"shape"`
 }
 
+func (sp *TopoShape) GetModel() string {
+	return ""
+}
+
 func (sp *TopoShape) IsTopoBoundy() bool {
 	return true
 }

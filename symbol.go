@@ -7,6 +7,10 @@ type TopoSymbol struct {
 	Matrixs   map[int][16]float64 `json:"matrixs,omitempty"`
 }
 
+func (sp *TopoSymbol) GetModel() string {
+	return sp.Model
+}
+
 func NewTopoSymbol() *TopoSymbol {
 	t := &TopoSymbol{}
 	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL)
@@ -18,6 +22,10 @@ type TopoSymbolPath struct {
 	Model   string  `json:"model"`
 	Mode    string  `json:"mode"`
 	Density float64 `json:"density"`
+}
+
+func (sp *TopoSymbolPath) GetModel() string {
+	return sp.Model
 }
 
 func NewTopoSymbolPath(md int) *TopoSymbolPath {
@@ -37,4 +45,8 @@ func NewTopoSymbolSurface(md int) *TopoSymbolSurface {
 	t := &TopoSymbolSurface{Mode: SurfaceModeToString(md)}
 	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL_SURFACE)
 	return t
+}
+
+func (sp *TopoSymbolSurface) GetModel() string {
+	return sp.Model
 }

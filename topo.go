@@ -520,6 +520,7 @@ type ToposInterface interface {
 	GetFusion() bool
 	ResetTransform()
 	IsBoundy() bool
+	GetModel() string
 }
 
 const (

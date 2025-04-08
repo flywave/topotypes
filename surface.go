@@ -4,6 +4,10 @@ type TopoSurface struct {
 	Topos
 }
 
+func (sp *TopoSurface) GetModel() string {
+	return ""
+}
+
 type TopoLeveledSurface struct {
 	TopoSurface
 	Leveled string `json:"leveled"`
