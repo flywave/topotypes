@@ -7,6 +7,7 @@ const (
 	SMOOTH_BSPLINE = "bspline"
 	SMOOTH_BEZIER  = "bezier"
 	SMOOTH_ARC     = "arc"
+	SMOOTH_CIRCLE  = "circle"
 )
 
 type TopoPipe struct {
