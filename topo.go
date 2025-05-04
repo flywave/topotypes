@@ -32,6 +32,7 @@ const (
 	TOPO_TYPE_CATENARY
 	TOPO_TYPE_BOARD
 	TOPO_TYPE_HOLE
+	TOPO_TYPE_MULTI_PIPE
 )
 
 func TopoTypeToString(tp int) string {
@@ -48,6 +49,8 @@ func TopoTypeToString(tp int) string {
 		return "cross-multi-point"
 	case TOPO_TYPE_PIPE:
 		return "pipe"
+	case TOPO_TYPE_MULTI_PIPE:
+		return "multi-pipe"
 	case TOPO_TYPE_SYMBOL_PATH:
 		return "symbol-path"
 	case TOPO_TYPE_MATERIAL_SURFACE:
