@@ -49,8 +49,6 @@ func TopoTypeToString(tp int) string {
 		return "cross-multi-point"
 	case TOPO_TYPE_PIPE:
 		return "pipe"
-	case TOPO_TYPE_MULTI_PIPE:
-		return "multi-pipe"
 	case TOPO_TYPE_SYMBOL_PATH:
 		return "symbol-path"
 	case TOPO_TYPE_MATERIAL_SURFACE:
@@ -81,6 +79,8 @@ func TopoTypeToString(tp int) string {
 		return "board"
 	case TOPO_TYPE_HOLE:
 		return "hole"
+	case TOPO_TYPE_MULTI_PIPE:
+		return "multi-pipe"
 	default:
 		return ""
 	}
@@ -127,6 +127,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_BOARD
 	} else if utils.StrEquals(tp, "hole") {
 		return TOPO_TYPE_HOLE
+	} else if utils.StrEquals(tp, "multi-pipe") {
+		return TOPO_TYPE_MULTI_PIPE
 	}
 	return TOPO_TYPE_NONE
 }
@@ -641,6 +643,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoHole{}
 	case TOPO_TYPE_CATENARY:
 		return CatenaryUnMarshal(js)
+	case TOPO_TYPE_MULTI_PIPE:
+		return MultiPipeUnMarshal(js)
 	default:
 		return nil, errors.New("not support topo type")
 	}
