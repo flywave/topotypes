@@ -5,6 +5,7 @@ type TopoCustom struct {
 	CenterMode string   `json:"mode"`
 	In         []string `json:"in-pipe-ids,omitempty"`
 	Out        []string `json:"out-pipe-ids,omitempty"`
+	SmoothEdge bool     `json:"smooth-edge"`
 }
 
 func NewTopoCustom() *TopoCustom {
