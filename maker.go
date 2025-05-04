@@ -4,7 +4,7 @@ type TopoMakerInterface interface {
 	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
 	GetMaterialIds() []string
-	etModel() string
+	GetModel() string
 }
 
 type TopoMaker struct {
