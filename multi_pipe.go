@@ -2,7 +2,7 @@ package topotypes
 
 import "encoding/json"
 
-type TopoMultiPipe struct {
+type TopoMultiSegmentPipe struct {
 	TopoMaker
 	Wires          [][][3]float64 `json:"-"`
 	Profiles       []TopoProfile  `json:"profiles"`
@@ -11,18 +11,18 @@ type TopoMultiPipe struct {
 	TransitionMode string         `json:"transition_mode"`
 }
 
-func NewTopoMultiPipe() *TopoMultiPipe {
-	t := &TopoMultiPipe{SegmentTypes: []SegmentType{}}
+func NewTopoMultiSegmentPipe() *TopoMultiSegmentPipe {
+	t := &TopoMultiSegmentPipe{SegmentTypes: []SegmentType{}}
 	t.Type = TopoTypeToString(TOPO_TYPE_MULTI_PIPE)
 	return t
 }
 
-func (sp *TopoMultiPipe) IsTopoBoundy() bool {
+func (sp *TopoMultiSegmentPipe) IsTopoBoundy() bool {
 	return true
 }
 
-func MultiPipeUnMarshal(js []byte) (*TopoMultiPipe, error) {
-	mp := TopoMultiPipe{}
+func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {
+	mp := TopoMultiSegmentPipe{}
 	e := json.Unmarshal(js, &mp)
 	if e != nil {
 		return nil, e
