@@ -23,7 +23,7 @@ const (
 	TOPO_TYPE_LIGHT
 	TOPO_TYPE_LEVELED_SURFACE
 	TOPO_TYPE_CAMERA
-	TOPO_TYPE_CUSTOM
+	TOPO_TYPE_PIPE_JOIN
 	TOPO_TYPE_CROSS_MULTI_POINT
 	TOPO_TYPE_FEATURE
 	TOPO_TYPE_SWEEP_LAYERS
@@ -63,8 +63,8 @@ func TopoTypeToString(tp int) string {
 		return "mask"
 	case TOPO_TYPE_LIGHT:
 		return "light"
-	case TOPO_TYPE_CUSTOM:
-		return "custom"
+	case TOPO_TYPE_PIPE_JOIN:
+		return "pipe-join"
 	case TOPO_TYPE_FEATURE:
 		return "feature"
 	case TOPO_TYPE_SWEEP_LAYERS:
@@ -111,8 +111,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_MASK
 	} else if utils.StrEquals(tp, "light") {
 		return TOPO_TYPE_LIGHT
-	} else if utils.StrEquals(tp, "custom") {
-		return TOPO_TYPE_CUSTOM
+	} else if utils.StrEquals(tp, "pipe-join") {
+		return TOPO_TYPE_PIPE_JOIN
 	} else if utils.StrEquals(tp, "feature") {
 		return TOPO_TYPE_FEATURE
 	} else if utils.StrEquals(tp, "sweep-layers") {
@@ -629,8 +629,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoLeveledSurface{}
 	case TOPO_TYPE_CAMERA:
 		inter = &TopoCamera{}
-	case TOPO_TYPE_CUSTOM:
-		inter = &TopoCustom{}
+	case TOPO_TYPE_PIPE_JOIN:
+		inter = &TopoPipeJoin{}
 	case TOPO_TYPE_CROSS_MULTI_POINT:
 		inter = &TopoCrossMultiPoint{}
 	case TOPO_TYPE_FEATURE:

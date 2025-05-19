@@ -2,12 +2,13 @@ package topotypes
 
 import "encoding/json"
 
+type SegmentType string
+
 const (
-	SMOOTH_NONE    = ""
-	SMOOTH_BSPLINE = "bspline"
-	SMOOTH_BEZIER  = "bezier"
-	SMOOTH_ARC     = "arc"
-	SMOOTH_CIRCLE  = "circle"
+	SEGMENT_NONE              SegmentType = ""
+	SEGMENT_SPLINE            SegmentType = "spline"
+	SEGMENT_THREE_POINT_ARC   SegmentType = "three_point_arc"
+	SEGMENT_CIRCLE_CENTER_ARC SegmentType = "circle_center_arc"
 )
 
 type TopoPipe struct {
@@ -16,12 +17,12 @@ type TopoPipe struct {
 	Profile        TopoProfile    `json:"profile"`
 	InnerProfile   TopoProfile    `json:"inner_profile,omitempty"`
 	Anchors        [2]*TopoAnchor `json:"anchors"`
-	Smooth         string         `json:"smooth,omitempty"`
+	SegmentType    SegmentType    `json:"segment_type,omitempty"`
 	TransitionMode string         `json:"transition_mode"`
 }
 
 func NewTopoPipe() *TopoPipe {
-	t := &TopoPipe{Smooth: SMOOTH_NONE}
+	t := &TopoPipe{SegmentType: SEGMENT_NONE}
 	t.Type = TopoTypeToString(TOPO_TYPE_PIPE)
 	return t
 }

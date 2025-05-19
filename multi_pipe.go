@@ -7,12 +7,12 @@ type TopoMultiPipe struct {
 	Wires          [][][3]float64 `json:"-"`
 	Profiles       []TopoProfile  `json:"profiles"`
 	InnerProfiles  []TopoProfile  `json:"inner_profiles,omitempty"`
-	Smooths        []string       `json:"smooths,omitempty"`
+	SegmentTypes   []SegmentType  `json:"segment_types,omitempty"`
 	TransitionMode string         `json:"transition_mode"`
 }
 
 func NewTopoMultiPipe() *TopoMultiPipe {
-	t := &TopoMultiPipe{Smooths: []string{}}
+	t := &TopoMultiPipe{SegmentTypes: []SegmentType{}}
 	t.Type = TopoTypeToString(TOPO_TYPE_MULTI_PIPE)
 	return t
 }
