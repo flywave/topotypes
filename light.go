@@ -33,10 +33,6 @@ func NewTopoAreaLight() *TopoAreaLight {
 	return &l
 }
 
-func (sp *TopoAreaLight) GetModel() string {
-	return ""
-}
-
 type TopoDirectionalLight struct {
 	TopoLight
 	Dir          [3]float64 `json:"dir"`
@@ -45,10 +41,6 @@ type TopoDirectionalLight struct {
 	Bias         *float64   `json:"bias,omitempty"`
 	Softness     *float64   `json:"softness,omitempty"`
 	SoftnessFade *float64   `json:"softness-fade,omitempty"`
-}
-
-func (sp *TopoDirectionalLight) GetModel() string {
-	return ""
 }
 
 func NewTopoDirectionalLight() *TopoDirectionalLight {
@@ -61,10 +53,6 @@ func NewTopoDirectionalLight() *TopoDirectionalLight {
 type TopoPointLight struct {
 	TopoLight
 	Distance float64 `json:"distance"`
-}
-
-func (sp *TopoPointLight) GetModel() string {
-	return ""
 }
 
 func NewTopoPointLight() *TopoPointLight {
@@ -87,10 +75,6 @@ func NewTopoSpotLight() *TopoSpotLight {
 	l.Light = LightTypeToString(TOPO_LIGHT_MODE_SPOT)
 	l.Type = TopoTypeToString(TOPO_TYPE_LIGHT)
 	return &l
-}
-
-func (sp *TopoSpotLight) GetModel() string {
-	return ""
 }
 
 func LightUnMarshal(js []byte) (ToposInterface, error) {

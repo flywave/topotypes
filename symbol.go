@@ -11,6 +11,10 @@ func (sp *TopoSymbol) GetModel() string {
 	return sp.Model
 }
 
+func (sp *TopoSymbol) SetModel(fileid string) {
+	sp.Model = fileid
+}
+
 func NewTopoSymbol() *TopoSymbol {
 	t := &TopoSymbol{}
 	t.Type = TopoTypeToString(TOPO_TYPE_SYMBOL)
@@ -26,6 +30,10 @@ type TopoSymbolPath struct {
 
 func (sp *TopoSymbolPath) GetModel() string {
 	return sp.Model
+}
+
+func (sp *TopoSymbolPath) SetModel(fileid string) {
+	sp.Model = fileid
 }
 
 func NewTopoSymbolPath(md int) *TopoSymbolPath {
@@ -49,4 +57,8 @@ func NewTopoSymbolSurface(md int) *TopoSymbolSurface {
 
 func (sp *TopoSymbolSurface) GetModel() string {
 	return sp.Model
+}
+
+func (sp *TopoSymbolSurface) SetModel(fileid string) {
+	sp.Model = fileid
 }

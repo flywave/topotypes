@@ -22,6 +22,13 @@ func (sp *TopoCrossMultiPoint) GetModel() string {
 	return strings.Join(mds, ",")
 }
 
+func (sp *TopoCrossMultiPoint) SetModel(fileid string) {
+	ids := strings.Split(fileid, ",")
+	for i, obj := range sp.Objects {
+		obj.Model = ids[i]
+	}
+}
+
 type TopoCrossPoint struct {
 	Topos
 	Model     string           `json:"model"`
@@ -37,4 +44,8 @@ func NewTopoCrossPoint() *TopoCrossPoint {
 
 func (sp *TopoCrossPoint) GetModel() string {
 	return sp.Model
+}
+
+func (sp *TopoCrossPoint) SetModel(fileid string) {
+	sp.Model = fileid
 }

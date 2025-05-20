@@ -8,3 +8,7 @@ type TopoMask struct {
 func (sp *TopoMask) GetModel() string {
 	return sp.Model
 }
+
+func (sp *TopoMask) SetModel(fileid string) {
+	sp.Model = fileid
+}

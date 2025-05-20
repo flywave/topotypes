@@ -4,7 +4,6 @@ type TopoMakerInterface interface {
 	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
 	GetMaterialIds() []string
-	GetModel() string
 }
 
 type TopoMaker struct {
@@ -13,10 +12,6 @@ type TopoMaker struct {
 	Materials  *TopoMaterialMap `json:"materials,omitempty"`
 	Instanced  bool             `json:"instanced,omitempty"`
 	MaterialId string           `json:"mtl_id,omitempty"`
-}
-
-func (sp *TopoMaker) GetModel() string {
-	return ""
 }
 
 func (t *TopoMaker) IsInstance() bool {
