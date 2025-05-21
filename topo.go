@@ -307,26 +307,6 @@ func StringToShapeType(tp string) int {
 }
 
 const (
-	TOPO_SMOOTH_TYPE_BSPLINE = iota
-)
-
-func SmoothTypeToString(tp int) string {
-	switch tp {
-	case TOPO_SMOOTH_TYPE_BSPLINE:
-		return "bspline"
-	default:
-		return "bspline"
-	}
-}
-
-func StringToSmoothType(tp string) int {
-	if utils.StrEquals(tp, "bspline") {
-		return TOPO_SMOOTH_TYPE_BSPLINE
-	}
-	return TOPO_SMOOTH_TYPE_BSPLINE
-}
-
-const (
 	TOPO_LIGHT_MODE_NONE = iota
 	TOPO_LIGHT_MODE_SPOT
 	TOPO_LIGHT_MODE_POINT

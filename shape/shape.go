@@ -183,7 +183,7 @@ type Pipe struct {
 	Type           string
 	Wire           [][3]float64 `json:"wire"`
 	Profile        interface{}  `json:"profile"`
-	SegmentType    string       `json:"smooth,omitempty"`
+	SegmentType    string       `json:"segment_type,omitempty"`
 	TransitionMode string       `json:"transition_mode"`
 }
 
