@@ -18,20 +18,15 @@ const (
 	TOPO_TYPE_SYMBOL
 	TOPO_TYPE_SYMBOL_PATH
 	TOPO_TYPE_SYMBOL_SURFACE
-	TOPO_TYPE_MATERIAL_SURFACE
 	TOPO_TYPE_MASK
 	TOPO_TYPE_LIGHT
-	TOPO_TYPE_LEVELED_SURFACE
 	TOPO_TYPE_CAMERA
 	TOPO_TYPE_PIPE_JOIN
 	TOPO_TYPE_CROSS_MULTI_POINT
 	TOPO_TYPE_FEATURE
-	TOPO_TYPE_SWEEP_LAYERS
-	TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	TOPO_TYPE_DECAL
 	TOPO_TYPE_CATENARY
 	TOPO_TYPE_BOARD
-	TOPO_TYPE_HOLE
 	TOPO_TYPE_MULTI_PIPE
 )
 
@@ -51,12 +46,8 @@ func TopoTypeToString(tp int) string {
 		return "pipe"
 	case TOPO_TYPE_SYMBOL_PATH:
 		return "symbol-path"
-	case TOPO_TYPE_MATERIAL_SURFACE:
-		return "material-surface"
 	case TOPO_TYPE_SYMBOL_SURFACE:
 		return "symbol-surface"
-	case TOPO_TYPE_LEVELED_SURFACE:
-		return "leveled-surface"
 	case TOPO_TYPE_SYMBOL:
 		return "symbol"
 	case TOPO_TYPE_MASK:
@@ -67,18 +58,12 @@ func TopoTypeToString(tp int) string {
 		return "pipe-join"
 	case TOPO_TYPE_FEATURE:
 		return "feature"
-	case TOPO_TYPE_SWEEP_LAYERS:
-		return "sweep-layers"
-	case TOPO_TYPE_SWEEP_LAYERS_INTERSECTION:
-		return "sweep-layers-intersection"
 	case TOPO_TYPE_DECAL:
 		return "decal"
 	case TOPO_TYPE_CATENARY:
 		return "catenary"
 	case TOPO_TYPE_BOARD:
 		return "board"
-	case TOPO_TYPE_HOLE:
-		return "hole"
 	case TOPO_TYPE_MULTI_PIPE:
 		return "multi-pipe"
 	default:
@@ -99,12 +84,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_PIPE
 	} else if utils.StrEquals(tp, "symbol-path") {
 		return TOPO_TYPE_SYMBOL_PATH
-	} else if utils.StrEquals(tp, "material-surface") {
-		return TOPO_TYPE_MATERIAL_SURFACE
 	} else if utils.StrEquals(tp, "symbol-surface") {
 		return TOPO_TYPE_SYMBOL_SURFACE
-	} else if utils.StrEquals(tp, "leveled-surface") {
-		return TOPO_TYPE_LEVELED_SURFACE
 	} else if utils.StrEquals(tp, "symbol") {
 		return TOPO_TYPE_SYMBOL
 	} else if utils.StrEquals(tp, "mask") {
@@ -115,18 +96,12 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_PIPE_JOIN
 	} else if utils.StrEquals(tp, "feature") {
 		return TOPO_TYPE_FEATURE
-	} else if utils.StrEquals(tp, "sweep-layers") {
-		return TOPO_TYPE_SWEEP_LAYERS
-	} else if utils.StrEquals(tp, "sweep-layers-intersection") {
-		return TOPO_TYPE_SWEEP_LAYERS_INTERSECTION
 	} else if utils.StrEquals(tp, "catenary") {
 		return TOPO_TYPE_CATENARY
 	} else if utils.StrEquals(tp, "decal") {
 		return TOPO_TYPE_DECAL
 	} else if utils.StrEquals(tp, "board") {
 		return TOPO_TYPE_BOARD
-	} else if utils.StrEquals(tp, "hole") {
-		return TOPO_TYPE_HOLE
 	} else if utils.StrEquals(tp, "multi-pipe") {
 		return TOPO_TYPE_MULTI_PIPE
 	}
@@ -582,10 +557,6 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return RevolUnMarshal(js)
 	case TOPO_TYPE_PIPE:
 		return PipeUnMarshal(js)
-	case TOPO_TYPE_SWEEP_LAYERS:
-		return SweepLayersUnMarshal(js)
-	case TOPO_TYPE_SWEEP_LAYERS_INTERSECTION:
-		inter = &TopoSweepLayersIntersection{}
 	case TOPO_TYPE_CROSS_POINT:
 		inter = &TopoCrossPoint{}
 	case TOPO_TYPE_SYMBOL:
@@ -594,18 +565,10 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoSymbolPath{}
 	case TOPO_TYPE_SYMBOL_SURFACE:
 		inter = &TopoSymbolSurface{}
-	case TOPO_TYPE_MATERIAL_SURFACE:
-		prs, err := PrismUnMarshal(js)
-		if err != nil {
-			return nil, err
-		}
-		inter = &TopoMaterialSurface{TopoPrism: *prs}
 	case TOPO_TYPE_MASK:
 		inter = &TopoMask{}
 	case TOPO_TYPE_LIGHT:
 		return LightUnMarshal(js)
-	case TOPO_TYPE_LEVELED_SURFACE:
-		inter = &TopoLeveledSurface{}
 	case TOPO_TYPE_CAMERA:
 		inter = &TopoCamera{}
 	case TOPO_TYPE_PIPE_JOIN:
@@ -618,8 +581,6 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		inter = &TopoDecal{}
 	case TOPO_TYPE_BOARD:
 		inter = &TopoBoard{}
-	case TOPO_TYPE_HOLE:
-		inter = &TopoHole{}
 	case TOPO_TYPE_CATENARY:
 		return CatenaryUnMarshal(js)
 	case TOPO_TYPE_MULTI_PIPE:

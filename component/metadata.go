@@ -90,10 +90,6 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &Decal{}
 			case COMPONENT_TYPE_BOARD:
 				c = &Board{}
-			case COMPONENT_TYPE_CONEPOLE:
-				c = &ConePole{}
-			case COMPONENT_TYPE_POLE:
-				c = &Pole{}
 			case COMPONENT_TYPE_SPEC:
 				c = &Spec{}
 			case COMPONENT_TYPE_STEEL_STRUCTURE:
