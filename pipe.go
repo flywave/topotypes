@@ -27,7 +27,7 @@ func NewTopoPipe() *TopoPipe {
 	return t
 }
 
-func (sp *TopoPipe) IsTopoBoundy() bool {
+func (sp *TopoPipe) IsTopoBound() bool {
 	return true
 }
 

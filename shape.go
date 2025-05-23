@@ -7,8 +7,8 @@ import (
 	"github.com/flywave/topotypes/shape"
 )
 
-type TopoBoundy interface {
-	IsTopoBoundy() bool
+type TopoBound interface {
+	IsTopoBound() bool
 }
 
 type TopoShape struct {
@@ -17,7 +17,7 @@ type TopoShape struct {
 	ShapeModel interface{} `json:"shape"`
 }
 
-func (sp *TopoShape) IsTopoBoundy() bool {
+func (sp *TopoShape) IsTopoBound() bool {
 	return true
 }
 

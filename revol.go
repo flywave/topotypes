@@ -15,7 +15,7 @@ func NewTopoRevol() *TopoRevol {
 	return t
 }
 
-func (sp *TopoRevol) IsTopoBoundy() bool {
+func (sp *TopoRevol) IsTopoBound() bool {
 	return true
 }
 

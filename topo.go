@@ -479,7 +479,7 @@ type ToposInterface interface {
 	GetTransform() *TopoTransform
 	GetFusion() bool
 	ResetTransform()
-	IsBoundy() bool
+	IsTopoBound() bool
 }
 
 const (
@@ -501,11 +501,11 @@ type Topos struct {
 	Zooms     []*TopoZoom    `json:"zooms"`
 }
 
-func (tp *Topos) IsBoundy() bool {
-	return IsBoundy(tp.Type)
+func (tp *Topos) IsTopoBound() bool {
+	return IsTopoBound(tp.Type)
 }
 
-func IsBoundy(t string) bool {
+func IsTopoBound(t string) bool {
 	ty := StringToTopoType(t)
 	switch ty {
 	case TOPO_TYPE_CROSS_POINT,

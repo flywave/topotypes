@@ -17,7 +17,7 @@ func NewTopoMultiSegmentPipe() *TopoMultiSegmentPipe {
 	return t
 }
 
-func (sp *TopoMultiSegmentPipe) IsTopoBoundy() bool {
+func (sp *TopoMultiSegmentPipe) IsTopoBound() bool {
 	return true
 }
 

@@ -24,7 +24,7 @@ func (sp *TopoPrism) GetTopoPrism() *TopoPrism {
 	return sp
 }
 
-func (sp *TopoPrism) IsTopoBoundy() bool {
+func (sp *TopoPrism) IsTopoBound() bool {
 	return true
 }
 
