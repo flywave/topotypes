@@ -23,42 +23,42 @@ const (
 func ShapeTypeToString(tp int) string {
 	switch tp {
 	case MODE_BOX:
-		return "box"
+		return "BoxShape"
 	case MODE_CYLINDER:
-		return "cylinder"
+		return "CylinderShape"
 	case MODE_CONE:
-		return "cone"
+		return "ConeShape"
 	case MODE_SPHERE:
-		return "sphere"
+		return "SphereShape"
 	case MODE_TORUS:
-		return "torus"
+		return "TorusShape"
 	case MODE_WEDGE:
-		return "wedge"
+		return "WedgeShape"
 	case MODE_REVOLUTION:
-		return "revolution"
+		return "RevolutionShape"
 	case MODE_PIPE:
-		return "pipe"
+		return "PipeShape"
 	default:
 		return ""
 	}
 }
 
 func StringToShapeType(tp string) int {
-	if utils.StrEquals(tp, "box") {
+	if utils.StrEquals(tp, "BoxShape") {
 		return MODE_BOX
-	} else if utils.StrEquals(tp, "cylinder") {
+	} else if utils.StrEquals(tp, "CylinderShape") {
 		return MODE_CYLINDER
-	} else if utils.StrEquals(tp, "cone") {
+	} else if utils.StrEquals(tp, "ConeShape") {
 		return MODE_CONE
-	} else if utils.StrEquals(tp, "sphere") {
+	} else if utils.StrEquals(tp, "SphereShape") {
 		return MODE_SPHERE
-	} else if utils.StrEquals(tp, "torus") {
+	} else if utils.StrEquals(tp, "TorusShape") {
 		return MODE_TORUS
-	} else if utils.StrEquals(tp, "wedge") {
+	} else if utils.StrEquals(tp, "WedgeShape") {
 		return MODE_WEDGE
-	} else if utils.StrEquals(tp, "revolution") {
+	} else if utils.StrEquals(tp, "RevolutionShape") {
 		return MODE_REVOLUTION
-	} else if utils.StrEquals(tp, "pipe") {
+	} else if utils.StrEquals(tp, "PipeShape") {
 		return MODE_PIPE
 	}
 	return MODE_NONE

@@ -3,6 +3,7 @@ package profile
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/flywave/topotypes/utils"
 )
@@ -20,23 +21,22 @@ const (
 func ProfileTypeToString(tp int) string {
 	switch tp {
 	case TYPE_TRIANGLE:
-		return "triangle"
+		return "TRIANGLE"
 	case TYPE_RECTANGLE:
-		return "rectangle"
+		return "RECTANGLE"
 	case TYPE_CIRC:
-		return "circ"
+		return "CIRC"
 	case TYPE_ELIPS:
-		return "ellipse"
+		return "ELIPS"
 	case TYPE_POLYGON:
-		return "polygon"
-	case TYPE_L_STEEL:
-		return "l-steel"
+		return "POLYGON"
 	default:
 		return ""
 	}
 }
 
 func StringToProfileType(tp string) int {
+	tp = strings.ToLower(tp)
 	if utils.StrEquals(tp, "triangle") {
 		return TYPE_TRIANGLE
 	} else if utils.StrEquals(tp, "rectangle") {

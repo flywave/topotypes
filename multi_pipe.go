@@ -6,9 +6,10 @@ type TopoMultiSegmentPipe struct {
 	TopoMaker
 	Wires          [][][3]float64 `json:"-"`
 	Profiles       []TopoProfile  `json:"profiles"`
-	InnerProfiles  []TopoProfile  `json:"inner_profiles,omitempty"`
-	SegmentTypes   []SegmentType  `json:"segment_types,omitempty"`
-	TransitionMode string         `json:"transition_mode"`
+	InnerProfiles  []TopoProfile  `json:"innerProfiles,omitempty"`
+	SegmentTypes   []SegmentType  `json:"segmentTypes,omitempty"`
+	TransitionMode string         `json:"transitionMode"`
+	UpDir          *[3]float64    `json:"upDir,omitempty"`
 }
 
 func NewTopoMultiSegmentPipe() *TopoMultiSegmentPipe {

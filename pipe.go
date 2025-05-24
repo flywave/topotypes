@@ -5,10 +5,10 @@ import "encoding/json"
 type SegmentType string
 
 const (
-	SEGMENT_NONE              SegmentType = ""
-	SEGMENT_SPLINE            SegmentType = "spline"
-	SEGMENT_THREE_POINT_ARC   SegmentType = "three_point_arc"
-	SEGMENT_CIRCLE_CENTER_ARC SegmentType = "circle_center_arc"
+	SEGMENT_LINE              SegmentType = "LINE"
+	SEGMENT_SPLINE            SegmentType = "SPLINE"
+	SEGMENT_THREE_POINT_ARC   SegmentType = "THREE_POINT_ARC"
+	SEGMENT_CIRCLE_CENTER_ARC SegmentType = "CIRCLE_CENTER_ARC"
 )
 
 type TopoPipe struct {
@@ -22,7 +22,7 @@ type TopoPipe struct {
 }
 
 func NewTopoPipe() *TopoPipe {
-	t := &TopoPipe{SegmentType: SEGMENT_NONE}
+	t := &TopoPipe{SegmentType: SEGMENT_LINE}
 	t.Type = TopoTypeToString(TOPO_TYPE_PIPE)
 	return t
 }

@@ -92,14 +92,6 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &Board{}
 			case COMPONENT_TYPE_SPEC:
 				c = &Spec{}
-			case COMPONENT_TYPE_STEEL_STRUCTURE:
-				var err error
-				c, err = SteelStructureUnMarshal(js2)
-				if err != nil {
-					return nil, err
-				}
-				components[i] = c
-				continue
 			case COMPONENT_TYPE_CATENARY:
 				var err error
 				c, err = CatenaryUnMarshal(js2)

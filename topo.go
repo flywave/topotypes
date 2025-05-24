@@ -3,6 +3,7 @@ package topotypes
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/flywave/topotypes/shape"
 	"github.com/flywave/topotypes/utils"
@@ -33,58 +34,61 @@ const (
 func TopoTypeToString(tp int) string {
 	switch tp {
 	case TOPO_TYPE_SHAPE:
-		return "shape"
+		return "Shape"
 	case TOPO_TYPE_REVOL:
-		return "revol"
+		return "Revol"
 	case TOPO_TYPE_PRISM:
-		return "prism"
+		return "Prism"
 	case TOPO_TYPE_CROSS_POINT:
-		return "cross-point"
+		return "CrossPoint"
 	case TOPO_TYPE_CROSS_MULTI_POINT:
-		return "cross-multi-point"
+		return "CrossMultiPoint"
 	case TOPO_TYPE_PIPE:
-		return "pipe"
+		return "Pipe"
 	case TOPO_TYPE_SYMBOL_PATH:
-		return "symbol-path"
+		return "SymbolPath"
 	case TOPO_TYPE_SYMBOL_SURFACE:
-		return "symbol-surface"
+		return "SymbolSurface"
 	case TOPO_TYPE_SYMBOL:
-		return "symbol"
+		return "Symbol"
 	case TOPO_TYPE_MASK:
-		return "mask"
+		return "Mask"
 	case TOPO_TYPE_LIGHT:
-		return "light"
+		return "Light"
 	case TOPO_TYPE_PIPE_JOIN:
-		return "pipe-join"
+		return "PipeJoin"
 	case TOPO_TYPE_FEATURE:
-		return "feature"
+		return "Feature"
 	case TOPO_TYPE_DECAL:
-		return "decal"
+		return "Decal"
 	case TOPO_TYPE_CATENARY:
-		return "catenary"
+		return "Catenary"
 	case TOPO_TYPE_BOARD:
-		return "board"
+		return "Board"
 	case TOPO_TYPE_MULTI_PIPE:
-		return "multi-pipe"
+		return "MultiSegmentPipe"
 	default:
 		return ""
 	}
 }
 
 func StringToTopoType(tp string) int {
+	tp = strings.ToLower(tp)
 	if utils.StrEquals(tp, "shape") {
 		return TOPO_TYPE_SHAPE
 	} else if utils.StrEquals(tp, "prism") {
 		return TOPO_TYPE_PRISM
 	} else if utils.StrEquals(tp, "revol") {
 		return TOPO_TYPE_REVOL
-	} else if utils.StrEquals(tp, "cross-point") {
+	} else if utils.StrEquals(tp, "crosspoint") {
 		return TOPO_TYPE_CROSS_POINT
+	} else if utils.StrEquals(tp, "crossmultipoint") {
+		return TOPO_TYPE_CROSS_MULTI_POINT
 	} else if utils.StrEquals(tp, "pipe") {
 		return TOPO_TYPE_PIPE
-	} else if utils.StrEquals(tp, "symbol-path") {
+	} else if utils.StrEquals(tp, "symbolpath") {
 		return TOPO_TYPE_SYMBOL_PATH
-	} else if utils.StrEquals(tp, "symbol-surface") {
+	} else if utils.StrEquals(tp, "symbolsurface") {
 		return TOPO_TYPE_SYMBOL_SURFACE
 	} else if utils.StrEquals(tp, "symbol") {
 		return TOPO_TYPE_SYMBOL
@@ -92,7 +96,7 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_MASK
 	} else if utils.StrEquals(tp, "light") {
 		return TOPO_TYPE_LIGHT
-	} else if utils.StrEquals(tp, "pipe-join") {
+	} else if utils.StrEquals(tp, "pipejoin") {
 		return TOPO_TYPE_PIPE_JOIN
 	} else if utils.StrEquals(tp, "feature") {
 		return TOPO_TYPE_FEATURE
@@ -102,7 +106,7 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_DECAL
 	} else if utils.StrEquals(tp, "board") {
 		return TOPO_TYPE_BOARD
-	} else if utils.StrEquals(tp, "multi-pipe") {
+	} else if utils.StrEquals(tp, "multisegmentpipe") {
 		return TOPO_TYPE_MULTI_PIPE
 	}
 	return TOPO_TYPE_NONE
@@ -417,26 +421,30 @@ func StringToFeatureBoundType(tp string) int {
 const (
 	TOPO_CENTER_MODE_SPHERE = iota
 	TOPO_CENTER_MODE_BOX
+	TOPO_CENTER_MODE_CYLINDER
 )
 
 func CenterModeToString(tp int) string {
 	switch tp {
 	case TOPO_CENTER_MODE_BOX:
-		return "box"
+		return "BOX"
 	case TOPO_CENTER_MODE_SPHERE:
-		return "sphere"
+		return "SPHERE"
+	case TOPO_CENTER_MODE_CYLINDER:
+		return "CYLINDER"
 	default:
 		return ""
 	}
 }
 
 func StringToCenterMode(tp string) int {
+	tp = strings.ToLower(tp)
 	if utils.StrEquals(tp, "box") {
 		return TOPO_CENTER_MODE_BOX
 	} else if utils.StrEquals(tp, "sphere") {
 		return TOPO_CENTER_MODE_SPHERE
 	}
-	return TOPO_CENTER_MODE_SPHERE
+	return TOPO_CENTER_MODE_CYLINDER
 }
 
 type ToposInterface interface {
@@ -472,7 +480,11 @@ func IsTopoBound(t string) bool {
 		TOPO_TYPE_SYMBOL,
 		TOPO_TYPE_SYMBOL_PATH,
 		TOPO_TYPE_FEATURE,
-		TOPO_TYPE_LIGHT:
+		TOPO_TYPE_LIGHT,
+		TOPO_TYPE_BOARD,
+		TOPO_TYPE_DECAL,
+		TOPO_TYPE_MASK,
+		TOPO_TYPE_SYMBOL_SURFACE:
 		return false
 	default:
 		return true

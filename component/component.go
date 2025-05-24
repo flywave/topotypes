@@ -10,7 +10,6 @@ const (
 	COMPONENT_TYPE_SHAPE
 	COMPONENT_TYPE_SOLID
 	COMPONENT_TYPE_CATENARY
-	COMPONENT_TYPE_STEEL_STRUCTURE
 	COMPONENT_TYPE_DECAL
 	COMPONENT_TYPE_BOARD
 	COMPONENT_TYPE_SPEC
@@ -28,8 +27,6 @@ func ComponentTypeToString(tp int) string {
 		return "shape"
 	case COMPONENT_TYPE_SOLID:
 		return "solid"
-	case COMPONENT_TYPE_STEEL_STRUCTURE:
-		return "steel-structure"
 	case COMPONENT_TYPE_CATENARY:
 		return "catenary"
 	case COMPONENT_TYPE_DECAL:
@@ -54,8 +51,6 @@ func StringToComponentType(tp string) int {
 		return COMPONENT_TYPE_SOLID
 	} else if utils.StrEquals(tp, "model") {
 		return COMPONENT_TYPE_MODEL
-	} else if utils.StrEquals(tp, "steel-structure") {
-		return COMPONENT_TYPE_STEEL_STRUCTURE
 	} else if utils.StrEquals(tp, "catenary") {
 		return COMPONENT_TYPE_CATENARY
 	} else if utils.StrEquals(tp, "decal") {
