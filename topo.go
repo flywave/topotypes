@@ -348,41 +348,6 @@ func StringToShadowType(tp string) int {
 }
 
 const (
-	TOPO_LEVELED_TYPE_ABSOLUTE = iota
-	TOPO_LEVELED_TYPE_AVG
-	TOPO_LEVELED_TYPE_MAX
-	TOPO_LEVELED_TYPE_MIN
-)
-
-func LeveledTypeToString(tp int) string {
-	switch tp {
-	case TOPO_LEVELED_TYPE_ABSOLUTE:
-		return "absolute"
-	case TOPO_LEVELED_TYPE_AVG:
-		return "avg"
-	case TOPO_LEVELED_TYPE_MAX:
-		return "max"
-	case TOPO_LEVELED_TYPE_MIN:
-		return "min"
-	default:
-		return ""
-	}
-}
-
-func StringToLeveledType(tp string) int {
-	if utils.StrEquals(tp, "absolute") {
-		return TOPO_LEVELED_TYPE_ABSOLUTE
-	} else if utils.StrEquals(tp, "avg") {
-		return TOPO_LEVELED_TYPE_AVG
-	} else if utils.StrEquals(tp, "max") {
-		return TOPO_LEVELED_TYPE_MAX
-	} else if utils.StrEquals(tp, "min") {
-		return TOPO_LEVELED_TYPE_MIN
-	}
-	return TOPO_LEVELED_TYPE_ABSOLUTE
-}
-
-const (
 	TOPO_MATERIAL_TYPE_NONE = iota
 	TOPO_MATERIAL_TYPE_PBR
 	TOPO_MATERIAL_TYPE_LAMBERT
@@ -488,17 +453,11 @@ const (
 	TOPO_SIMPLIFY_HIGH   = "high"
 )
 
-type TopoZoom struct {
-	Simplify  string    `json:"simplify,omitempty"`
-	ZoomRange [2]uint32 `json:"zoom_range,omitempty"`
-}
-
 type Topos struct {
 	Type      string         `json:"type"`
 	Transform *TopoTransform `json:"transform,omitempty"`
 	BBox      *[2][3]float64 `json:"bbox,omitempty"`
 	Fusion    bool           `json:"fusion"`
-	Zooms     []*TopoZoom    `json:"zooms"`
 }
 
 func (tp *Topos) IsTopoBound() bool {
@@ -518,10 +477,6 @@ func IsTopoBound(t string) bool {
 	default:
 		return true
 	}
-}
-
-func (tp *Topos) GetZooms() []*TopoZoom {
-	return tp.Zooms
 }
 
 func (tp *Topos) GetType() string {
