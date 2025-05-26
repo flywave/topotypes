@@ -1,6 +1,9 @@
 package material
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/flywave/go-mst"
 	"github.com/flywave/topotypes/utils"
 )
@@ -157,6 +160,45 @@ func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 			mtp.Specularity = float32(*mtl.Specularity)
 		}
 		return mtp
+	}
+	return nil
+}
+
+func TopoMtlToMeshMtl(mtl *Material) mst.MeshMaterial {
+	return MtlToMeshMtl((*Material)(mtl))
+}
+
+type TopoMaterialMap map[string]*Material
+
+func (mk *TopoMaterialMap) UnmarshalJSON(data []byte) error {
+	*mk = make(map[string]*Material)
+	var tmp interface{}
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+
+	switch t := tmp.(type) {
+	case map[string]interface{}:
+		dt, _ := json.Marshal(t)
+		mtls := make(map[string]*Material)
+		json.Unmarshal(dt, &mtls)
+		*mk = mtls
+	case []interface{}:
+		if len(t) == 0 {
+			return nil
+		}
+		mtls := make(map[string]*Material)
+		dt, _ := json.Marshal(t)
+		ary := []*Material{}
+		json.Unmarshal(dt, &ary)
+
+		for i, m := range ary {
+			if m.Name == "" {
+				m.Name = fmt.Sprintf("mtl_%d", i)
+			}
+			mtls[m.Name] = m
+		}
+		*mk = mtls
 	}
 	return nil
 }

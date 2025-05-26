@@ -29,6 +29,7 @@ const (
 	TOPO_TYPE_CATENARY
 	TOPO_TYPE_BOARD
 	TOPO_TYPE_MULTI_PIPE
+	TOPO_TYPE_MAKER
 )
 
 func TopoTypeToString(tp int) string {
@@ -67,6 +68,8 @@ func TopoTypeToString(tp int) string {
 		return "Board"
 	case TOPO_TYPE_MULTI_PIPE:
 		return "MultiSegmentPipe"
+	case TOPO_TYPE_MAKER:
+		return "Maker"
 	default:
 		return ""
 	}
@@ -108,33 +111,10 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_BOARD
 	} else if utils.StrEquals(tp, "multisegmentpipe") {
 		return TOPO_TYPE_MULTI_PIPE
+	} else if utils.StrEquals(tp, "maker") {
+		return TOPO_TYPE_MAKER
 	}
 	return TOPO_TYPE_NONE
-}
-
-const (
-	TOPO_MESH_MODE_SOLID = iota
-	TOPO_MESH_MODE_SHELL
-)
-
-func MeshModeToString(tp int) string {
-	switch tp {
-	case TOPO_MESH_MODE_SOLID:
-		return "solid"
-	case TOPO_MESH_MODE_SHELL:
-		return "shell"
-	default:
-		return "solid"
-	}
-}
-
-func StringToMeshMode(tp string) int {
-	if utils.StrEquals(tp, "solid") {
-		return TOPO_MESH_MODE_SOLID
-	} else if utils.StrEquals(tp, "shell") {
-		return TOPO_MESH_MODE_SHELL
-	}
-	return TOPO_MESH_MODE_SOLID
 }
 
 const (
@@ -466,29 +446,7 @@ type Topos struct {
 	Transform *TopoTransform `json:"transform,omitempty"`
 	BBox      *[2][3]float64 `json:"bbox,omitempty"`
 	Fusion    bool           `json:"fusion"`
-}
-
-func (tp *Topos) IsTopoBound() bool {
-	return IsTopoBound(tp.Type)
-}
-
-func IsTopoBound(t string) bool {
-	ty := StringToTopoType(t)
-	switch ty {
-	case TOPO_TYPE_CROSS_POINT,
-		TOPO_TYPE_CROSS_MULTI_POINT,
-		TOPO_TYPE_SYMBOL,
-		TOPO_TYPE_SYMBOL_PATH,
-		TOPO_TYPE_FEATURE,
-		TOPO_TYPE_LIGHT,
-		TOPO_TYPE_BOARD,
-		TOPO_TYPE_DECAL,
-		TOPO_TYPE_MASK,
-		TOPO_TYPE_SYMBOL_SURFACE:
-		return false
-	default:
-		return true
-	}
+	Instanced bool           `json:"instanced,omitempty"`
 }
 
 func (tp *Topos) GetType() string {
@@ -505,6 +463,10 @@ func (tp *Topos) ResetTransform() {
 
 func (tp *Topos) GetFusion() bool {
 	return tp.Fusion
+}
+
+func (tp *Topos) IsTopoBound() bool {
+	return false
 }
 
 func TopoUnMarshal(js []byte) (ToposInterface, error) {
@@ -552,6 +514,13 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return CatenaryUnMarshal(js)
 	case TOPO_TYPE_MULTI_PIPE:
 		return MultiPipeUnMarshal(js)
+	case TOPO_TYPE_MAKER:
+		mk := TopoMaker{}
+		err := json.Unmarshal(js, &mk)
+		if err != nil {
+			return nil, err
+		}
+		return &mk, nil
 	default:
 		return nil, errors.New("not support topo type")
 	}

@@ -1,6 +1,8 @@
 package topotypes
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type TopoMultiSegmentPipe struct {
 	TopoMaker

@@ -11,7 +11,8 @@ type PrismInterface interface {
 type TopoPrism struct {
 	TopoMaker
 	Profile   interface{} `json:"profile,omitempty"`
-	Direction [3]float64  `json:"dir"`
+	Direction [3]float64  `json:"direction"`
+	Height    float64     `json:"height`
 }
 
 func NewTopoPrism() *TopoPrism {

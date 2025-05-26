@@ -1,6 +1,8 @@
 package topotypes
 
-import "strings"
+import (
+	"strings"
+)
 
 type TopoCrossMultiPoint struct {
 	Topos
