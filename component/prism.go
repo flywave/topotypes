@@ -11,6 +11,7 @@ type Prism struct {
 	BaseComponent
 	Profile   profile.Profile      `json:"profile,omitempty"`
 	Direction [3]float64           `json:"direction"`
+	Height    float64              `json:"height"`
 	Materials []*material.Material `json:"materials,omitempty"`
 }
 

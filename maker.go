@@ -76,18 +76,20 @@ func (t *TopoMaker) UnmarshalJSON(data []byte) error {
 	ty := stu.Shape["type"].(string)
 	tys := strings.Split(ty, "/")
 	dt, _ := json.Marshal(stu.Shape)
-	if tys[0] == gim.Major {
-		shp, err := gim.Unmarshal(ty, dt)
-		if err != nil {
-			return err
+	if len(tys) > 1 {
+		if tys[0] == gim.Major {
+			shp, err := gim.Unmarshal(ty, dt)
+			if err != nil {
+				return err
+			}
+			t.Shape = shp
+		} else if tys[0] == hydropower.Major {
+			shp, err := hydropower.Unmarshal(ty, dt)
+			if err != nil {
+				return err
+			}
+			t.Shape = shp
 		}
-		t.Shape = shp
-	} else if tys[0] == hydropower.Major {
-		shp, err := hydropower.Unmarshal(ty, dt)
-		if err != nil {
-			return err
-		}
-		t.Shape = shp
 	} else {
 		shp, err := base.Unmarshal(ty, dt)
 		if err != nil {

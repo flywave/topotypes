@@ -123,7 +123,7 @@ func NewPipe() *Pipe {
 }
 
 // MultiSegmentPipePrimitive represents a multi-segment pipe
-type MultiSegmentPipePrimitive struct {
+type MultiSegmentPipe struct {
 	Base
 	Wires          [][][3]float64    `json:"wires,omitempty"`
 	Profiles       []profile.Profile `json:"profiles"`
@@ -133,8 +133,8 @@ type MultiSegmentPipePrimitive struct {
 	UpDir          *[3]float64       `json:"upDir,omitempty"`
 }
 
-func NewMultiSegmentPipePrimitive() *MultiSegmentPipePrimitive {
-	return &MultiSegmentPipePrimitive{
+func NewMultiSegmentPipe() *MultiSegmentPipe {
+	return &MultiSegmentPipe{
 		Base: Base{Type: "MultiSegmentPipe"},
 	}
 }
@@ -151,11 +151,13 @@ type PipeJointEndpoint struct {
 // PipeJoint represents a pipe joint
 type PipeJoint struct {
 	Base
-	Ins     []PipeJointEndpoint `json:"ins"`
-	Outs    []PipeJointEndpoint `json:"outs"`
-	Mode    string              `json:"mode"`
-	Flanged bool                `json:"flanged"`
-	UpDir   *[3]float64         `json:"upDir,omitempty"`
+	Ins          []string            `json:"ins"`
+	Outs         []string            `json:"outs"`
+	InsEndpoint  []PipeJointEndpoint `json:"-"`
+	OutsEndpoint []PipeJointEndpoint `json:"-"`
+	Mode         string              `json:"mode"`
+	Flanged      bool                `json:"flanged"`
+	UpDir        *[3]float64         `json:"upDir,omitempty"`
 }
 
 func NewPipeJoint() *PipeJoint {
@@ -197,10 +199,10 @@ func NewBoxShape() *BoxShape {
 
 type ConeShape struct {
 	Base
-	Radius1 float64 `json:"radius1"`
-	Radius2 float64 `json:"radius2"`
-	Height  float64 `json:"height"`
-	Angle   float64 `json:"angle,omitempty"`
+	Radius1 float64  `json:"radius1"`
+	Radius2 float64  `json:"radius2"`
+	Height  float64  `json:"height"`
+	Angle   *float64 `json:"angle,omitempty"`
 }
 
 func NewConeShape() *ConeShape {
@@ -211,9 +213,9 @@ func NewConeShape() *ConeShape {
 
 type CylinderShape struct {
 	Base
-	Radius float64 `json:"radius"`
-	Height float64 `json:"height"`
-	Angle  float64 `json:"angle,omitempty"`
+	Radius float64  `json:"radius"`
+	Height float64  `json:"height"`
+	Angle  *float64 `json:"angle,omitempty"`
 }
 
 func NewCylinderShape() *CylinderShape {
@@ -225,7 +227,7 @@ func NewCylinderShape() *CylinderShape {
 type RevolutionShape struct {
 	Base
 	Meridian [][3]float64 `json:"meridian"`
-	Angle    float64      `json:"angle,omitempty"`
+	Angle    *float64     `json:"angle,omitempty"`
 	Max      *float64     `json:"max,omitempty"`
 	Min      *float64     `json:"min,omitempty"`
 }
@@ -240,9 +242,9 @@ type SphereShape struct {
 	Base
 	Center *[3]float64 `json:"center,omitempty"`
 	Radius float64     `json:"radius"`
-	Angle1 float64     `json:"angle1,omitempty"`
-	Angle2 float64     `json:"angle2,omitempty"`
-	Angle  float64     `json:"angle,omitempty"`
+	Angle1 *float64    `json:"angle1,omitempty"`
+	Angle2 *float64    `json:"angle2,omitempty"`
+	Angle  *float64    `json:"angle,omitempty"`
 }
 
 func NewSphereShape() *SphereShape {
@@ -253,11 +255,11 @@ func NewSphereShape() *SphereShape {
 
 type TorusShape struct {
 	Base
-	Radius1 float64 `json:"radius1"`
-	Radius2 float64 `json:"radius2"`
-	Angle1  float64 `json:"angle1,omitempty"`
-	Angle2  float64 `json:"angle2,omitempty"`
-	Angle   float64 `json:"angle,omitempty"`
+	Radius1 float64  `json:"radius1"`
+	Radius2 float64  `json:"radius2"`
+	Angle1  *float64 `json:"angle1,omitempty"`
+	Angle2  *float64 `json:"angle2,omitempty"`
+	Angle   *float64 `json:"angle,omitempty"`
 }
 
 func NewTorusShape() *TorusShape {
@@ -270,7 +272,7 @@ type WedgeShape struct {
 	Base
 	Edge  [3]float64  `json:"edge"`
 	Limit *[4]float64 `json:"limit,omitempty"`
-	Ltx   float64     `json:"ltx,omitempty"`
+	Ltx   *float64    `json:"ltx,omitempty"`
 }
 
 func NewWedgeShape() *WedgeShape {
@@ -281,7 +283,7 @@ func NewWedgeShape() *WedgeShape {
 
 type PipeShape struct {
 	Base
-	Wire    [][3]float64    `json:"wire"`
+	Wire    [2][3]float64   `json:"wire"`
 	Profile profile.Profile `json:"profile"`
 	UpDir   *[3]float64     `json:"upDir,omitempty"`
 }
@@ -341,7 +343,7 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 		}
 		return pipe, nil
 	case "MultiSegmentPipe":
-		pipe := &MultiSegmentPipePrimitive{}
+		pipe := &MultiSegmentPipe{}
 		err := json.Unmarshal(dt, pipe)
 		if err != nil {
 			return nil, err
