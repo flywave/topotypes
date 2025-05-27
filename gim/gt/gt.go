@@ -42,9 +42,9 @@ type PileCapBase struct {
 	H4         float64      `json:"H4"`
 	H5         float64      `json:"H5"`
 	H6         float64      `json:"H6"`
-	D1         float64      `json:"d"`
+	Diameter   float64      `json:"d"`
 	D          float64      `json:"D"`
-	B11        float64      `json:"b"`
+	B          float64      `json:"b"`
 	B1         float64      `json:"B1"`
 	L1         float64      `json:"L1"`
 	E1         float64      `json:"e1"`
@@ -65,7 +65,7 @@ type RockAnchorBase struct {
 	GtBase
 	H1         float64      `json:"H1"`
 	H2         float64      `json:"H2"`
-	D1         float64      `json:"d"`
+	Diameter   float64      `json:"d"`
 	B1         float64      `json:"B1"`
 	L1         float64      `json:"L1"`
 	ZCOUNT     int          `json:"ZCOUNT"`
@@ -84,8 +84,8 @@ type RockPileCapBase struct {
 	H1         float64      `json:"H1"`
 	H2         float64      `json:"H2"`
 	H3         float64      `json:"H3"`
-	D1         float64      `json:"d"`
-	B11        float64      `json:"b"`
+	Diameter   float64      `json:"d"`
+	B          float64      `json:"b"`
 	B1         float64      `json:"B1"`
 	L1         float64      `json:"L1"`
 	E1         float64      `json:"e1"`
@@ -104,11 +104,11 @@ func NewRockPileCapBase() *RockPileCapBase {
 // EmbeddedRockAnchorBase represents an embedded rock anchor base
 type EmbeddedRockAnchorBase struct {
 	GtBase
-	H1 float64 `json:"H1"`
-	H2 float64 `json:"H2"`
-	H3 float64 `json:"H3"`
-	D1 float64 `json:"d"`
-	D  float64 `json:"D"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	H3       float64 `json:"H3"`
+	Diameter float64 `json:"d"`
+	D        float64 `json:"D"`
 }
 
 func NewEmbeddedRockAnchorBase() *EmbeddedRockAnchorBase {
@@ -120,16 +120,16 @@ func NewEmbeddedRockAnchorBase() *EmbeddedRockAnchorBase {
 // InclinedRockAnchorBase represents an inclined rock anchor base
 type InclinedRockAnchorBase struct {
 	GtBase
-	H1     float64 `json:"H1"`
-	H2     float64 `json:"H2"`
-	D1     float64 `json:"d"`
-	D      float64 `json:"D"`
-	B      float64 `json:"B"`
-	L      float64 `json:"L"`
-	E1     float64 `json:"e1"`
-	E2     float64 `json:"e2"`
-	Alpha1 float64 `json:"alpha1"`
-	Alpha2 float64 `json:"alpha2"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	Diameter float64 `json:"d"`
+	D        float64 `json:"D"`
+	B        float64 `json:"B"`
+	L        float64 `json:"L"`
+	E1       float64 `json:"e1"`
+	E2       float64 `json:"e2"`
+	Alpha1   float64 `json:"alpha1"`
+	Alpha2   float64 `json:"alpha2"`
 }
 
 func NewInclinedRockAnchorBase() *InclinedRockAnchorBase {
@@ -141,13 +141,13 @@ func NewInclinedRockAnchorBase() *InclinedRockAnchorBase {
 // ExcavatedBase represents an excavated base
 type ExcavatedBase struct {
 	GtBase
-	H1     float64 `json:"H1"`
-	H2     float64 `json:"H2"`
-	H3     float64 `json:"H3"`
-	D1     float64 `json:"d"`
-	D      float64 `json:"D"`
-	Alpha1 float64 `json:"alpha1"`
-	Alpha2 float64 `json:"alpha2"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	H3       float64 `json:"H3"`
+	Diameter float64 `json:"d"`
+	D        float64 `json:"D"`
+	Alpha1   float64 `json:"alpha1"`
+	Alpha2   float64 `json:"alpha2"`
 }
 
 func NewExcavatedBase() *ExcavatedBase {
@@ -159,18 +159,18 @@ func NewExcavatedBase() *ExcavatedBase {
 // StepBase represents a step base
 type StepBase struct {
 	GtBase
-	H   float64 `json:"H"`
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	B11 float64 `json:"b"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	B3  float64 `json:"B3"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
-	L3  float64 `json:"L3"`
-	N   int     `json:"N"`
+	H  float64 `json:"H"`
+	H1 float64 `json:"H1"`
+	H2 float64 `json:"H2"`
+	H3 float64 `json:"H3"`
+	B  float64 `json:"b"`
+	B1 float64 `json:"B1"`
+	B2 float64 `json:"B2"`
+	B3 float64 `json:"B3"`
+	L1 float64 `json:"L1"`
+	L2 float64 `json:"L2"`
+	L3 float64 `json:"L3"`
+	N  int     `json:"N"`
 }
 
 func NewStepBase() *StepBase {
@@ -186,7 +186,7 @@ type StepPlateBase struct {
 	H1     float64 `json:"H1"`
 	H2     float64 `json:"H2"`
 	H3     float64 `json:"H3"`
-	B11    float64 `json:"b"`
+	B      float64 `json:"b"`
 	B1     float64 `json:"B1"`
 	B2     float64 `json:"B2"`
 	L1     float64 `json:"L1"`
@@ -208,7 +208,7 @@ type SlopedBaseBase struct {
 	H1     float64 `json:"H1"`
 	H2     float64 `json:"H2"`
 	H3     float64 `json:"H3"`
-	B11    float64 `json:"b"`
+	B      float64 `json:"b"`
 	B1     float64 `json:"B1"`
 	B2     float64 `json:"B2"`
 	L1     float64 `json:"L1"`
@@ -226,17 +226,17 @@ func NewSlopedBaseBase() *SlopedBaseBase {
 // CompositeCaissonBase represents a composite caisson base
 type CompositeCaissonBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	H4  float64 `json:"H4"`
-	B11 float64 `json:"b"`
-	D   float64 `json:"D"`
-	T   float64 `json:"t"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
+	H1 float64 `json:"H1"`
+	H2 float64 `json:"H2"`
+	H3 float64 `json:"H3"`
+	H4 float64 `json:"H4"`
+	B  float64 `json:"b"`
+	D  float64 `json:"D"`
+	T  float64 `json:"t"`
+	B1 float64 `json:"B1"`
+	B2 float64 `json:"B2"`
+	L1 float64 `json:"L1"`
+	L2 float64 `json:"L2"`
 }
 
 func NewCompositeCaissonBase() *CompositeCaissonBase {
@@ -248,15 +248,15 @@ func NewCompositeCaissonBase() *CompositeCaissonBase {
 // RaftBase represents a raft base
 type RaftBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	B11 float64 `json:"b1"`
-	B22 float64 `json:"b2"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
+	H1    float64 `json:"H1"`
+	H2    float64 `json:"H2"`
+	H3    float64 `json:"H3"`
+	Beam1 float64 `json:"b1"`
+	Beam2 float64 `json:"b2"`
+	B1    float64 `json:"B1"`
+	B2    float64 `json:"B2"`
+	L1    float64 `json:"L1"`
+	L2    float64 `json:"L2"`
 }
 
 func NewRaftBase() *RaftBase {
@@ -268,12 +268,12 @@ func NewRaftBase() *RaftBase {
 // DirectBuriedBase represents a direct buried base
 type DirectBuriedBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	D11 float64 `json:"d"`
-	D   float64 `json:"D"`
-	B   float64 `json:"B"`
-	T   float64 `json:"t"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	Diameter float64 `json:"d"`
+	D        float64 `json:"D"`
+	B        float64 `json:"B"`
+	T        float64 `json:"t"`
 }
 
 func NewDirectBuriedBase() *DirectBuriedBase {
@@ -285,16 +285,16 @@ func NewDirectBuriedBase() *DirectBuriedBase {
 // SteelSleeveBase represents a steel sleeve base
 type SteelSleeveBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	H4  float64 `json:"H4"`
-	D11 float64 `json:"d"`
-	D1  float64 `json:"D1"`
-	D2  float64 `json:"D2"`
-	T   float64 `json:"t"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	H3       float64 `json:"H3"`
+	H4       float64 `json:"H4"`
+	Diameter float64 `json:"d"`
+	D1       float64 `json:"D1"`
+	D2       float64 `json:"D2"`
+	T        float64 `json:"t"`
+	B1       float64 `json:"B1"`
+	B2       float64 `json:"B2"`
 }
 
 func NewSteelSleeveBase() *SteelSleeveBase {
@@ -306,14 +306,14 @@ func NewSteelSleeveBase() *SteelSleeveBase {
 // PrecastColumnBase represents a precast column base
 type PrecastColumnBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	D11 float64 `json:"d"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	H3       float64 `json:"H3"`
+	Diameter float64 `json:"d"`
+	B1       float64 `json:"B1"`
+	B2       float64 `json:"B2"`
+	L1       float64 `json:"L1"`
+	L2       float64 `json:"L2"`
 }
 
 func NewPrecastColumnBase() *PrecastColumnBase {
@@ -325,17 +325,17 @@ func NewPrecastColumnBase() *PrecastColumnBase {
 // PrecastPinnedBase represents a precast pinned base
 type PrecastPinnedBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	D11 float64 `json:"d"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
-	B   float64 `json:"B"`
-	H   float64 `json:"H"`
-	L   float64 `json:"L"`
+	H1       float64 `json:"H1"`
+	H2       float64 `json:"H2"`
+	H3       float64 `json:"H3"`
+	Diameter float64 `json:"d"`
+	B1       float64 `json:"B1"`
+	B2       float64 `json:"B2"`
+	L1       float64 `json:"L1"`
+	L2       float64 `json:"L2"`
+	B        float64 `json:"B"`
+	H        float64 `json:"H"`
+	L        float64 `json:"L"`
 }
 
 func NewPrecastPinnedBase() *PrecastPinnedBase {
@@ -347,21 +347,21 @@ func NewPrecastPinnedBase() *PrecastPinnedBase {
 // PrecastMetalSupportBase represents a precast metal support base
 type PrecastMetalSupportBase struct {
 	GtBase
-	H1  float64   `json:"H1"`
-	H2  float64   `json:"H2"`
-	H3  float64   `json:"H3"`
-	H4  float64   `json:"H4"`
-	B11 float64   `json:"b1"`
-	B22 float64   `json:"b2"`
-	B1  float64   `json:"B1"`
-	B2  float64   `json:"B2"`
-	L1  float64   `json:"L1"`
-	L2  float64   `json:"L2"`
-	S1  float64   `json:"S1"`
-	S2  float64   `json:"S2"`
-	N1  int       `json:"n1"`
-	N2  int       `json:"n2"`
-	HX  []float64 `json:"HX"`
+	H1    float64   `json:"H1"`
+	H2    float64   `json:"H2"`
+	H3    float64   `json:"H3"`
+	H4    float64   `json:"H4"`
+	Beam1 float64   `json:"b1"`
+	Beam2 float64   `json:"b2"`
+	B1    float64   `json:"B1"`
+	B2    float64   `json:"B2"`
+	L1    float64   `json:"L1"`
+	L2    float64   `json:"L2"`
+	S1    float64   `json:"S1"`
+	S2    float64   `json:"S2"`
+	N1    int       `json:"n1"`
+	N2    int       `json:"n2"`
+	HX    []float64 `json:"HX"`
 }
 
 func NewPrecastMetalSupportBase() *PrecastMetalSupportBase {
@@ -373,20 +373,20 @@ func NewPrecastMetalSupportBase() *PrecastMetalSupportBase {
 // PrecastConcreteSupportBase represents a precast concrete support base
 type PrecastConcreteSupportBase struct {
 	GtBase
-	H1  float64 `json:"H1"`
-	H2  float64 `json:"H2"`
-	H3  float64 `json:"H3"`
-	H4  float64 `json:"H4"`
-	H5  float64 `json:"H5"`
-	B11 float64 `json:"b1"`
-	B22 float64 `json:"b2"`
-	B3  float64 `json:"b3"`
-	B1  float64 `json:"B1"`
-	B2  float64 `json:"B2"`
-	L1  float64 `json:"L1"`
-	L2  float64 `json:"L2"`
-	S1  float64 `json:"S1"`
-	N1  int     `json:"n1"`
+	H1    float64 `json:"H1"`
+	H2    float64 `json:"H2"`
+	H3    float64 `json:"H3"`
+	H4    float64 `json:"H4"`
+	H5    float64 `json:"H5"`
+	Beam1 float64 `json:"b1"`
+	Beam2 float64 `json:"b2"`
+	Beam3 float64 `json:"b3"`
+	B1    float64 `json:"B1"`
+	B2    float64 `json:"B2"`
+	L1    float64 `json:"L1"`
+	L2    float64 `json:"L2"`
+	S1    float64 `json:"S1"`
+	N1    int     `json:"n1"`
 }
 
 func NewPrecastConcreteSupportBase() *PrecastConcreteSupportBase {

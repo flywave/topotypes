@@ -7,37 +7,40 @@ import (
 	"github.com/flywave/topotypes/base"
 	"github.com/flywave/topotypes/gim"
 	"github.com/flywave/topotypes/hydropower"
-	"github.com/flywave/topotypes/material"
 )
 
 type TopoMakerInterface interface {
-	GetMaterials() map[string]*material.Material
+	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
 	GetMaterialIds() []string
-	GetShape() interface{}
-	SetShape(interface{})
+	GetShape() MakerShape
+	SetShape(MakerShape)
+}
+
+type MakerShape interface {
+	GetType() string
 }
 
 type TopoMaker struct {
 	Topos
-	Materials  map[string]*material.Material `json:"materials,omitempty"`
-	MaterialId string                        `json:"mtl_id,omitempty"`
-	Shape      interface{}                   `json:"shape,omitempty"`
+	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
+	MaterialId string                   `json:"mtl_id,omitempty"`
+	Shape      MakerShape               `json:"shape,omitempty"`
 }
 
 func (t *TopoMaker) IsInstance() bool {
 	return t.Instanced
 }
 
-func (t *TopoMaker) GetShape() interface{} {
+func (t *TopoMaker) GetShape() MakerShape {
 	return t.Shape
 }
 
-func (t *TopoMaker) GetMaterials() map[string]*material.Material {
+func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
 	if t.Materials == nil {
-		return map[string]*material.Material{}
+		return map[string]*TopoMaterial{}
 	}
-	return (map[string]*material.Material)(t.Materials)
+	return (map[string]*TopoMaterial)(t.Materials)
 }
 
 func (t *TopoMaker) GetMaterialIds() []string {
@@ -51,16 +54,16 @@ func (tp *TopoMaker) IsTopoBound() bool {
 	return true
 }
 
-func (t *TopoMaker) SetShape(shape interface{}) {
+func (t *TopoMaker) SetShape(shape MakerShape) {
 	t.Shape = shape
 }
 
 func (t *TopoMaker) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*material.Material `json:"materials,omitempty"`
-		MaterialId string                        `json:"mtl_id,omitempty"`
-		Shape      map[string]interface{}        `json:"shape,omitempty"`
+		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId string                   `json:"mtl_id,omitempty"`
+		Shape      map[string]interface{}   `json:"shape,omitempty"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

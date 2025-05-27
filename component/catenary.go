@@ -5,6 +5,7 @@ import (
 
 	"github.com/flywave/topotypes/catenary"
 	"github.com/flywave/topotypes/material"
+	"github.com/flywave/topotypes/profile"
 )
 
 type Catenary struct {
@@ -23,7 +24,7 @@ func CatenaryUnMarshal(js []byte) (*Catenary, error) {
 		return nil, e
 	}
 	if catenary.Profile != nil {
-		prof, er := ProfileUnMarshal(catenary.Profile)
+		prof, er := profile.ProfileUnMarshal(catenary.Profile)
 		if er != nil {
 			return nil, er
 		}

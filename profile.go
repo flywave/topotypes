@@ -11,7 +11,6 @@ const (
 	TOPO_PROFILE_TYPE_CIRC      = profile.TYPE_CIRC
 	TOPO_PROFILE_TYPE_ELIPS     = profile.TYPE_ELIPS
 	TOPO_PROFILE_TYPE_POLYGON   = profile.TYPE_POLYGON
-	TOPO_PROFILE_TYPE_L_STEEL   = profile.TYPE_L_STEEL
 )
 
 type TopoProfile profile.Profile

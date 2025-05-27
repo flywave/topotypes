@@ -15,7 +15,6 @@ const (
 	TYPE_CIRC
 	TYPE_ELIPS
 	TYPE_POLYGON
-	TYPE_L_STEEL
 )
 
 func ProfileTypeToString(tp int) string {
@@ -47,8 +46,6 @@ func StringToProfileType(tp string) int {
 		return TYPE_ELIPS
 	} else if utils.StrEquals(tp, "polygon") {
 		return TYPE_POLYGON
-	} else if utils.StrEquals(tp, "l-steel") {
-		return TYPE_L_STEEL
 	}
 	return TYPE_NONE
 }
@@ -123,22 +120,6 @@ func NewPolygon() *Polygon {
 	return &t
 }
 
-type LShape struct {
-	Profile
-	Type string     `json:"type"`
-	XDir [3]float64 `json:"xdir"`
-	YDir [3]float64 `json:"ydir"`
-
-	Width  float64 `json:"width"`
-	Height float64 `json:"thickness"`
-}
-
-func NewLShape() *LShape {
-	t := LShape{}
-	t.Type = ProfileTypeToString(TYPE_L_STEEL)
-	return &t
-}
-
 func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 	switch pro := inter.(type) {
 	case map[string]interface{}:
@@ -169,8 +150,6 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 			pf = NewElips()
 		case TYPE_POLYGON:
 			pf = NewPolygon()
-		case TYPE_L_STEEL:
-			pf = NewLShape()
 		default:
 			return nil, errors.New("profile type error")
 		}

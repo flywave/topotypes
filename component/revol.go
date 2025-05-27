@@ -22,7 +22,7 @@ func RevolUnMarshal(js []byte) (*Revol, error) {
 		return nil, e
 	}
 	if r.Profile != nil {
-		prof, er := ProfileUnMarshal(r.Profile)
+		prof, er := profile.ProfileUnMarshal(r.Profile)
 		if er != nil {
 			return nil, er
 		}

@@ -12,6 +12,10 @@ type Base struct {
 	Type    string `json:"type"`
 }
 
+func (b *Base) GetType() string {
+	return b.Type
+}
+
 // Profile types
 type TriangleProfile struct {
 	Type string     `json:"type"` // "TRIANGLE"
@@ -288,64 +292,119 @@ func NewPipeShape() *PipeShape {
 	}
 }
 
-func Unmarshal(ty string, dt []byte) (interface{}, error) {
+type Shape interface {
+	GetType() string
+}
+
+func Unmarshal(ty string, dt []byte) (Shape, error) {
 	switch ty {
 	case "Revol":
-		rel := Revol{}
-		err := json.Unmarshal(dt, &rel)
-		return rel, err
+		rel := &Revol{}
+		err := json.Unmarshal(dt, rel)
+		if err != nil {
+			return nil, err
+		}
+		if rel.Profile != nil {
+			rel.Profile, _ = profile.ProfileUnMarshal(rel.Profile)
+		}
+		return rel, nil
 	case "Prism":
-		prism := Prism{}
-		err := json.Unmarshal(dt, &prism)
-		return prism, err
+		prism := &Prism{}
+		err := json.Unmarshal(dt, prism)
+		if err != nil {
+			return nil, err
+		}
+		if prism.Profile != nil {
+			prism.Profile, _ = profile.ProfileUnMarshal(prism.Profile)
+		}
+		return prism, nil
 	case "Pipe":
-		pipe := Pipe{}
-		err := json.Unmarshal(dt, &pipe)
-		return pipe, err
+		pipe := &Pipe{}
+		err := json.Unmarshal(dt, pipe)
+		if err != nil {
+			return nil, err
+		}
+
+		if pipe.Profile[0] != nil {
+			pipe.Profile[0], _ = profile.ProfileUnMarshal(pipe.Profile[0])
+		}
+		if pipe.Profile[1] != nil {
+			pipe.Profile[1], _ = profile.ProfileUnMarshal(pipe.Profile[1])
+		}
+		if pipe.InnerProfile != nil {
+			if pipe.InnerProfile[0] != nil {
+				pipe.InnerProfile[0], _ = profile.ProfileUnMarshal(pipe.InnerProfile[0])
+			}
+			if pipe.InnerProfile[1] != nil {
+				pipe.InnerProfile[1], _ = profile.ProfileUnMarshal(pipe.InnerProfile[1])
+			}
+		}
+		return pipe, nil
 	case "MultiSegmentPipe":
-		pipe := MultiSegmentPipePrimitive{}
-		err := json.Unmarshal(dt, &pipe)
-		return pipe, err
+		pipe := &MultiSegmentPipePrimitive{}
+		err := json.Unmarshal(dt, pipe)
+		if err != nil {
+			return nil, err
+		}
+		for i := range pipe.Profiles {
+			pipe.Profiles[i], _ = profile.ProfileUnMarshal(pipe.Profiles[i])
+		}
+		for i := range pipe.InnerProfiles {
+			pipe.InnerProfiles[i], _ = profile.ProfileUnMarshal(pipe.InnerProfiles[i])
+		}
+		return pipe, nil
 	case "PipeJoint":
-		joint := PipeJoint{}
-		err := json.Unmarshal(dt, &joint)
+		joint := &PipeJoint{}
+		err := json.Unmarshal(dt, joint)
 		return joint, err
 	case "Catenary":
-		catenary := Catenary{}
-		err := json.Unmarshal(dt, &catenary)
-		return catenary, err
+		catenary := &Catenary{}
+		err := json.Unmarshal(dt, catenary)
+		if err != nil {
+			return nil, err
+		}
+		if catenary.Profile != nil {
+			catenary.Profile, _ = profile.ProfileUnMarshal(catenary.Profile)
+		}
+		return catenary, nil
 	case "BoxShape":
-		shape := BoxShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &BoxShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "ConeShape":
-		shape := ConeShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &ConeShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "CylinderShape":
-		shape := CylinderShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &CylinderShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "RevolutionShape":
-		shape := RevolutionShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &RevolutionShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "SphereShape":
-		shape := SphereShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &SphereShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "TorusShape":
-		shape := TorusShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &TorusShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "WedgeShape":
-		shape := WedgeShape{}
-		err := json.Unmarshal(dt, &shape)
+		shape := &WedgeShape{}
+		err := json.Unmarshal(dt, shape)
 		return shape, err
 	case "PipeShape":
-		shape := PipeShape{}
-		err := json.Unmarshal(dt, &shape)
-		return shape, err
+		shape := &PipeShape{}
+		err := json.Unmarshal(dt, shape)
+		if err != nil {
+			return nil, err
+		}
+		if shape.Profile != nil {
+			shape.Profile, _ = profile.ProfileUnMarshal(shape.Profile)
+		}
+		return shape, nil
 	default:
 		return nil, fmt.Errorf("invalid type: %s", ty)
 	}
