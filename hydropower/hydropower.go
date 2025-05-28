@@ -19,9 +19,14 @@ func (b *Base) GetType() string {
 	return b.Type
 }
 
+const (
+	PointTypeLine = "LINE"
+	PointTypeArc  = "ARC"
+)
+
 type Point struct {
 	Position [3]float64 `json:"position"`
-	Type     int        `json:"type"`
+	Type     string     `json:"type"`
 }
 
 const (

@@ -16,7 +16,7 @@ func (b *GsBase) GetType() string {
 	return b.Type
 }
 
-// SphereObject represents a sphere
+// Sphere represents a sphere
 type Sphere struct {
 	GsBase
 	Radius float64 `json:"radius"`
@@ -28,7 +28,7 @@ func NewSphere() *Sphere {
 	}
 }
 
-// RotationalEllipsoidObject represents a rotational ellipsoid
+// RotationalEllipsoid represents a rotational ellipsoid
 type RotationalEllipsoid struct {
 	GsBase
 	PolarRadius      float64 `json:"polarRadius"`
@@ -42,7 +42,7 @@ func NewRotationalEllipsoid() *RotationalEllipsoid {
 	}
 }
 
-// CuboidObject represents a cuboid
+// Cuboid represents a cuboid
 type Cuboid struct {
 	GsBase
 	Length float64 `json:"length"`
@@ -56,7 +56,7 @@ func NewCuboid() *Cuboid {
 	}
 }
 
-// DiamondFrustumObject represents a diamond frustum
+// DiamondFrustum represents a diamond frustum
 type DiamondFrustum struct {
 	GsBase
 	TopDiag1    float64 `json:"topDiag1"`
@@ -72,7 +72,7 @@ func NewDiamondFrustum() *DiamondFrustum {
 	}
 }
 
-// OffsetRectangularTableObject represents an offset rectangular table
+// OffsetRectangularTable represents an offset rectangular table
 type OffsetRectangularTable struct {
 	GsBase
 	TopLength    float64 `json:"topLength"`
@@ -90,7 +90,7 @@ func NewOffsetRectangularTable() *OffsetRectangularTable {
 	}
 }
 
-// CylinderObject represents a cylinder
+// Cylinder represents a cylinder
 type Cylinder struct {
 	GsBase
 	Radius float64 `json:"radius"`
@@ -103,7 +103,7 @@ func NewCylinder() *Cylinder {
 	}
 }
 
-// SharpBentCylinderObject represents a sharp bent cylinder
+// SharpBentCylinder represents a sharp bent cylinder
 type SharpBentCylinder struct {
 	GsBase
 	Radius    float64 `json:"radius"`
@@ -117,7 +117,7 @@ func NewSharpBentCylinder() *SharpBentCylinder {
 	}
 }
 
-// TruncatedConeObject represents a truncated cone
+// TruncatedCone represents a truncated cone
 type TruncatedCone struct {
 	GsBase
 	TopRadius    float64 `json:"topRadius"`
@@ -131,7 +131,7 @@ func NewTruncatedCone() *TruncatedCone {
 	}
 }
 
-// EccentricTruncatedConeObject represents an eccentric truncated cone
+// EccentricTruncatedCone represents an eccentric truncated cone
 type EccentricTruncatedCone struct {
 	GsBase
 	TopRadius    float64 `json:"topRadius"`
@@ -147,7 +147,7 @@ func NewEccentricTruncatedCone() *EccentricTruncatedCone {
 	}
 }
 
-// RingObject represents a ring
+// Ring represents a ring
 type Ring struct {
 	GsBase
 	RingRadius float64 `json:"ringRadius"`
@@ -161,7 +161,7 @@ func NewRing() *Ring {
 	}
 }
 
-// RectangularRingObject represents a rectangular ring
+// RectangularRing represents a rectangular ring
 type RectangularRing struct {
 	GsBase
 	TubeRadius   float64 `json:"tubeRadius"`
@@ -176,7 +176,7 @@ func NewRectangularRing() *RectangularRing {
 	}
 }
 
-// EllipticRingObject represents an elliptic ring
+// EllipticRing represents an elliptic ring
 type EllipticRing struct {
 	GsBase
 	TubeRadius  float64 `json:"tubeRadius"`
@@ -190,7 +190,7 @@ func NewEllipticRing() *EllipticRing {
 	}
 }
 
-// CircularGasketObject represents a circular gasket
+// CircularGasket represents a circular gasket
 type CircularGasket struct {
 	GsBase
 	OuterRadius float64 `json:"outerRadius"`
@@ -205,7 +205,7 @@ func NewCircularGasket() *CircularGasket {
 	}
 }
 
-// TableGasketObject represents a table gasket
+// TableGasket represents a table gasket
 type TableGasket struct {
 	GsBase
 	TopRadius   float64 `json:"topRadius"`
@@ -221,7 +221,7 @@ func NewTableGasket() *TableGasket {
 	}
 }
 
-// SquareGasketObject represents a square gasket
+// SquareGasket represents a square gasket
 type SquareGasket struct {
 	GsBase
 	OuterLength float64 `json:"outerLength"`
@@ -239,7 +239,7 @@ func NewSquareGasket() *SquareGasket {
 	}
 }
 
-// StretchedBodyObject represents a stretched body
+// StretchedBody represents a stretched body
 type StretchedBody struct {
 	GsBase
 	Points [][3]float64 `json:"points"`
@@ -253,7 +253,7 @@ func NewStretchedBody() *StretchedBody {
 	}
 }
 
-// PorcelainBushingObject represents a porcelain bushing
+// PorcelainBushing represents a porcelain bushing
 type PorcelainBushing struct {
 	GsBase
 	Height           float64 `json:"height"`
@@ -269,7 +269,7 @@ func NewPorcelainBushing() *PorcelainBushing {
 	}
 }
 
-// ConePorcelainBushingObject represents a cone porcelain bushing
+// ConePorcelainBushing represents a cone porcelain bushing
 type ConePorcelainBushing struct {
 	GsBase
 	Height             float64 `json:"height"`
@@ -288,7 +288,7 @@ func NewConePorcelainBushing() *ConePorcelainBushing {
 	}
 }
 
-// InsulatorStringObject represents an insulator string
+// InsulatorString represents an insulator string
 type InsulatorString struct {
 	GsBase
 	Count            int     `json:"count"`
@@ -309,7 +309,7 @@ func NewInsulatorString() *InsulatorString {
 	}
 }
 
-// VTypeInsulatorObject represents a V-type insulator
+// VTypeInsulator represents a V-type insulator
 type VTypeInsulator struct {
 	GsBase
 	FrontSpacing     float64 `json:"frontSpacing"`
@@ -330,7 +330,7 @@ func NewVTypeInsulator() *VTypeInsulator {
 	}
 }
 
-// TerminalBlockObject represents a terminal block
+// TerminalBlock represents a terminal block
 type TerminalBlock struct {
 	GsBase
 	Length        float64 `json:"length"`
@@ -351,7 +351,7 @@ func NewTerminalBlock() *TerminalBlock {
 	}
 }
 
-// RectangularHolePlateObject represents a rectangular hole plate
+// RectangularHolePlate represents a rectangular hole plate
 type RectangularHolePlate struct {
 	GsBase
 	Length        float64 `json:"length"`
@@ -371,7 +371,7 @@ func NewRectangularHolePlate() *RectangularHolePlate {
 	}
 }
 
-// CircularFixedPlateObject represents a circular fixed plate
+// CircularFixedPlate represents a circular fixed plate
 type CircularFixedPlate struct {
 	GsBase
 	Length        float64 `json:"length"`
@@ -389,7 +389,7 @@ func NewCircularFixedPlate() *CircularFixedPlate {
 	}
 }
 
-// WireObject represents a wire
+// Wire represents a wire
 type Wire struct {
 	GsBase
 	StartPoint [3]float64   `json:"startPoint"`
@@ -407,7 +407,7 @@ func NewWire() *Wire {
 	}
 }
 
-// CableObject represents a cable
+// Cable represents a cable
 type Cable struct {
 	GsBase
 	StartPoint       [3]float64   `json:"startPoint"`
@@ -428,10 +428,23 @@ type CurveType string
 const (
 	CurveTypeLine   CurveType = "LINE"
 	CurveTypeArc    CurveType = "ARC"
-	CurveTypeSpline CurveType = "SPLINE"
+	CurveTypeBezier CurveType = "BEZIER"
 )
 
-// CurveCableObject represents a curve cable
+func (c CurveType) ToInt() int {
+	switch c {
+	case CurveTypeLine:
+		return 0
+	case CurveTypeArc:
+		return 1
+	case CurveTypeBezier:
+		return 2
+	default:
+		return 0
+	}
+}
+
+// CurveCable represents a curve cable
 type CurveCable struct {
 	GsBase
 	ControlPoints [][][3]float64 `json:"controlPoints"`
@@ -445,7 +458,7 @@ func NewCurveCable() *CurveCable {
 	}
 }
 
-// AngleSteelObject represents angle steel
+// AngleSteel represents angle steel
 type AngleSteel struct {
 	GsBase
 	L1     float64 `json:"L1"`
@@ -460,7 +473,7 @@ func NewAngleSteel() *AngleSteel {
 	}
 }
 
-// IShapedSteelObject represents I-shaped steel
+// IShapedSteel represents I-shaped steel
 type IShapedSteel struct {
 	GsBase
 	Height          float64 `json:"height"`
@@ -476,7 +489,7 @@ func NewIShapedSteel() *IShapedSteel {
 	}
 }
 
-// ChannelSteelObject represents channel steel
+// ChannelSteel represents channel steel
 type ChannelSteel struct {
 	GsBase
 	Height          float64 `json:"height"`
@@ -492,7 +505,7 @@ func NewChannelSteel() *ChannelSteel {
 	}
 }
 
-// TSteelObject represents T-shaped steel
+// TSteel represents T-shaped steel
 type TSteel struct {
 	GsBase
 	Height          float64 `json:"height"`

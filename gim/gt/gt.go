@@ -525,23 +525,41 @@ func NewPoleTower() *PoleTower {
 	}
 }
 
+type WasherShape string
+
+const (
+	WasherShapeRound  WasherShape = "ROUND"
+	WasherShapeSquare WasherShape = "SQUARE"
+)
+
+func (w WasherShape) ToInt() int {
+	switch w {
+	case WasherShapeRound:
+		return 2
+	case WasherShapeSquare:
+		return 1
+	default:
+		return 0
+	}
+}
+
 // SingleHookAnchor represents a single hook anchor
 type SingleHookAnchor struct {
 	GtBase
-	BoltDiameter        float64 `json:"boltDiameter"`        // 螺栓直径
-	ExposedLength       float64 `json:"exposedLength"`       // 外露长度
-	NutCount            int     `json:"nutCount"`            // 螺母数量
-	NutHeight           float64 `json:"nutHeight"`           // 螺母高度
-	NutOD               float64 `json:"nutOD"`               // 螺母外径
-	WasherCount         int     `json:"washerCount"`         // 垫圈数量
-	WasherShape         int     `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize          float64 `json:"washerSize"`          // 垫圈尺寸
-	WasherThickness     float64 `json:"washerThickness"`     // 垫圈厚度
-	AnchorLength        float64 `json:"anchorLength"`        // 锚固长度
-	HookStraightLengthA float64 `json:"hookStraightLengthA"` // 钩直段长度A
-	HookStraightLengthB float64 `json:"hookStraightLengthB"` // 钩直段长度B
-	HookDiameter        float64 `json:"hookDiameter"`        // 钩直径
-	AnchorBarDiameter   float64 `json:"anchorBarDiameter"`   // 锚筋直径
+	BoltDiameter        float64     `json:"boltDiameter"`        // 螺栓直径
+	ExposedLength       float64     `json:"exposedLength"`       // 外露长度
+	NutCount            int         `json:"nutCount"`            // 螺母数量
+	NutHeight           float64     `json:"nutHeight"`           // 螺母高度
+	NutOD               float64     `json:"nutOD"`               // 螺母外径
+	WasherCount         int         `json:"washerCount"`         // 垫圈数量
+	WasherShape         WasherShape `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize          float64     `json:"washerSize"`          // 垫圈尺寸
+	WasherThickness     float64     `json:"washerThickness"`     // 垫圈厚度
+	AnchorLength        float64     `json:"anchorLength"`        // 锚固长度
+	HookStraightLengthA float64     `json:"hookStraightLengthA"` // 钩直段长度A
+	HookStraightLengthB float64     `json:"hookStraightLengthB"` // 钩直段长度B
+	HookDiameter        float64     `json:"hookDiameter"`        // 钩直径
+	AnchorBarDiameter   float64     `json:"anchorBarDiameter"`   // 锚筋直径
 }
 
 func NewSingleHookAnchor() *SingleHookAnchor {
@@ -553,18 +571,18 @@ func NewSingleHookAnchor() *SingleHookAnchor {
 // TripleHookAnchor represents a triple hook anchor
 type TripleHookAnchor struct {
 	GtBase
-	BoltDiameter       float64 `json:"boltDiameter"`       // 螺栓直径
-	ExposedLength      float64 `json:"exposedLength"`      // 外露长度
-	NutCount           int     `json:"nutCount"`           // 螺母数量
-	NutHeight          float64 `json:"nutHeight"`          // 螺母高度
-	NutOD              float64 `json:"nutOD"`              // 螺母外径
-	WasherCount        int     `json:"washerCount"`        // 垫圈数量
-	WasherShape        int     `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize         float64 `json:"washerSize"`         // 垫圈尺寸
-	WasherThickness    float64 `json:"washerThickness"`    // 垫圈厚度
-	AnchorLength       float64 `json:"anchorLength"`       // 锚固长度
-	HookStraightLength float64 `json:"hookStraightLength"` // 钩直段长度
-	HookDiameter       float64 `json:"hookDiameter"`       // 钩直径
+	BoltDiameter       float64     `json:"boltDiameter"`       // 螺栓直径
+	ExposedLength      float64     `json:"exposedLength"`      // 外露长度
+	NutCount           int         `json:"nutCount"`           // 螺母数量
+	NutHeight          float64     `json:"nutHeight"`          // 螺母高度
+	NutOD              float64     `json:"nutOD"`              // 螺母外径
+	WasherCount        int         `json:"washerCount"`        // 垫圈数量
+	WasherShape        WasherShape `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize         float64     `json:"washerSize"`         // 垫圈尺寸
+	WasherThickness    float64     `json:"washerThickness"`    // 垫圈厚度
+	AnchorLength       float64     `json:"anchorLength"`       // 锚固长度
+	HookStraightLength float64     `json:"hookStraightLength"` // 钩直段长度
+	HookDiameter       float64     `json:"hookDiameter"`       // 钩直径
 }
 
 func NewTripleHookAnchor() *TripleHookAnchor {
@@ -576,22 +594,22 @@ func NewTripleHookAnchor() *TripleHookAnchor {
 // RibbedAnchor represents a ribbed anchor
 type RibbedAnchor struct {
 	GtBase
-	BoltDiameter       float64 `json:"boltDiameter"`       // 螺栓直径
-	ExposedLength      float64 `json:"exposedLength"`      // 外露长度
-	NutCount           int     `json:"nutCount"`           // 螺母数量
-	NutHeight          float64 `json:"nutHeight"`          // 螺母高度
-	NutOD              float64 `json:"nutOD"`              // 螺母外径
-	WasherCount        int     `json:"washerCount"`        // 垫圈数量
-	WasherShape        int     `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize         float64 `json:"washerSize"`         // 垫圈尺寸
-	WasherThickness    float64 `json:"washerThickness"`    // 垫圈厚度
-	AnchorLength       float64 `json:"anchorLength"`       // 锚固长度
-	BasePlateSize      float64 `json:"basePlateSize"`      // 底板尺寸
-	RibTopWidth        float64 `json:"ribTopWidth"`        // 肋顶部宽度
-	RibBottomWidth     float64 `json:"ribBottomWidth"`     // 肋底部宽度
-	BasePlateThickness float64 `json:"basePlateThickness"` // 底板厚度
-	RibHeight          float64 `json:"ribHeight"`          // 肋高度
-	RibThickness       float64 `json:"ribThickness"`       // 肋厚度
+	BoltDiameter       float64     `json:"boltDiameter"`       // 螺栓直径
+	ExposedLength      float64     `json:"exposedLength"`      // 外露长度
+	NutCount           int         `json:"nutCount"`           // 螺母数量
+	NutHeight          float64     `json:"nutHeight"`          // 螺母高度
+	NutOD              float64     `json:"nutOD"`              // 螺母外径
+	WasherCount        int         `json:"washerCount"`        // 垫圈数量
+	WasherShape        WasherShape `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize         float64     `json:"washerSize"`         // 垫圈尺寸
+	WasherThickness    float64     `json:"washerThickness"`    // 垫圈厚度
+	AnchorLength       float64     `json:"anchorLength"`       // 锚固长度
+	BasePlateSize      float64     `json:"basePlateSize"`      // 底板尺寸
+	RibTopWidth        float64     `json:"ribTopWidth"`        // 肋顶部宽度
+	RibBottomWidth     float64     `json:"ribBottomWidth"`     // 肋底部宽度
+	BasePlateThickness float64     `json:"basePlateThickness"` // 底板厚度
+	RibHeight          float64     `json:"ribHeight"`          // 肋高度
+	RibThickness       float64     `json:"ribThickness"`       // 肋厚度
 }
 
 func NewRibbedAnchor() *RibbedAnchor {
@@ -603,19 +621,19 @@ func NewRibbedAnchor() *RibbedAnchor {
 // NutAnchor represents a nut anchor
 type NutAnchor struct {
 	GtBase
-	BoltDiameter        float64 `json:"boltDiameter"`        // 螺栓直径
-	ExposedLength       float64 `json:"exposedLength"`       // 外露长度
-	NutCount            int     `json:"nutCount"`            // 螺母数量
-	NutHeight           float64 `json:"nutHeight"`           // 螺母高度
-	NutOD               float64 `json:"nutOD"`               // 螺母外径
-	WasherCount         int     `json:"washerCount"`         // 垫圈数量
-	WasherShape         int     `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize          float64 `json:"washerSize"`          // 垫圈尺寸
-	WasherThickness     float64 `json:"washerThickness"`     // 垫圈厚度
-	AnchorLength        float64 `json:"anchorLength"`        // 锚固长度
-	BasePlateSize       float64 `json:"basePlateSize"`       // 底板尺寸
-	BasePlateThickness  float64 `json:"basePlateThickness"`  // 底板厚度
-	BoltToPlateDistance float64 `json:"boltToPlateDistance"` // 螺栓到底板距离
+	BoltDiameter        float64     `json:"boltDiameter"`        // 螺栓直径
+	ExposedLength       float64     `json:"exposedLength"`       // 外露长度
+	NutCount            int         `json:"nutCount"`            // 螺母数量
+	NutHeight           float64     `json:"nutHeight"`           // 螺母高度
+	NutOD               float64     `json:"nutOD"`               // 螺母外径
+	WasherCount         int         `json:"washerCount"`         // 垫圈数量
+	WasherShape         WasherShape `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize          float64     `json:"washerSize"`          // 垫圈尺寸
+	WasherThickness     float64     `json:"washerThickness"`     // 垫圈厚度
+	AnchorLength        float64     `json:"anchorLength"`        // 锚固长度
+	BasePlateSize       float64     `json:"basePlateSize"`       // 底板尺寸
+	BasePlateThickness  float64     `json:"basePlateThickness"`  // 底板厚度
+	BoltToPlateDistance float64     `json:"boltToPlateDistance"` // 螺栓到底板距离
 }
 
 func NewNutAnchor() *NutAnchor {
@@ -627,20 +645,20 @@ func NewNutAnchor() *NutAnchor {
 // TripleArmAnchor represents a triple arm anchor
 type TripleArmAnchor struct {
 	GtBase
-	BoltDiameter      float64 `json:"boltDiameter"`      // 螺栓直径
-	ExposedLength     float64 `json:"exposedLength"`     // 外露长度
-	NutCount          int     `json:"nutCount"`          // 螺母数量
-	NutHeight         float64 `json:"nutHeight"`         // 螺母高度
-	NutOD             float64 `json:"nutOD"`             // 螺母外径
-	WasherCount       int     `json:"washerCount"`       // 垫圈数量
-	WasherShape       int     `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize        float64 `json:"washerSize"`        // 垫圈尺寸
-	WasherThickness   float64 `json:"washerThickness"`   // 垫圈厚度
-	AnchorLength      float64 `json:"anchorLength"`      // 锚固长度
-	ArmDiameter       float64 `json:"armDiameter"`       // 臂直径
-	ArmStraightLength float64 `json:"armStraightLength"` // 臂直段长度
-	ArmBendLength     float64 `json:"armBendLength"`     // 臂弯曲段长度
-	ArmBendAngle      float64 `json:"armBendAngle"`      // 臂弯曲角度(弧度)
+	BoltDiameter      float64     `json:"boltDiameter"`      // 螺栓直径
+	ExposedLength     float64     `json:"exposedLength"`     // 外露长度
+	NutCount          int         `json:"nutCount"`          // 螺母数量
+	NutHeight         float64     `json:"nutHeight"`         // 螺母高度
+	NutOD             float64     `json:"nutOD"`             // 螺母外径
+	WasherCount       int         `json:"washerCount"`       // 垫圈数量
+	WasherShape       WasherShape `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize        float64     `json:"washerSize"`        // 垫圈尺寸
+	WasherThickness   float64     `json:"washerThickness"`   // 垫圈厚度
+	AnchorLength      float64     `json:"anchorLength"`      // 锚固长度
+	ArmDiameter       float64     `json:"armDiameter"`       // 臂直径
+	ArmStraightLength float64     `json:"armStraightLength"` // 臂直段长度
+	ArmBendLength     float64     `json:"armBendLength"`     // 臂弯曲段长度
+	ArmBendAngle      float64     `json:"armBendAngle"`      // 臂弯曲角度(弧度)
 }
 
 func NewTripleArmAnchor() *TripleArmAnchor {
@@ -652,21 +670,21 @@ func NewTripleArmAnchor() *TripleArmAnchor {
 // PositioningPlateAnchor represents a positioning plate anchor
 type PositioningPlateAnchor struct {
 	GtBase
-	BoltDiameter      float64 `json:"boltDiameter"`      // 螺栓直径
-	ExposedLength     float64 `json:"exposedLength"`     // 外露长度
-	NutCount          int     `json:"nutCount"`          // 螺母数量
-	NutHeight         float64 `json:"nutHeight"`         // 螺母高度
-	NutOD             float64 `json:"nutOD"`             // 螺母外径
-	WasherCount       int     `json:"washerCount"`       // 垫圈数量
-	WasherShape       int     `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize        float64 `json:"washerSize"`        // 垫圈尺寸
-	WasherThickness   float64 `json:"washerThickness"`   // 垫圈厚度
-	AnchorLength      float64 `json:"anchorLength"`      // 锚固长度
-	PlateLength       float64 `json:"plateLength"`       // 定位板长度
-	PlateThickness    float64 `json:"plateThickness"`    // 定位板厚度
-	ToBaseDistance    float64 `json:"toBaseDistance"`    // 到基础距离
-	ToBottomDistance  float64 `json:"toBottomDistance"`  // 到底部距离
-	GroutHoleDiameter float64 `json:"groutHoleDiameter"` // 灌浆孔直径
+	BoltDiameter      float64     `json:"boltDiameter"`      // 螺栓直径
+	ExposedLength     float64     `json:"exposedLength"`     // 外露长度
+	NutCount          int         `json:"nutCount"`          // 螺母数量
+	NutHeight         float64     `json:"nutHeight"`         // 螺母高度
+	NutOD             float64     `json:"nutOD"`             // 螺母外径
+	WasherCount       int         `json:"washerCount"`       // 垫圈数量
+	WasherShape       WasherShape `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize        float64     `json:"washerSize"`        // 垫圈尺寸
+	WasherThickness   float64     `json:"washerThickness"`   // 垫圈厚度
+	AnchorLength      float64     `json:"anchorLength"`      // 锚固长度
+	PlateLength       float64     `json:"plateLength"`       // 定位板长度
+	PlateThickness    float64     `json:"plateThickness"`    // 定位板厚度
+	ToBaseDistance    float64     `json:"toBaseDistance"`    // 到基础距离
+	ToBottomDistance  float64     `json:"toBottomDistance"`  // 到底部距离
+	GroutHoleDiameter float64     `json:"groutHoleDiameter"` // 灌浆孔直径
 }
 
 func NewPositioningPlateAnchor() *PositioningPlateAnchor {
