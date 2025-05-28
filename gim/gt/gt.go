@@ -464,11 +464,32 @@ func NewInsulator() *Insulator {
 	}
 }
 
+type MemberType string
+
+const (
+	MemberTypeAngle       MemberType = "ANGLE"
+	MemberTypeTube        MemberType = "TUBE"
+	MemberTypeTaperedTube MemberType = "TAPERED_TUBE"
+)
+
+func (m MemberType) ToInt() int {
+	switch m {
+	case MemberTypeAngle:
+		return 1
+	case MemberTypeTube:
+		return 2
+	case MemberTypeTaperedTube:
+		return 3
+	default:
+		return 0
+	}
+}
+
 type Member struct {
 	Id            string     `json:"id"`            // 构件ID
 	StartNodeId   string     `json:"startNodeId"`   // 起始节点ID
 	EndNodeId     string     `json:"endNodeId"`     // 结束节点ID
-	Type          string     `json:"type"`          // 构件类型
+	Type          MemberType `json:"type"`          // 构件类型
 	Specification string     `json:"specification"` // 规格
 	Material      string     `json:"material"`      // 材料
 	XDirection    [3]float64 `json:"xDirection"`    // X方向
@@ -504,10 +525,31 @@ type PoleTowerHeight struct {
 	LegId  string  `json:"legId"`  // 所属腿柱ID
 }
 
+type AttachmentType string
+
+const (
+	AttachmentTypeGroundWire AttachmentType = "GROUND_WIRE" // 地线
+	AttachmentTypeConductor  AttachmentType = "CONDUCTOR"   // 导线
+	AttachmentTypeJumper     AttachmentType = "JUMPER"      // 跳线
+)
+
+func (a AttachmentType) ToInt() int {
+	switch a {
+	case AttachmentTypeGroundWire:
+		return 1
+	case AttachmentTypeConductor:
+		return 2
+	case AttachmentTypeJumper:
+		return 3
+	default:
+		return 0
+	}
+}
+
 type Attachment []struct {
-	Name     string     `json:"name"` // 附件名称
-	Type     string     `json:"type"` // 附件类型
-	Position [3]float64 `json:"position"`
+	Name     string         `json:"name"` // 附件名称
+	Type     AttachmentType `json:"type"` // 附件类型
+	Position [3]float64     `json:"position"`
 }
 
 // PoleTower represents a pole tower

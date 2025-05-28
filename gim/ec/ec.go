@@ -377,16 +377,38 @@ func NewCableTerminal() CableTerminal {
 	}
 }
 
+type CableAccessoryType string
+
+const (
+	CableAccessoryDirectGround      CableAccessoryType = "DIRECT_GROUND"
+	CableAccessoryProtectiveGround  CableAccessoryType = "PROTECTIVE_GROUND"
+	CableAccessoryCrossInterconnect CableAccessoryType = "CROSS_INTERCONNECT"
+)
+
+func (c CableAccessoryType) ToInt() int {
+	switch c {
+	case CableAccessoryDirectGround:
+		return 1
+	case CableAccessoryProtectiveGround:
+		return 2
+	case CableAccessoryCrossInterconnect:
+		return 3
+	default:
+		return 0
+	}
+}
+
 type CableAccessory struct {
 	EcBase
-	Length            float64 `json:"length"`
-	Width             float64 `json:"width"`
-	Height            float64 `json:"height"`
-	PortCount         int     `json:"portCount"`
-	PortDiameter      float64 `json:"portDiameter"`
-	PortSpacing       float64 `json:"portSpacing"`
-	BackPanelDistance float64 `json:"backPanelDistance"`
-	SidePanelDistance float64 `json:"sidePanelDistance"`
+	CableAccessoryType CableAccessoryType `json:"cableAccessoryType"`
+	Length             float64            `json:"length"`
+	Width              float64            `json:"width"`
+	Height             float64            `json:"height"`
+	PortCount          int                `json:"portCount"`
+	PortDiameter       float64            `json:"portDiameter"`
+	PortSpacing        float64            `json:"portSpacing"`
+	BackPanelDistance  float64            `json:"backPanelDistance"`
+	SidePanelDistance  float64            `json:"sidePanelDistance"`
 }
 
 func NewCableAccessory() CableAccessory {
