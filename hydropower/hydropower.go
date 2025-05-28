@@ -29,29 +29,46 @@ type Point struct {
 	Type     string     `json:"type"`
 }
 
+type TunnelStyle string
+
 const (
-	TunnelStyleRectangular = "RECTANGULAR"
-	TunnelStyleCityOpening = "CITYOPENING"
-	TunnelStyleCircular    = "CIRCULAR"
-	TunnelStyleHorseshoe   = "HORSESHOE"
+	TunnelStyleRectangular TunnelStyle = "RECTANGULAR"
+	TunnelStyleCityOpening TunnelStyle = "CITYOPENING"
+	TunnelStyleCircular    TunnelStyle = "CIRCULAR"
+	TunnelStyleHorseshoe   TunnelStyle = "HORSESHOE"
 )
+
+func (t TunnelStyle) ToInt() int {
+	switch t {
+	case TunnelStyleRectangular:
+		return 1
+	case TunnelStyleCityOpening:
+		return 2
+	case TunnelStyleCircular:
+		return 3
+	case TunnelStyleHorseshoe:
+		return 4
+	default:
+		return 0
+	}
+}
 
 type WaterTunnel struct {
 	Base
-	Style                string   `json:"style"`                          // 'RECTANGULAR' | 'CITYOPENING' | 'CIRCULAR' | 'HORSESHOE'
-	Width                float64  `json:"width"`                          // Width of the tunnel
-	Height               float64  `json:"height"`                         // Height of the tunnel
-	TopThickness         float64  `json:"topThickness"`                   // Thickness of the top part
-	BottomThickness      float64  `json:"bottomThickness"`                // Thickness of the bottom part
-	OuterWallThickness   float64  `json:"outerWallThickness"`             // Thickness of outer wall
-	InnerWallThickness   float64  `json:"innerWallThickness"`             // Thickness of inner wall
-	ArcHeight            float64  `json:"arcHeight,omitempty"`            // Height of the arc (for certain styles)
-	ArcRadius            float64  `json:"arcRadius,omitempty"`            // Radius of the arc (for certain styles)
-	ArcAngle             float64  `json:"arcAngle,omitempty"`             // Angle of the arc (for certain styles)
-	BottomPlatformHeight float64  `json:"bottomPlatformHeight,omitempty"` // Height of bottom platform
-	CushionExtension     float64  `json:"cushionExtension,omitempty"`     // Extension of cushion
-	CushionThickness     float64  `json:"cushionThickness,omitempty"`     // Thickness of cushion
-	Points               []*Point `json:"points"`                         // Path points defining the tunnel
+	Style                TunnelStyle `json:"style"`                          // 'RECTANGULAR' | 'CITYOPENING' | 'CIRCULAR' | 'HORSESHOE'
+	Width                float64     `json:"width"`                          // Width of the tunnel
+	Height               float64     `json:"height"`                         // Height of the tunnel
+	TopThickness         float64     `json:"topThickness"`                   // Thickness of the top part
+	BottomThickness      float64     `json:"bottomThickness"`                // Thickness of the bottom part
+	OuterWallThickness   float64     `json:"outerWallThickness"`             // Thickness of outer wall
+	InnerWallThickness   float64     `json:"innerWallThickness"`             // Thickness of inner wall
+	ArcHeight            float64     `json:"arcHeight,omitempty"`            // Height of the arc (for certain styles)
+	ArcRadius            float64     `json:"arcRadius,omitempty"`            // Radius of the arc (for certain styles)
+	ArcAngle             float64     `json:"arcAngle,omitempty"`             // Angle of the arc (for certain styles)
+	BottomPlatformHeight float64     `json:"bottomPlatformHeight,omitempty"` // Height of bottom platform
+	CushionExtension     float64     `json:"cushionExtension,omitempty"`     // Extension of cushion
+	CushionThickness     float64     `json:"cushionThickness,omitempty"`     // Thickness of cushion
+	Points               []*Point    `json:"points"`                         // Path points defining the tunnel
 }
 
 // NewWaterTunnel creates a new WaterTunnel instance
