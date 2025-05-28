@@ -50,27 +50,75 @@ type PolygonProfile struct {
 	Inners [][][3]float64 `json:"inners,omitempty"`
 }
 
-// Segment types
+type SegmentType string
+
 const (
-	SegmentTypeLine            = "LINE"
-	SegmentTypeThreePointArc   = "THREE_POINT_ARC"
-	SegmentTypeCircleCenterArc = "CIRCLE_CENTER_ARC"
-	SegmentTypeSpline          = "SPLINE"
+	SegmentTypeLine            SegmentType = "LINE"
+	SegmentTypeThreePointArc   SegmentType = "THREE_POINT_ARC"
+	SegmentTypeCircleCenterArc SegmentType = "CIRCLE_CENTER_ARC"
+	SegmentTypeSpline          SegmentType = "SPLINE"
+	SegmentTypeBezier          SegmentType = "BEZIER"
 )
 
-// Transition modes
+func (s SegmentType) ToInt() int {
+	switch s {
+	case SegmentTypeLine:
+		return 1
+	case SegmentTypeThreePointArc:
+		return 2
+	case SegmentTypeCircleCenterArc:
+		return 3
+	case SegmentTypeSpline:
+		return 4
+	case SegmentTypeBezier:
+		return 5
+	default:
+		return 1
+	}
+}
+
+// TransitionMode enum
+type TransitionMode string
+
 const (
-	TransitionModeTransformed = "TRANSFORMED"
-	TransitionModeRound       = "ROUND"
-	TransitionModeRight       = "RIGHT"
+	TransitionModeTransformed TransitionMode = "TRANSFORMED"
+	TransitionModeRound       TransitionMode = "ROUND"
+	TransitionModeRight       TransitionMode = "RIGHT"
 )
 
-// Joint modes
+func (t TransitionMode) ToInt() int {
+	switch t {
+	case TransitionModeTransformed:
+		return 1
+	case TransitionModeRound:
+		return 2
+	case TransitionModeRight:
+		return 3
+	default:
+		return 1
+	}
+}
+
+type PipeJointMode string
+
 const (
-	JointModeSphere   = "SPHERE"
-	JointModeBox      = "BOX"
-	JointModeCylinder = "CYLINDER"
+	PipeJointModeSphere   PipeJointMode = "SPHERE"
+	PipeJointModeBox      PipeJointMode = "BOX"
+	PipeJointModeCylinder PipeJointMode = "CYLINDER"
 )
+
+func (p PipeJointMode) ToInt() int {
+	switch p {
+	case PipeJointModeSphere:
+		return 0
+	case PipeJointModeBox:
+		return 1
+	case PipeJointModeCylinder:
+		return 2
+	default:
+		return 0
+	}
+}
 
 type Axis struct {
 	Location  [3]float64 `json:"location"`
@@ -111,8 +159,8 @@ type Pipe struct {
 	Wire           [][3]float64        `json:"wire,omitempty"`
 	Profile        [2]profile.Profile  `json:"profile"`
 	InnerProfile   *[2]profile.Profile `json:"innerProfile,omitempty"`
-	SegmentType    string              `json:"segmentType"`
-	TransitionMode string              `json:"transitionMode"`
+	SegmentType    SegmentType         `json:"segmentType"`
+	TransitionMode TransitionMode      `json:"transitionMode"`
 	UpDir          *[3]float64         `json:"upDir,omitempty"`
 }
 
@@ -128,8 +176,8 @@ type MultiSegmentPipe struct {
 	Wires          [][][3]float64    `json:"wires,omitempty"`
 	Profiles       []profile.Profile `json:"profiles"`
 	InnerProfiles  []profile.Profile `json:"innerProfiles,omitempty"`
-	SegmentTypes   []string          `json:"segmentTypes"`
-	TransitionMode string            `json:"transitionMode"`
+	SegmentTypes   []SegmentType     `json:"segmentTypes"`
+	TransitionMode TransitionMode    `json:"transitionMode"`
 	UpDir          *[3]float64       `json:"upDir,omitempty"`
 }
 
@@ -155,7 +203,7 @@ type PipeJoint struct {
 	Outs         []string            `json:"outs"`
 	InsEndpoint  []PipeJointEndpoint `json:"-"`
 	OutsEndpoint []PipeJointEndpoint `json:"-"`
-	Mode         string              `json:"mode"`
+	Mode         PipeJointMode       `json:"mode"`
 	Flanged      bool                `json:"flanged"`
 	UpDir        *[3]float64         `json:"upDir,omitempty"`
 }
