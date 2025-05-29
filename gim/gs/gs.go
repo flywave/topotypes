@@ -351,8 +351,8 @@ func NewTerminalBlock() *TerminalBlock {
 	}
 }
 
-// RectangularHolePlate represents a rectangular hole plate
-type RectangularHolePlate struct {
+// RectangularFixedPlate represents a rectangular hole plate
+type RectangularFixedPlate struct {
 	GsBase
 	Length        float64 `json:"length"`
 	Width         float64 `json:"width"`
@@ -365,9 +365,9 @@ type RectangularHolePlate struct {
 	HoleDiameter  float64 `json:"holeDiameter"`
 }
 
-func NewRectangularHolePlate() *RectangularHolePlate {
-	return &RectangularHolePlate{
-		GsBase: GsBase{Type: "GIM/GS/RectangularHolePlate"},
+func NewRectangularFixedPlate() *RectangularFixedPlate {
+	return &RectangularFixedPlate{
+		GsBase: GsBase{Type: "GIM/GS/RectangularFixedPlate"},
 	}
 }
 
@@ -611,8 +611,8 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		shape := TerminalBlock{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
-	case "GIM/GS/RectangularHolePlate":
-		shape := RectangularHolePlate{}
+	case "GIM/GS/RectangularFixedPlate":
+		shape := RectangularFixedPlate{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	case "GIM/GS/CircularFixedPlate":

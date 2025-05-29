@@ -689,6 +689,8 @@ type PipeRow struct {
 	PullPipeInnerDiameter float64        `json:"pullPipeInnerDiameter"`
 	PullPipeThickness     float64        `json:"pullPipeThickness"`
 	Points                []ChannelPoint `json:"points"`
+	PipeCount             int            `json:"pipeCount"`
+	PointCount            int            `json:"pointCount"`
 }
 
 func NewPipeRow() PipeRow {
