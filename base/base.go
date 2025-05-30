@@ -171,6 +171,12 @@ func NewPipe() *Pipe {
 	}
 }
 
+type PointIndex struct {
+	Start int         `json:"-"`
+	End   int         `json:"end"`
+	Type  SegmentType `json:"type"`
+}
+
 // MultiSegmentPipePrimitive represents a multi-segment pipe
 type MultiSegmentPipe struct {
 	Base
@@ -181,6 +187,7 @@ type MultiSegmentPipe struct {
 	TransitionMode TransitionMode        `json:"transitionMode"`
 	UpDir          *[3]float64           `json:"upDir,omitempty"`
 	Anchors        [2]*anchor.TopoAnchor `json:"anchors"`
+	PointIndexs    []PointIndex          `json:"pointIndexes"`
 }
 
 func NewMultiSegmentPipe() *MultiSegmentPipe {
