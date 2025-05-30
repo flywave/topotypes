@@ -19,12 +19,12 @@ func (b *GtBase) GetType() string {
 // BoredPileBase represents a bored pile base
 type BoredPileBase struct {
 	GtBase
-	H1 float64 `json:"H1"` // 上部圆柱高度
-	H2 float64 `json:"H2"` // 过渡段高度
-	H3 float64 `json:"H3"` // 底部圆柱高度
-	H4 float64 `json:"H4"` // 桩头高度
-	D1 float64 `json:"d"`  // 上部直径
-	D  float64 `json:"D"`  // 底部直径
+	H1       float64 `json:"H1"` // 上部圆柱高度
+	H2       float64 `json:"H2"` // 过渡段高度
+	H3       float64 `json:"H3"` // 底部圆柱高度
+	H4       float64 `json:"H4"` // 桩头高度
+	Diameter float64 `json:"d"`  // 上部直径
+	D        float64 `json:"D"`  // 底部直径
 }
 
 func NewBoredPileBase() *BoredPileBase {
@@ -412,6 +412,47 @@ func NewTransmissionLine() *TransmissionLine {
 	}
 }
 
+// Arrangement enum (排列方式)
+type ArrangementType string
+
+const (
+	ArrangementHorizontal ArrangementType = "HORIZONTAL" // 水平排列
+	ArrangementVertical   ArrangementType = "VERTICAL"   // 垂直排列
+)
+
+func (a ArrangementType) ToInt() int {
+	switch a {
+	case ArrangementHorizontal:
+		return 1
+	case ArrangementVertical:
+		return 2
+	default:
+		return 0
+	}
+}
+
+// Material enum (材料类型)
+type MaterialType string
+
+const (
+	MaterialCeramic   MaterialType = "CERAMIC"   // 陶瓷
+	MaterialGlass     MaterialType = "GLASS"     // 玻璃
+	MaterialComposite MaterialType = "COMPOSITE" // 复合材料
+)
+
+func (m MaterialType) ToInt() int {
+	switch m {
+	case MaterialCeramic:
+		return 1
+	case MaterialGlass:
+		return 2
+	case MaterialComposite:
+		return 3
+	default:
+		return 0
+	}
+}
+
 type FittingLength struct {
 	LeftUpper  float64 `json:"leftUpper"`  // 左上金具长度
 	RightUpper float64 `json:"rightUpper"` // 右上金具长度
@@ -420,17 +461,17 @@ type FittingLength struct {
 }
 
 type MultiLink struct {
-	Count       int     `json:"count"`       // 多联数量
-	Spacing     float64 `json:"spacing"`     // 多联间距
-	Arrangement string  `json:"arrangement"` // 排列方式
+	Count       int             `json:"count"`       // 多联数量
+	Spacing     float64         `json:"spacing"`     // 多联间距
+	Arrangement ArrangementType `json:"arrangement"` // 排列方式
 }
 
 type InsulatorMember struct {
-	Radius     float64 `json:"radius"`     // 绝缘子半径
-	Height     float64 `json:"height"`     // 绝缘子高度
-	LeftCount  int     `json:"leftCount"`  // 左侧片数
-	RightCount int     `json:"rightCount"` // 右侧片数
-	Material   string  `json:"material"`   // 材料类型
+	Radius     float64      `json:"radius"`     // 绝缘子半径
+	Height     float64      `json:"height"`     // 绝缘子高度
+	LeftCount  int          `json:"leftCount"`  // 左侧片数
+	RightCount int          `json:"rightCount"` // 右侧片数
+	Material   MaterialType `json:"material"`   // 材料类型
 }
 
 type GradingRing struct {
@@ -438,6 +479,43 @@ type GradingRing struct {
 	Position float64 `json:"position"` // 均压环位置
 	Height   float64 `json:"height"`   // 均压环高度
 	Radius   float64 `json:"radius"`   // 均压环半径
+}
+
+type Application string
+
+const (
+	ApplicationConductor  Application = "CONDUCTOR"   // 导线
+	ApplicationGroundWire Application = "GROUND_WIRE" // 地线
+)
+
+func (a Application) ToInt() int {
+	switch a {
+	case ApplicationConductor:
+		return 1
+	case ApplicationGroundWire:
+		return 2
+	default:
+		return 0
+	}
+}
+
+// StringType enum (串型类型)
+type StringType string
+
+const (
+	StringTypeSuspension StringType = "SUSPENSION" // 悬垂
+	StringTypeTension    StringType = "TENSION"    // 张力
+)
+
+func (s StringType) ToInt() int {
+	switch s {
+	case StringTypeSuspension:
+		return 1
+	case StringTypeTension:
+		return 2
+	default:
+		return 0
+	}
 }
 
 // Insulator represents an insulator
@@ -454,8 +532,8 @@ type Insulator struct {
 	MultiLink      *MultiLink       `json:"multiLink"`
 	Insulator      *InsulatorMember `json:"insulator"`
 	GradingRing    *GradingRing     `json:"gradingRing"`
-	Application    string           `json:"application"` // 应用类型
-	StringType     string           `json:"stringType"`  // 串型类型
+	Application    Application      `json:"application"` // 应用类型
+	StringType     StringType       `json:"stringType"`  // 串型类型
 }
 
 func NewInsulator() *Insulator {
@@ -546,7 +624,7 @@ func (a AttachmentType) ToInt() int {
 	}
 }
 
-type Attachment []struct {
+type Attachment struct {
 	Name     string         `json:"name"` // 附件名称
 	Type     AttachmentType `json:"type"` // 附件类型
 	Position [3]float64     `json:"position"`
@@ -567,14 +645,14 @@ func NewPoleTower() *PoleTower {
 	}
 }
 
-type WasherShape string
+type WasherShapeType string
 
 const (
-	WasherShapeRound  WasherShape = "ROUND"
-	WasherShapeSquare WasherShape = "SQUARE"
+	WasherShapeRound  WasherShapeType = "ROUND"
+	WasherShapeSquare WasherShapeType = "SQUARE"
 )
 
-func (w WasherShape) ToInt() int {
+func (w WasherShapeType) ToInt() int {
 	switch w {
 	case WasherShapeRound:
 		return 2
@@ -588,20 +666,20 @@ func (w WasherShape) ToInt() int {
 // SingleHookAnchor represents a single hook anchor
 type SingleHookAnchor struct {
 	GtBase
-	BoltDiameter        float64     `json:"boltDiameter"`        // 螺栓直径
-	ExposedLength       float64     `json:"exposedLength"`       // 外露长度
-	NutCount            int         `json:"nutCount"`            // 螺母数量
-	NutHeight           float64     `json:"nutHeight"`           // 螺母高度
-	NutOD               float64     `json:"nutOD"`               // 螺母外径
-	WasherCount         int         `json:"washerCount"`         // 垫圈数量
-	WasherShape         WasherShape `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize          float64     `json:"washerSize"`          // 垫圈尺寸
-	WasherThickness     float64     `json:"washerThickness"`     // 垫圈厚度
-	AnchorLength        float64     `json:"anchorLength"`        // 锚固长度
-	HookStraightLengthA float64     `json:"hookStraightLengthA"` // 钩直段长度A
-	HookStraightLengthB float64     `json:"hookStraightLengthB"` // 钩直段长度B
-	HookDiameter        float64     `json:"hookDiameter"`        // 钩直径
-	AnchorBarDiameter   float64     `json:"anchorBarDiameter"`   // 锚筋直径
+	BoltDiameter        float64         `json:"boltDiameter"`        // 螺栓直径
+	ExposedLength       float64         `json:"exposedLength"`       // 外露长度
+	NutCount            int             `json:"nutCount"`            // 螺母数量
+	NutHeight           float64         `json:"nutHeight"`           // 螺母高度
+	NutOD               float64         `json:"nutOD"`               // 螺母外径
+	WasherCount         int             `json:"washerCount"`         // 垫圈数量
+	WasherShapeType     WasherShapeType `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize          float64         `json:"washerSize"`          // 垫圈尺寸
+	WasherThickness     float64         `json:"washerThickness"`     // 垫圈厚度
+	AnchorLength        float64         `json:"anchorLength"`        // 锚固长度
+	HookStraightLengthA float64         `json:"hookStraightLengthA"` // 钩直段长度A
+	HookStraightLengthB float64         `json:"hookStraightLengthB"` // 钩直段长度B
+	HookDiameter        float64         `json:"hookDiameter"`        // 钩直径
+	AnchorBarDiameter   float64         `json:"anchorBarDiameter"`   // 锚筋直径
 }
 
 func NewSingleHookAnchor() *SingleHookAnchor {
@@ -613,18 +691,18 @@ func NewSingleHookAnchor() *SingleHookAnchor {
 // TripleHookAnchor represents a triple hook anchor
 type TripleHookAnchor struct {
 	GtBase
-	BoltDiameter       float64     `json:"boltDiameter"`       // 螺栓直径
-	ExposedLength      float64     `json:"exposedLength"`      // 外露长度
-	NutCount           int         `json:"nutCount"`           // 螺母数量
-	NutHeight          float64     `json:"nutHeight"`          // 螺母高度
-	NutOD              float64     `json:"nutOD"`              // 螺母外径
-	WasherCount        int         `json:"washerCount"`        // 垫圈数量
-	WasherShape        WasherShape `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize         float64     `json:"washerSize"`         // 垫圈尺寸
-	WasherThickness    float64     `json:"washerThickness"`    // 垫圈厚度
-	AnchorLength       float64     `json:"anchorLength"`       // 锚固长度
-	HookStraightLength float64     `json:"hookStraightLength"` // 钩直段长度
-	HookDiameter       float64     `json:"hookDiameter"`       // 钩直径
+	BoltDiameter       float64         `json:"boltDiameter"`       // 螺栓直径
+	ExposedLength      float64         `json:"exposedLength"`      // 外露长度
+	NutCount           int             `json:"nutCount"`           // 螺母数量
+	NutHeight          float64         `json:"nutHeight"`          // 螺母高度
+	NutOD              float64         `json:"nutOD"`              // 螺母外径
+	WasherCount        int             `json:"washerCount"`        // 垫圈数量
+	WasherShapeType    WasherShapeType `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize         float64         `json:"washerSize"`         // 垫圈尺寸
+	WasherThickness    float64         `json:"washerThickness"`    // 垫圈厚度
+	AnchorLength       float64         `json:"anchorLength"`       // 锚固长度
+	HookStraightLength float64         `json:"hookStraightLength"` // 钩直段长度
+	HookDiameter       float64         `json:"hookDiameter"`       // 钩直径
 }
 
 func NewTripleHookAnchor() *TripleHookAnchor {
@@ -636,22 +714,22 @@ func NewTripleHookAnchor() *TripleHookAnchor {
 // RibbedAnchor represents a ribbed anchor
 type RibbedAnchor struct {
 	GtBase
-	BoltDiameter       float64     `json:"boltDiameter"`       // 螺栓直径
-	ExposedLength      float64     `json:"exposedLength"`      // 外露长度
-	NutCount           int         `json:"nutCount"`           // 螺母数量
-	NutHeight          float64     `json:"nutHeight"`          // 螺母高度
-	NutOD              float64     `json:"nutOD"`              // 螺母外径
-	WasherCount        int         `json:"washerCount"`        // 垫圈数量
-	WasherShape        WasherShape `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize         float64     `json:"washerSize"`         // 垫圈尺寸
-	WasherThickness    float64     `json:"washerThickness"`    // 垫圈厚度
-	AnchorLength       float64     `json:"anchorLength"`       // 锚固长度
-	BasePlateSize      float64     `json:"basePlateSize"`      // 底板尺寸
-	RibTopWidth        float64     `json:"ribTopWidth"`        // 肋顶部宽度
-	RibBottomWidth     float64     `json:"ribBottomWidth"`     // 肋底部宽度
-	BasePlateThickness float64     `json:"basePlateThickness"` // 底板厚度
-	RibHeight          float64     `json:"ribHeight"`          // 肋高度
-	RibThickness       float64     `json:"ribThickness"`       // 肋厚度
+	BoltDiameter       float64         `json:"boltDiameter"`       // 螺栓直径
+	ExposedLength      float64         `json:"exposedLength"`      // 外露长度
+	NutCount           int             `json:"nutCount"`           // 螺母数量
+	NutHeight          float64         `json:"nutHeight"`          // 螺母高度
+	NutOD              float64         `json:"nutOD"`              // 螺母外径
+	WasherCount        int             `json:"washerCount"`        // 垫圈数量
+	WasherShapeType    WasherShapeType `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize         float64         `json:"washerSize"`         // 垫圈尺寸
+	WasherThickness    float64         `json:"washerThickness"`    // 垫圈厚度
+	AnchorLength       float64         `json:"anchorLength"`       // 锚固长度
+	BasePlateSize      float64         `json:"basePlateSize"`      // 底板尺寸
+	RibTopWidth        float64         `json:"ribTopWidth"`        // 肋顶部宽度
+	RibBottomWidth     float64         `json:"ribBottomWidth"`     // 肋底部宽度
+	BasePlateThickness float64         `json:"basePlateThickness"` // 底板厚度
+	RibHeight          float64         `json:"ribHeight"`          // 肋高度
+	RibThickness       float64         `json:"ribThickness"`       // 肋厚度
 }
 
 func NewRibbedAnchor() *RibbedAnchor {
@@ -663,19 +741,19 @@ func NewRibbedAnchor() *RibbedAnchor {
 // NutAnchor represents a nut anchor
 type NutAnchor struct {
 	GtBase
-	BoltDiameter        float64     `json:"boltDiameter"`        // 螺栓直径
-	ExposedLength       float64     `json:"exposedLength"`       // 外露长度
-	NutCount            int         `json:"nutCount"`            // 螺母数量
-	NutHeight           float64     `json:"nutHeight"`           // 螺母高度
-	NutOD               float64     `json:"nutOD"`               // 螺母外径
-	WasherCount         int         `json:"washerCount"`         // 垫圈数量
-	WasherShape         WasherShape `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize          float64     `json:"washerSize"`          // 垫圈尺寸
-	WasherThickness     float64     `json:"washerThickness"`     // 垫圈厚度
-	AnchorLength        float64     `json:"anchorLength"`        // 锚固长度
-	BasePlateSize       float64     `json:"basePlateSize"`       // 底板尺寸
-	BasePlateThickness  float64     `json:"basePlateThickness"`  // 底板厚度
-	BoltToPlateDistance float64     `json:"boltToPlateDistance"` // 螺栓到底板距离
+	BoltDiameter        float64         `json:"boltDiameter"`        // 螺栓直径
+	ExposedLength       float64         `json:"exposedLength"`       // 外露长度
+	NutCount            int             `json:"nutCount"`            // 螺母数量
+	NutHeight           float64         `json:"nutHeight"`           // 螺母高度
+	NutOD               float64         `json:"nutOD"`               // 螺母外径
+	WasherCount         int             `json:"washerCount"`         // 垫圈数量
+	WasherShapeType     WasherShapeType `json:"washerShape"`         // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize          float64         `json:"washerSize"`          // 垫圈尺寸
+	WasherThickness     float64         `json:"washerThickness"`     // 垫圈厚度
+	AnchorLength        float64         `json:"anchorLength"`        // 锚固长度
+	BasePlateSize       float64         `json:"basePlateSize"`       // 底板尺寸
+	BasePlateThickness  float64         `json:"basePlateThickness"`  // 底板厚度
+	BoltToPlateDistance float64         `json:"boltToPlateDistance"` // 螺栓到底板距离
 }
 
 func NewNutAnchor() *NutAnchor {
@@ -687,20 +765,20 @@ func NewNutAnchor() *NutAnchor {
 // TripleArmAnchor represents a triple arm anchor
 type TripleArmAnchor struct {
 	GtBase
-	BoltDiameter      float64     `json:"boltDiameter"`      // 螺栓直径
-	ExposedLength     float64     `json:"exposedLength"`     // 外露长度
-	NutCount          int         `json:"nutCount"`          // 螺母数量
-	NutHeight         float64     `json:"nutHeight"`         // 螺母高度
-	NutOD             float64     `json:"nutOD"`             // 螺母外径
-	WasherCount       int         `json:"washerCount"`       // 垫圈数量
-	WasherShape       WasherShape `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize        float64     `json:"washerSize"`        // 垫圈尺寸
-	WasherThickness   float64     `json:"washerThickness"`   // 垫圈厚度
-	AnchorLength      float64     `json:"anchorLength"`      // 锚固长度
-	ArmDiameter       float64     `json:"armDiameter"`       // 臂直径
-	ArmStraightLength float64     `json:"armStraightLength"` // 臂直段长度
-	ArmBendLength     float64     `json:"armBendLength"`     // 臂弯曲段长度
-	ArmBendAngle      float64     `json:"armBendAngle"`      // 臂弯曲角度(弧度)
+	BoltDiameter      float64         `json:"boltDiameter"`      // 螺栓直径
+	ExposedLength     float64         `json:"exposedLength"`     // 外露长度
+	NutCount          int             `json:"nutCount"`          // 螺母数量
+	NutHeight         float64         `json:"nutHeight"`         // 螺母高度
+	NutOD             float64         `json:"nutOD"`             // 螺母外径
+	WasherCount       int             `json:"washerCount"`       // 垫圈数量
+	WasherShapeType   WasherShapeType `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize        float64         `json:"washerSize"`        // 垫圈尺寸
+	WasherThickness   float64         `json:"washerThickness"`   // 垫圈厚度
+	AnchorLength      float64         `json:"anchorLength"`      // 锚固长度
+	ArmDiameter       float64         `json:"armDiameter"`       // 臂直径
+	ArmStraightLength float64         `json:"armStraightLength"` // 臂直段长度
+	ArmBendLength     float64         `json:"armBendLength"`     // 臂弯曲段长度
+	ArmBendAngle      float64         `json:"armBendAngle"`      // 臂弯曲角度(弧度)
 }
 
 func NewTripleArmAnchor() *TripleArmAnchor {
@@ -712,21 +790,21 @@ func NewTripleArmAnchor() *TripleArmAnchor {
 // PositioningPlateAnchor represents a positioning plate anchor
 type PositioningPlateAnchor struct {
 	GtBase
-	BoltDiameter      float64     `json:"boltDiameter"`      // 螺栓直径
-	ExposedLength     float64     `json:"exposedLength"`     // 外露长度
-	NutCount          int         `json:"nutCount"`          // 螺母数量
-	NutHeight         float64     `json:"nutHeight"`         // 螺母高度
-	NutOD             float64     `json:"nutOD"`             // 螺母外径
-	WasherCount       int         `json:"washerCount"`       // 垫圈数量
-	WasherShape       WasherShape `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize        float64     `json:"washerSize"`        // 垫圈尺寸
-	WasherThickness   float64     `json:"washerThickness"`   // 垫圈厚度
-	AnchorLength      float64     `json:"anchorLength"`      // 锚固长度
-	PlateLength       float64     `json:"plateLength"`       // 定位板长度
-	PlateThickness    float64     `json:"plateThickness"`    // 定位板厚度
-	ToBaseDistance    float64     `json:"toBaseDistance"`    // 到基础距离
-	ToBottomDistance  float64     `json:"toBottomDistance"`  // 到底部距离
-	GroutHoleDiameter float64     `json:"groutHoleDiameter"` // 灌浆孔直径
+	BoltDiameter      float64         `json:"boltDiameter"`      // 螺栓直径
+	ExposedLength     float64         `json:"exposedLength"`     // 外露长度
+	NutCount          int             `json:"nutCount"`          // 螺母数量
+	NutHeight         float64         `json:"nutHeight"`         // 螺母高度
+	NutOD             float64         `json:"nutOD"`             // 螺母外径
+	WasherCount       int             `json:"washerCount"`       // 垫圈数量
+	WasherShapeType   WasherShapeType `json:"washerShape"`       // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize        float64         `json:"washerSize"`        // 垫圈尺寸
+	WasherThickness   float64         `json:"washerThickness"`   // 垫圈厚度
+	AnchorLength      float64         `json:"anchorLength"`      // 锚固长度
+	PlateLength       float64         `json:"plateLength"`       // 定位板长度
+	PlateThickness    float64         `json:"plateThickness"`    // 定位板厚度
+	ToBaseDistance    float64         `json:"toBaseDistance"`    // 到基础距离
+	ToBottomDistance  float64         `json:"toBottomDistance"`  // 到底部距离
+	GroutHoleDiameter float64         `json:"groutHoleDiameter"` // 灌浆孔直径
 }
 
 func NewPositioningPlateAnchor() *PositioningPlateAnchor {
