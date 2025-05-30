@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/flywave/topotypes/anchor"
 	"github.com/flywave/topotypes/profile"
 )
 
@@ -156,7 +157,7 @@ func NewPrism() *Prism {
 // Pipe represents a pipe object
 type Pipe struct {
 	Base
-	Wire           [][3]float64        `json:"wire,omitempty"`
+	Wire           [][3]float64        `json:"-,omitempty"`
 	Profile        [2]profile.Profile  `json:"profile"`
 	InnerProfile   *[2]profile.Profile `json:"innerProfile,omitempty"`
 	SegmentType    SegmentType         `json:"segmentType"`
@@ -173,12 +174,13 @@ func NewPipe() *Pipe {
 // MultiSegmentPipePrimitive represents a multi-segment pipe
 type MultiSegmentPipe struct {
 	Base
-	Wires          [][][3]float64    `json:"wires,omitempty"`
-	Profiles       []profile.Profile `json:"profiles"`
-	InnerProfiles  []profile.Profile `json:"innerProfiles,omitempty"`
-	SegmentTypes   []SegmentType     `json:"segmentTypes"`
-	TransitionMode TransitionMode    `json:"transitionMode"`
-	UpDir          *[3]float64       `json:"upDir,omitempty"`
+	Wires          [][][3]float64        `json:"-,omitempty"`
+	Profiles       []profile.Profile     `json:"profiles"`
+	InnerProfiles  []profile.Profile     `json:"innerProfiles,omitempty"`
+	SegmentTypes   []SegmentType         `json:"segmentTypes"`
+	TransitionMode TransitionMode        `json:"transitionMode"`
+	UpDir          *[3]float64           `json:"upDir,omitempty"`
+	Anchors        [2]*anchor.TopoAnchor `json:"anchors"`
 }
 
 func NewMultiSegmentPipe() *MultiSegmentPipe {

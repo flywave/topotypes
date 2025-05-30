@@ -1,4 +1,4 @@
-package topotypes
+package anchor
 
 type TopoAnchorRef struct {
 	Ref string `json:"ref"`

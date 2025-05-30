@@ -2,6 +2,8 @@ package topotypes
 
 import (
 	"encoding/json"
+
+	"github.com/flywave/topotypes/anchor"
 )
 
 type SegmentType string
@@ -15,12 +17,12 @@ const (
 
 type TopoPipe struct {
 	TopoMaker
-	Wire           [][3]float64   `json:"-"`
-	Profile        TopoProfile    `json:"profile"`
-	InnerProfile   TopoProfile    `json:"inner_profile,omitempty"`
-	Anchors        [2]*TopoAnchor `json:"anchors"`
-	SegmentType    SegmentType    `json:"segment_type,omitempty"`
-	TransitionMode string         `json:"transition_mode"`
+	Wire           [][3]float64          `json:"-"`
+	Profile        TopoProfile           `json:"profile"`
+	InnerProfile   TopoProfile           `json:"inner_profile,omitempty"`
+	Anchors        [2]*anchor.TopoAnchor `json:"anchors"`
+	SegmentType    SegmentType           `json:"segment_type,omitempty"`
+	TransitionMode string                `json:"transition_mode"`
 }
 
 func NewTopoPipe() *TopoPipe {
@@ -33,7 +35,7 @@ func (sp *TopoPipe) IsTopoBound() bool {
 	return true
 }
 
-func (sp *TopoPipe) GetAnchor() [2]*TopoAnchor {
+func (sp *TopoPipe) GetAnchor() [2]*anchor.TopoAnchor {
 	return sp.Anchors
 }
 

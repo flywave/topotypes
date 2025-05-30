@@ -2,12 +2,14 @@ package topotypes
 
 import (
 	"strings"
+
+	"github.com/flywave/topotypes/anchor"
 )
 
 type TopoCrossMultiPoint struct {
 	Topos
-	Refs    []TopoAnchorRef   `json:"links,omitempty"`
-	Objects []*TopoCrossPoint `json:"objects,omitempty"`
+	Refs    []anchor.TopoAnchorRef `json:"links,omitempty"`
+	Objects []*TopoCrossPoint      `json:"objects,omitempty"`
 }
 
 func NewTopoCrossMultiPoint() *TopoCrossMultiPoint {
@@ -33,9 +35,9 @@ func (sp *TopoCrossMultiPoint) SetModel(fileid string) {
 
 type TopoCrossPoint struct {
 	Topos
-	Model     string           `json:"model"`
-	Instanced bool             `json:"instanced"`
-	Links     []TopoAnchorLink `json:"links,omitempty"`
+	Model     string                  `json:"model"`
+	Instanced bool                    `json:"instanced"`
+	Links     []anchor.TopoAnchorLink `json:"links,omitempty"`
 }
 
 func NewTopoCrossPoint() *TopoCrossPoint {

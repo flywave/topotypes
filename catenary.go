@@ -3,12 +3,13 @@ package topotypes
 import (
 	"encoding/json"
 
+	"github.com/flywave/topotypes/anchor"
 	"github.com/flywave/topotypes/catenary"
 )
 
 type TopoCatenary struct {
 	TopoMaker
-	Anchors [2]*TopoAnchor `json:"anchors"`
+	Anchors [2]*anchor.TopoAnchor `json:"anchors"`
 	catenary.Catenary
 }
 
@@ -28,7 +29,7 @@ func CatenaryUnMarshal(js []byte) (*TopoCatenary, error) {
 	return &catenary, nil
 }
 
-func (sp *TopoCatenary) GetAnchor() [2]*TopoAnchor {
+func (sp *TopoCatenary) GetAnchor() [2]*anchor.TopoAnchor {
 	return sp.Anchors
 }
 
