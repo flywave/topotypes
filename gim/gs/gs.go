@@ -392,13 +392,13 @@ func NewCircularFixedPlate() *CircularFixedPlate {
 // Wire represents a wire
 type Wire struct {
 	GsBase
-	StartPoint [3]float64   `json:"startPoint"`
-	EndPoint   [3]float64   `json:"endPoint"`
+	StartPoint [3]float64   `json:"-"`
+	EndPoint   [3]float64   `json:"-"`
 	StartDir   [3]float64   `json:"startDir"`
 	EndDir     [3]float64   `json:"endDir"`
 	Sag        float64      `json:"sag"`
 	Diameter   float64      `json:"diameter"`
-	FitPoints  [][3]float64 `json:"fitPoints"`
+	FitPoints  [][3]float64 `json:"-"`
 }
 
 func NewWire() *Wire {
@@ -410,8 +410,8 @@ func NewWire() *Wire {
 // Cable represents a cable
 type Cable struct {
 	GsBase
-	StartPoint       [3]float64   `json:"startPoint"`
-	EndPoint         [3]float64   `json:"endPoint"`
+	StartPoint       [3]float64   `json:"-"`
+	EndPoint         [3]float64   `json:"-"`
 	InflectionPoints [][3]float64 `json:"inflectionPoints"`
 	Radii            []float64    `json:"radii"`
 	Diameter         float64      `json:"diameter"`
@@ -444,12 +444,19 @@ func (c CurveType) ToInt() int {
 	}
 }
 
+type CableIndex struct {
+	StartIndex int       `json:"startIndex"`
+	EndIndex   int       `json:"endIndex"`
+	Type       CurveType `json:"type"`
+}
+
 // CurveCable represents a curve cable
 type CurveCable struct {
 	GsBase
-	ControlPoints [][][3]float64 `json:"controlPoints"`
-	CurveTypes    []CurveType    `json:"curveTypes"`
+	ControlPoints [][][3]float64 `json:"-"`
+	CurveTypes    []CurveType    `json:"-"`
 	Diameter      float64        `json:"diameter"`
+	CableIndexes  []CableIndex   `json:"cableIndexes"`
 }
 
 func NewCurveCable() *CurveCable {

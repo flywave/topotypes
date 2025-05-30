@@ -673,6 +673,11 @@ func NewFourWayWell() FourWayWell {
 	}
 }
 
+type SegmentIndex struct {
+	Start int              `json:"-"`
+	End   int              `json:"end"`
+	Type  ChannelPointType `json:"type"`
+}
 type PipeRow struct {
 	EcBase
 	PipeType              PipeType       `json:"pipeType"`
@@ -688,9 +693,8 @@ type PipeRow struct {
 	PipeWallThicknesses   []float64      `json:"pipeWallThicknesses"`
 	PullPipeInnerDiameter float64        `json:"pullPipeInnerDiameter"`
 	PullPipeThickness     float64        `json:"pullPipeThickness"`
-	Points                []ChannelPoint `json:"points"`
-	PipeCount             int            `json:"pipeCount"`
-	PointCount            int            `json:"pointCount"`
+	Points                []ChannelPoint `json:"-"`
+	SegmentIndexs         []SegmentIndex `json:"segmentIndexs"`
 }
 
 func NewPipeRow() PipeRow {
@@ -711,7 +715,8 @@ type CableTrench struct {
 	CushionThickness float64        `json:"cushionThickness"`
 	WallThickness    float64        `json:"wallThickness"`
 	WallThickness2   float64        `json:"wallThickness2"`
-	Points           []ChannelPoint `json:"points"`
+	Points           []ChannelPoint `json:"-"`
+	SegmentIndexs    []SegmentIndex `json:"segmentIndexs"`
 }
 
 func NewCableTrench() CableTrench {
@@ -733,7 +738,8 @@ type CableTunnel struct {
 	BottomPlatformHeight float64        `json:"bottomPlatformHeight"`
 	CushionExtension     float64        `json:"cushionExtension"`
 	CushionThickness     float64        `json:"cushionThickness"`
-	Points               []ChannelPoint `json:"points"`
+	Points               []ChannelPoint `json:"-"`
+	SegmentIndexs        []SegmentIndex `json:"segmentIndexs"`
 }
 
 func NewCableTunnel() CableTunnel {
@@ -758,7 +764,8 @@ type CableTray struct {
 	PipeInnerDiameters  []float64      `json:"pipeInnerDiameters"`
 	PipeWallThicknesses []float64      `json:"pipeWallThicknesses"`
 	HasProtectionPlate  bool           `json:"hasProtectionPlate"`
-	Points              []ChannelPoint `json:"points"`
+	Points              []ChannelPoint `json:"-"`
+	SegmentIndexs       []SegmentIndex `json:"segmentIndexs"`
 }
 
 func NewCableTray() CableTray {
@@ -838,9 +845,10 @@ func NewSump() Sump {
 
 type Footpath struct {
 	EcBase
-	Height float64        `json:"height"`
-	Width  float64        `json:"width"`
-	Points []ChannelPoint `json:"points"`
+	Height        float64        `json:"height"`
+	Width         float64        `json:"width"`
+	Points        []ChannelPoint `json:"-"`
+	SegmentIndexs []SegmentIndex `json:"segmentIndexs"`
 }
 
 func NewFootpath() Footpath {
