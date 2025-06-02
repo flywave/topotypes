@@ -666,6 +666,30 @@ func (w WasherShapeType) ToInt() int {
 // SingleHookAnchor represents a single hook anchor
 type SingleHookAnchor struct {
 	GtBase
+	BoltDiameter       float64         `json:"boltDiameter"`       // 螺栓直径
+	ExposedLength      float64         `json:"exposedLength"`      // 外露长度
+	NutCount           int             `json:"nutCount"`           // 螺母数量
+	NutHeight          float64         `json:"nutHeight"`          // 螺母高度
+	NutOD              float64         `json:"nutOD"`              // 螺母外径
+	WasherCount        int             `json:"washerCount"`        // 垫圈数量
+	WasherShapeType    WasherShapeType `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
+	WasherSize         float64         `json:"washerSize"`         // 垫圈尺寸
+	WasherThickness    float64         `json:"washerThickness"`    // 垫圈厚度
+	AnchorLength       float64         `json:"anchorLength"`       // 锚固长度
+	HookStraightLength float64         `json:"hookStraightLength"` // 钩直段长度
+	HookDiameter       float64         `json:"hookDiameter"`       // 钩直径
+	AnchorBarDiameter  float64         `json:"anchorBarDiameter"`  // 锚筋直径
+}
+
+func NewSingleHookAnchor() *SingleHookAnchor {
+	return &SingleHookAnchor{
+		GtBase: GtBase{Type: "GIM/GT/SingleHookAnchor"},
+	}
+}
+
+// TripleHookAnchor represents a triple hook anchor
+type TripleHookAnchor struct {
+	GtBase
 	BoltDiameter        float64         `json:"boltDiameter"`        // 螺栓直径
 	ExposedLength       float64         `json:"exposedLength"`       // 外露长度
 	NutCount            int             `json:"nutCount"`            // 螺母数量
@@ -679,30 +703,6 @@ type SingleHookAnchor struct {
 	HookStraightLengthA float64         `json:"hookStraightLengthA"` // 钩直段长度A
 	HookStraightLengthB float64         `json:"hookStraightLengthB"` // 钩直段长度B
 	HookDiameter        float64         `json:"hookDiameter"`        // 钩直径
-	AnchorBarDiameter   float64         `json:"anchorBarDiameter"`   // 锚筋直径
-}
-
-func NewSingleHookAnchor() *SingleHookAnchor {
-	return &SingleHookAnchor{
-		GtBase: GtBase{Type: "GIM/GT/SingleHookAnchor"},
-	}
-}
-
-// TripleHookAnchor represents a triple hook anchor
-type TripleHookAnchor struct {
-	GtBase
-	BoltDiameter       float64         `json:"boltDiameter"`       // 螺栓直径
-	ExposedLength      float64         `json:"exposedLength"`      // 外露长度
-	NutCount           int             `json:"nutCount"`           // 螺母数量
-	NutHeight          float64         `json:"nutHeight"`          // 螺母高度
-	NutOD              float64         `json:"nutOD"`              // 螺母外径
-	WasherCount        int             `json:"washerCount"`        // 垫圈数量
-	WasherShapeType    WasherShapeType `json:"washerShape"`        // 垫圈形状 (1-圆形, 2-方形)
-	WasherSize         float64         `json:"washerSize"`         // 垫圈尺寸
-	WasherThickness    float64         `json:"washerThickness"`    // 垫圈厚度
-	AnchorLength       float64         `json:"anchorLength"`       // 锚固长度
-	HookStraightLength float64         `json:"hookStraightLength"` // 钩直段长度
-	HookDiameter       float64         `json:"hookDiameter"`       // 钩直径
 }
 
 func NewTripleHookAnchor() *TripleHookAnchor {
