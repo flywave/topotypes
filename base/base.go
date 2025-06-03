@@ -157,18 +157,23 @@ func NewPrism() *Prism {
 // Pipe represents a pipe object
 type Pipe struct {
 	Base
-	Wire           [][3]float64        `json:"-,omitempty"`
-	Profile        [2]profile.Profile  `json:"profile"`
-	InnerProfile   *[2]profile.Profile `json:"innerProfile,omitempty"`
-	SegmentType    SegmentType         `json:"segmentType"`
-	TransitionMode TransitionMode      `json:"transitionMode"`
-	UpDir          *[3]float64         `json:"upDir,omitempty"`
+	Wire           [][3]float64          `json:"-,omitempty"`
+	Profile        [2]profile.Profile    `json:"profile"`
+	InnerProfile   *[2]profile.Profile   `json:"innerProfile,omitempty"`
+	SegmentType    SegmentType           `json:"segmentType"`
+	Anchors        [2]*anchor.TopoAnchor `json:"anchors"`
+	TransitionMode TransitionMode        `json:"transitionMode"`
+	UpDir          *[3]float64           `json:"upDir,omitempty"`
 }
 
 func NewPipe() *Pipe {
 	return &Pipe{
 		Base: Base{Type: "Pipe"},
 	}
+}
+
+func (m *Pipe) GetAnchors() [2]*anchor.TopoAnchor {
+	return m.Anchors
 }
 
 type SegmentIndex struct {
@@ -194,6 +199,10 @@ func NewMultiSegmentPipe() *MultiSegmentPipe {
 	return &MultiSegmentPipe{
 		Base: Base{Type: "MultiSegmentPipe"},
 	}
+}
+
+func (m *MultiSegmentPipe) GetAnchors() [2]*anchor.TopoAnchor {
+	return m.Anchors
 }
 
 // PipeJointEndpoint represents a pipe joint endpoint
@@ -226,8 +235,8 @@ func NewPipeJoint() *PipeJoint {
 // Catenary represents a catenary object
 type Catenary struct {
 	Base
-	P1           *[3]float64     `json:"p1,omitempty"`
-	P2           *[3]float64     `json:"p2,omitempty"`
+	P1           *[3]float64     `json:"-"`
+	P2           *[3]float64     `json:"-"`
 	Profile      profile.Profile `json:"profile"`
 	Slack        float64         `json:"slack"`
 	MaxSag       float64         `json:"maxSag"`
@@ -351,6 +360,18 @@ func NewPipeShape() *PipeShape {
 	}
 }
 
+type StepShape struct {
+	Base
+	Name string `json:"name"`
+	Step string `json:"step"`
+}
+
+func NewStepShape() *StepShape {
+	return &StepShape{
+		Base: Base{Type: "StepShape"},
+	}
+}
+
 type Shape interface {
 	GetType() string
 }
@@ -464,6 +485,10 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			shape.Profile, _ = profile.ProfileUnMarshal(shape.Profile)
 		}
 		return shape, nil
+	case "StepShape":
+		shape := &StepShape{}
+		err := json.Unmarshal(dt, shape)
+		return shape, err
 	default:
 		return nil, fmt.Errorf("invalid type: %s", ty)
 	}

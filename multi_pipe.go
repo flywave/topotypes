@@ -2,16 +2,19 @@ package topotypes
 
 import (
 	"encoding/json"
+
+	"github.com/flywave/topotypes/anchor"
 )
 
 type TopoMultiSegmentPipe struct {
 	TopoMaker
-	Wires          [][][3]float64 `json:"-"`
-	Profiles       []TopoProfile  `json:"profiles"`
-	InnerProfiles  []TopoProfile  `json:"innerProfiles,omitempty"`
-	SegmentTypes   []SegmentType  `json:"segmentTypes,omitempty"`
-	TransitionMode string         `json:"transitionMode"`
-	UpDir          *[3]float64    `json:"upDir,omitempty"`
+	Wires          [][][3]float64        `json:"-"`
+	Profiles       []TopoProfile         `json:"profiles"`
+	InnerProfiles  []TopoProfile         `json:"innerProfiles,omitempty"`
+	SegmentTypes   []SegmentType         `json:"segmentTypes,omitempty"`
+	TransitionMode string                `json:"transitionMode"`
+	UpDir          *[3]float64           `json:"upDir,omitempty"`
+	Anchors        [2]*anchor.TopoAnchor `json:"anchors"`
 }
 
 func NewTopoMultiSegmentPipe() *TopoMultiSegmentPipe {
@@ -22,6 +25,10 @@ func NewTopoMultiSegmentPipe() *TopoMultiSegmentPipe {
 
 func (sp *TopoMultiSegmentPipe) IsTopoBound() bool {
 	return true
+}
+
+func (sp *TopoMultiSegmentPipe) GetAnchor() [2]*anchor.TopoAnchor {
+	return sp.Anchors
 }
 
 func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {

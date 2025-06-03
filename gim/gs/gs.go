@@ -394,8 +394,8 @@ type Wire struct {
 	GsBase
 	StartPoint [3]float64   `json:"-"`
 	EndPoint   [3]float64   `json:"-"`
-	StartDir   [3]float64   `json:"startDir"`
-	EndDir     [3]float64   `json:"endDir"`
+	StartDir   *[3]float64  `json:"startDir"`
+	EndDir     *[3]float64  `json:"endDir"`
 	Sag        float64      `json:"sag"`
 	Diameter   float64      `json:"diameter"`
 	FitPoints  [][3]float64 `json:"-"`
