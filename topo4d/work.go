@@ -58,8 +58,7 @@ type WorkPlan struct {
 }
 
 type TopoWork struct {
-	TopoID        string                 `json:"topoId"`
-	WorkSchedules []*WorkSchedule        `json:"workSchedules"`
-	WorkPlans     []*WorkPlan            `json:"workPlans"`
-	Metadata      map[string]interface{} `json:"metadata"`
+	Schedules []*WorkSchedule        `json:"schedules"`
+	Plans     []*WorkPlan            `json:"plans"`
+	Metadata  map[string]interface{} `json:"metadata"`
 }
