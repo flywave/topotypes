@@ -9,7 +9,7 @@ const (
 
 type Generate4D struct {
 	Type       GenerateType  `json:"type"`
-	Dir        *[3]float64   `json:"dir,omitempty"`
+	Direction  *[3]float64   `json:"direction,omitempty"`
 	Radius     *float64      `json:"radius,omitempty"`
 	Centerline *[][3]float64 `json:"centerline,omitempty"`
 }
