@@ -14,6 +14,7 @@ type TopoMakerInterface interface {
 	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
 	GetMaterialIds() []string
+	GetGenerate() *topo4d.Generate4D
 	GetShape() MakerShape
 	SetShape(MakerShape)
 }
@@ -26,7 +27,7 @@ type TopoMaker struct {
 	Topos
 	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
 	MaterialId string                   `json:"mtl_id,omitempty"`
-	Generate   *topo4d.Generate         `json:"generate,omitempty"`
+	Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
 	Shape      MakerShape               `json:"shape,omitempty"`
 }
 
@@ -38,7 +39,7 @@ func (t *TopoMaker) GetShape() MakerShape {
 	return t.Shape
 }
 
-func (t *TopoMaker) GetGenerate() *topo4d.Generate {
+func (t *TopoMaker) GetGenerate() *topo4d.Generate4D {
 	return t.Generate
 }
 
