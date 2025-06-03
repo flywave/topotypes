@@ -7,6 +7,7 @@ import (
 	"github.com/flywave/topotypes/base"
 	"github.com/flywave/topotypes/gim"
 	"github.com/flywave/topotypes/hydropower"
+	"github.com/flywave/topotypes/topo4d"
 )
 
 type TopoMakerInterface interface {
@@ -25,6 +26,7 @@ type TopoMaker struct {
 	Topos
 	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
 	MaterialId string                   `json:"mtl_id,omitempty"`
+	Generate   *topo4d.Generate         `json:"generate,omitempty"`
 	Shape      MakerShape               `json:"shape,omitempty"`
 }
 
@@ -34,6 +36,10 @@ func (t *TopoMaker) IsInstance() bool {
 
 func (t *TopoMaker) GetShape() MakerShape {
 	return t.Shape
+}
+
+func (t *TopoMaker) GetGenerate() *topo4d.Generate {
+	return t.Generate
 }
 
 func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
