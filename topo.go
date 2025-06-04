@@ -530,3 +530,29 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	}
 	return inter, nil
 }
+
+func IsTopoBound(t string) bool {
+	ty := StringToTopoType(t)
+	switch ty {
+	case TOPO_TYPE_SHAPE:
+		return true
+	case TOPO_TYPE_PRISM:
+		return true
+	case TOPO_TYPE_REVOL:
+		return true
+	case TOPO_TYPE_PIPE:
+		return true
+	case TOPO_TYPE_MULTI_PIPE:
+		return true
+	case TOPO_TYPE_CATENARY:
+		return true
+	case TOPO_TYPE_BOARD:
+		return true
+	case TOPO_TYPE_MAKER:
+		return true
+	case TOPO_TYPE_PIPE_JOINT:
+		return true
+	default:
+		return false
+	}
+}
