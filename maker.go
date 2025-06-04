@@ -31,6 +31,15 @@ type TopoMaker struct {
 	Shape      MakerShape               `json:"shape,omitempty"`
 }
 
+func NewTopoMaker() *TopoMaker {
+	return &TopoMaker{
+		Topos: Topos{
+			Type: TopoTypeToString(TOPO_TYPE_MAKER),
+		},
+		Materials: map[string]*TopoMaterial{},
+	}
+}
+
 func (t *TopoMaker) IsInstance() bool {
 	return t.Instanced
 }
