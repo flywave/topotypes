@@ -5,7 +5,7 @@ import (
 )
 
 type TopoRevol struct {
-	TopoMaker
+	TopoParametric
 	Profile interface{}   `json:"profile"`
 	Axis    [2][3]float64 `json:"axis"`
 	Angle   float64       `json:"angle"`

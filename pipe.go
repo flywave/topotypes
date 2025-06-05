@@ -16,7 +16,7 @@ const (
 )
 
 type TopoPipe struct {
-	TopoMaker
+	TopoParametric
 	Wire           [][3]float64          `json:"-"`
 	Profile        TopoProfile           `json:"profile"`
 	InnerProfile   TopoProfile           `json:"inner_profile,omitempty"`

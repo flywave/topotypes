@@ -7,7 +7,7 @@ import (
 )
 
 type TopoMultiSegmentPipe struct {
-	TopoMaker
+	TopoParametric
 	Wires          [][][3]float64        `json:"-"`
 	Profiles       []TopoProfile         `json:"profiles"`
 	InnerProfiles  []TopoProfile         `json:"innerProfiles,omitempty"`

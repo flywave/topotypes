@@ -12,7 +12,7 @@ type TopoBound interface {
 }
 
 type TopoShape struct {
-	TopoMaker
+	TopoParametric
 	Shape      string      `json:"-"`
 	ShapeModel interface{} `json:"shape"`
 }

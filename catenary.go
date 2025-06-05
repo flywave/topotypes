@@ -8,7 +8,7 @@ import (
 )
 
 type TopoCatenary struct {
-	TopoMaker
+	TopoParametric
 	Anchors [2]*anchor.TopoAnchor `json:"anchors"`
 	catenary.Catenary
 }

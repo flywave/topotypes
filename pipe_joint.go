@@ -1,7 +1,7 @@
 package topotypes
 
 type TopoPipeJoint struct {
-	TopoMaker
+	TopoParametric
 	CenterMode string      `json:"mode"`
 	In         []string    `json:"in-pipe-ids,omitempty"`
 	Out        []string    `json:"out-pipe-ids,omitempty"`

@@ -10,79 +10,79 @@ import (
 	"github.com/flywave/topotypes/topo4d"
 )
 
-type TopoMakerInterface interface {
+type TopoParametricInterface interface {
 	IsInstance() bool
 	GetGenerate() *topo4d.Generate4D
 	GetTopoWork() *topo4d.TopoWork
 	SetTopoWork(*topo4d.TopoWork)
-	GetShape() MakerShape
-	SetShape(MakerShape)
+	GetShape() ParametricShape
+	SetShape(ParametricShape)
 }
 
-type MakerShape interface {
+type ParametricShape interface {
 	GetType() string
 }
 
-type TopoMaker struct {
+type TopoParametric struct {
 	Topos
 	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
 	MaterialId string                   `json:"mtl_id,omitempty"`
 	Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
 	Work       *topo4d.TopoWork         `json:"works,omitempty"`
-	Shape      MakerShape               `json:"shape,omitempty"`
+	Shape      ParametricShape          `json:"shape,omitempty"`
 }
 
-func NewTopoMaker() *TopoMaker {
-	return &TopoMaker{
+func NewTopoParametric() *TopoParametric {
+	return &TopoParametric{
 		Topos: Topos{
-			Type: TopoTypeToString(TOPO_TYPE_MAKER),
+			Type: TopoTypeToString(TOPO_TYPE_PARAMETRIC),
 		},
 		Materials: map[string]*TopoMaterial{},
 	}
 }
 
-func (t *TopoMaker) IsInstance() bool {
+func (t *TopoParametric) IsInstance() bool {
 	return t.Instanced
 }
 
-func (t *TopoMaker) GetShape() MakerShape {
+func (t *TopoParametric) GetShape() ParametricShape {
 	return t.Shape
 }
 
-func (t *TopoMaker) GetGenerate() *topo4d.Generate4D {
+func (t *TopoParametric) GetGenerate() *topo4d.Generate4D {
 	return t.Generate
 }
 
-func (t *TopoMaker) GetMaterials() map[string]*TopoMaterial {
+func (t *TopoParametric) GetMaterials() map[string]*TopoMaterial {
 	if t.Materials == nil {
 		return map[string]*TopoMaterial{}
 	}
 	return (map[string]*TopoMaterial)(t.Materials)
 }
 
-func (t *TopoMaker) GetMaterialIds() []string {
+func (t *TopoParametric) GetMaterialIds() []string {
 	if t.MaterialId == "" {
 		t.MaterialId = "mtl_0"
 	}
 	return []string{t.MaterialId}
 }
 
-func (tp *TopoMaker) IsTopoBound() bool {
+func (tp *TopoParametric) IsTopoBound() bool {
 	return true
 }
 
-func (t *TopoMaker) SetShape(shape MakerShape) {
+func (t *TopoParametric) SetShape(shape ParametricShape) {
 	t.Shape = shape
 }
 
-func (t *TopoMaker) GetTopoWork() *topo4d.TopoWork {
+func (t *TopoParametric) GetTopoWork() *topo4d.TopoWork {
 	return t.Work
 }
-func (t *TopoMaker) SetTopoWork(work *topo4d.TopoWork) {
+func (t *TopoParametric) SetTopoWork(work *topo4d.TopoWork) {
 	t.Work = work
 }
 
-func (t *TopoMaker) UnmarshalJSON(data []byte) error {
+func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
 		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`

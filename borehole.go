@@ -1,32 +1,27 @@
 package topotypes
 
-import "encoding/json"
+import (
+	"encoding/json"
 
-type BoreholeSample struct {
-	Name      string                 `json:"name,omitempty"`
-	DepthFrom float64                `json:"depthFrom"`
-	DepthTo   float64                `json:"depthTo"`
-	MTL       string                 `json:"mtl,omitempty"`
-	Property  map[string]interface{} `json:"property,omitempty"`
-}
+	"github.com/flywave/topotypes/geology"
+)
 
-type Borehole struct {
+type TopoBorehole struct {
 	Topos
-	Samples   []*BoreholeSample        `json:"samples"`
-	Diameter  *float64                 `json:"diameter,omitempty"`
+	geology.Borehole
 	Materials map[string]*TopoMaterial `json:"materials,omitempty"`
 }
 
-func NewBorehole() *Borehole {
-	t := &Borehole{}
+func NewBorehole() *TopoBorehole {
+	t := &TopoBorehole{}
 	t.Type = TopoTypeToString(TOPO_TYPE_BOREHOLE)
 	return t
 }
 
-func (b *Borehole) GetMaterials() map[string]*TopoMaterial {
+func (b *TopoBorehole) GetMaterials() map[string]*TopoMaterial {
 	return b.Materials
 }
-func (b *Borehole) GetMaterialIds() []string {
+func (b *TopoBorehole) GetMaterialIds() []string {
 	mtlids := []string{}
 	for _, m := range b.Samples {
 		mtlids = append(mtlids, m.MTL)
@@ -34,8 +29,8 @@ func (b *Borehole) GetMaterialIds() []string {
 	return mtlids
 }
 
-func BoreholeUnMarshal(js []byte) (*Borehole, error) {
-	mp := Borehole{}
+func BoreholeUnMarshal(js []byte) (*TopoBorehole, error) {
+	mp := TopoBorehole{}
 	e := json.Unmarshal(js, &mp)
 	if e != nil {
 		return nil, e
