@@ -11,10 +11,10 @@ import (
 )
 
 type TopoMakerInterface interface {
-	GetMaterials() map[string]*TopoMaterial
 	IsInstance() bool
-	GetMaterialIds() []string
 	GetGenerate() *topo4d.Generate4D
+	GetTopoWork() *topo4d.TopoWork
+	SetTopoWork(*topo4d.TopoWork)
 	GetShape() MakerShape
 	SetShape(MakerShape)
 }
@@ -28,6 +28,7 @@ type TopoMaker struct {
 	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
 	MaterialId string                   `json:"mtl_id,omitempty"`
 	Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
+	Work       *topo4d.TopoWork         `json:"works,omitempty"`
 	Shape      MakerShape               `json:"shape,omitempty"`
 }
 
@@ -72,6 +73,13 @@ func (tp *TopoMaker) IsTopoBound() bool {
 
 func (t *TopoMaker) SetShape(shape MakerShape) {
 	t.Shape = shape
+}
+
+func (t *TopoMaker) GetTopoWork() *topo4d.TopoWork {
+	return t.Work
+}
+func (t *TopoMaker) SetTopoWork(work *topo4d.TopoWork) {
+	t.Work = work
 }
 
 func (t *TopoMaker) UnmarshalJSON(data []byte) error {

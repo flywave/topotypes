@@ -10,6 +10,11 @@ import (
 
 type TopoMaterial material.Material
 
+type TopoMtlCareInterface interface {
+	GetMaterials() map[string]*TopoMaterial
+	GetMaterialIds() []string
+}
+
 func TopoMtlToMeshMtl(mtl *TopoMaterial) mst.MeshMaterial {
 	return material.MtlToMeshMtl((*material.Material)(mtl))
 }
