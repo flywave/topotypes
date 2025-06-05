@@ -205,6 +205,30 @@ func (m *MultiSegmentPipe) GetAnchors() [2]*anchor.TopoAnchor {
 	return m.Anchors
 }
 
+type ProfileLayer struct {
+	Name          string                 `json:"name,omitempty"`
+	Profiles      []profile.Profile      `json:"profiles"`
+	InnerProfiles []profile.Profile      `json:"innerProfiles,omitempty"`
+	Property      map[string]interface{} `json:"property,omitempty"`
+	MTL           string                 `json:"mtl,omitempty"`
+}
+
+type MultiLayerExtrusionStructure struct {
+	Base
+	Wires          [][][3]float64  `json:"-,omitempty"`
+	SegmentTypes   []SegmentType   `json:"-"`
+	TransitionMode TransitionMode  `json:"transitionMode"`
+	Layers         []*ProfileLayer `json:"layers,omitempty"`
+	UpDir          *[3]float64     `json:"upDir,omitempty"`
+	SegmentIndexs  []SegmentIndex  `json:"segmentIndexs"`
+}
+
+func NewMultiLayerExtrusionStructure() *MultiLayerExtrusionStructure {
+	return &MultiLayerExtrusionStructure{
+		Base: Base{Type: "MultiLayerExtrusionStructure"},
+	}
+}
+
 // PipeJointEndpoint represents a pipe joint endpoint
 type PipeJointEndpoint struct {
 	ID           string          `json:"id"`
@@ -433,6 +457,21 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			pipe.InnerProfiles[i], _ = profile.ProfileUnMarshal(pipe.InnerProfiles[i])
 		}
 		return pipe, nil
+	case "MultiLayerExtrusionStructure":
+		extrusion := &MultiLayerExtrusionStructure{}
+		err := json.Unmarshal(dt, extrusion)
+		if err != nil {
+			return nil, err
+		}
+		for i := range extrusion.Layers {
+			for j := range extrusion.Layers[i].Profiles {
+				extrusion.Layers[i].Profiles[j], _ = profile.ProfileUnMarshal(extrusion.Layers[i].Profiles[j])
+			}
+			for j := range extrusion.Layers[i].InnerProfiles {
+				extrusion.Layers[i].InnerProfiles[j], _ = profile.ProfileUnMarshal(extrusion.Layers[i].InnerProfiles[j])
+			}
+		}
+		return extrusion, nil
 	case "PipeJoint":
 		joint := &PipeJoint{}
 		err := json.Unmarshal(dt, joint)

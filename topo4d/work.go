@@ -31,6 +31,7 @@ const (
 
 type WorkSchedule struct {
 	ID          string       `json:"id"`
+	Layer       string       `json:"layer,omitempty"`
 	PlanID      string       `json:"planId"`
 	Type        ProgressType `json:"type"`
 	Name        string       `json:"name"`
@@ -46,6 +47,7 @@ type WorkSchedule struct {
 
 type WorkPlan struct {
 	ID          string                 `json:"id"`
+	Layer       string                 `json:"layer,omitempty"`
 	Type        ProgressType           `json:"type"`
 	Name        string                 `json:"name"`
 	Description string                 `json:"description"`
