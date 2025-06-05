@@ -10,7 +10,7 @@ import (
 
 type TopoMaterial material.Material
 
-type TopoMtlCareInterface interface {
+type TopoMaterialModelInterface interface {
 	GetMaterials() map[string]*TopoMaterial
 	GetMaterialIds() []string
 }

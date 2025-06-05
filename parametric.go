@@ -11,6 +11,7 @@ import (
 )
 
 type TopoParametricInterface interface {
+	TopoMaterialModelInterface
 	IsInstance() bool
 	GetGenerate() *topo4d.Generate4D
 	GetTopoWork() *topo4d.TopoWork
