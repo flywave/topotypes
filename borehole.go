@@ -13,6 +13,7 @@ type BoreholeSample struct {
 type Borehole struct {
 	Topos
 	Samples   []*BoreholeSample        `json:"samples"`
+	Diameter  *float64                 `json:"diameter,omitempty"`
 	Materials map[string]*TopoMaterial `json:"materials,omitempty"`
 }
 
