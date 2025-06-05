@@ -22,6 +22,17 @@ func NewBorehole() *Borehole {
 	return t
 }
 
+func (b *Borehole) GetMaterials() map[string]*TopoMaterial {
+	return b.Materials
+}
+func (b *Borehole) GetMaterialIds() []string {
+	mtlids := []string{}
+	for _, m := range b.Samples {
+		mtlids = append(mtlids, m.MTL)
+	}
+	return mtlids
+}
+
 func BoreholeUnMarshal(js []byte) (*Borehole, error) {
 	mp := Borehole{}
 	e := json.Unmarshal(js, &mp)
