@@ -30,6 +30,7 @@ const (
 	TOPO_TYPE_BOARD
 	TOPO_TYPE_MULTI_PIPE
 	TOPO_TYPE_MAKER
+	TOPO_TYPE_BOREHOLE
 )
 
 func TopoTypeToString(tp int) string {
@@ -70,6 +71,8 @@ func TopoTypeToString(tp int) string {
 		return "MultiSegmentPipe"
 	case TOPO_TYPE_MAKER:
 		return "Maker"
+	case TOPO_TYPE_BOREHOLE:
+		return "Borehole"
 	default:
 		return ""
 	}
@@ -113,6 +116,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_MULTI_PIPE
 	} else if utils.StrEquals(tp, "maker") {
 		return TOPO_TYPE_MAKER
+	} else if utils.StrEquals(tp, "borehole") {
+		return TOPO_TYPE_BOREHOLE
 	}
 	return TOPO_TYPE_NONE
 }
@@ -514,6 +519,8 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		return CatenaryUnMarshal(js)
 	case TOPO_TYPE_MULTI_PIPE:
 		return MultiPipeUnMarshal(js)
+	case TOPO_TYPE_BOREHOLE:
+		return BoreholeUnMarshal(js)
 	case TOPO_TYPE_MAKER:
 		mk := TopoMaker{}
 		err := json.Unmarshal(js, &mk)
@@ -549,6 +556,8 @@ func IsTopoBound(t string) bool {
 	case TOPO_TYPE_BOARD:
 		return true
 	case TOPO_TYPE_MAKER:
+		return true
+	case TOPO_TYPE_BOREHOLE:
 		return true
 	case TOPO_TYPE_PIPE_JOINT:
 		return true
