@@ -86,15 +86,15 @@ func (s SectionType) ToInt() int {
 	}
 }
 
-type WellType string
+type ThreeWayWellType string
 
 const (
-	WellUndergroundTunnel WellType = "UNDERGROUND_TUNNEL"
-	WellOpenCutTunnel     WellType = "OPEN_CUT_TUNNEL"
-	WellWorkingWell       WellType = "WORKING_WELL"
+	WellUndergroundTunnel ThreeWayWellType = "UNDERGROUND_TUNNEL"
+	WellOpenCutTunnel     ThreeWayWellType = "OPEN_CUT_TUNNEL"
+	WellWorkingWell       ThreeWayWellType = "WORKING_WELL"
 )
 
-func (w WellType) ToInt() int {
+func (w ThreeWayWellType) ToInt() int {
 	switch w {
 	case WellUndergroundTunnel:
 		return 3
@@ -103,7 +103,7 @@ func (w WellType) ToInt() int {
 	case WellWorkingWell:
 		return 1
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -302,8 +302,8 @@ type CableWire struct {
 	OutsideDiameter float64 `json:"outsideDiameter"`
 }
 
-func NewCableWire() CableWire {
-	return CableWire{
+func NewCableWire() *CableWire {
+	return &CableWire{
 		EcBase: EcBase{Type: "GIM/EC/CableWire"},
 	}
 }
@@ -316,8 +316,8 @@ type CableJoint struct {
 	InnerDiameter  float64 `json:"innerDiameter"`
 }
 
-func NewCableJoint() CableJoint {
-	return CableJoint{
+func NewCableJoint() *CableJoint {
+	return &CableJoint{
 		EcBase: EcBase{Type: "GIM/EC/CableJoint"},
 	}
 }
@@ -334,8 +334,8 @@ type OpticalFiberBox struct {
 	Width  float64 `json:"width"`
 }
 
-func NewOpticalFiberBox() OpticalFiberBox {
-	return OpticalFiberBox{
+func NewOpticalFiberBox() *OpticalFiberBox {
+	return &OpticalFiberBox{
 		EcBase: EcBase{Type: "GIM/EC/OpticalFiberBox"},
 	}
 }
@@ -371,8 +371,8 @@ type CableTerminal struct {
 	FlangeBoltHeight         float64           `json:"flangeBoltHeight"`
 }
 
-func NewCableTerminal() CableTerminal {
-	return CableTerminal{
+func NewCableTerminal() *CableTerminal {
+	return &CableTerminal{
 		EcBase: EcBase{Type: "GIM/EC/CableTerminal"},
 	}
 }
@@ -411,8 +411,8 @@ type CableAccessory struct {
 	SidePanelDistance  float64            `json:"sidePanelDistance"`
 }
 
-func NewCableAccessory() CableAccessory {
-	return CableAccessory{
+func NewCableAccessory() *CableAccessory {
+	return &CableAccessory{
 		EcBase: EcBase{Type: "GIM/EC/CableAccessory"},
 	}
 }
@@ -429,8 +429,8 @@ type CableBracket struct {
 	ClampMountPoints  []Point `json:"clampMountPoints"`
 }
 
-func NewCableBracket() CableBracket {
-	return CableBracket{
+func NewCableBracket() *CableBracket {
+	return &CableBracket{
 		EcBase: EcBase{Type: "GIM/EC/CableBracket"},
 	}
 }
@@ -443,8 +443,8 @@ type CableClamp struct {
 	Width     float64        `json:"width"`
 }
 
-func NewCableClamp() CableClamp {
-	return CableClamp{
+func NewCableClamp() *CableClamp {
+	return &CableClamp{
 		EcBase: EcBase{Type: "GIM/EC/CableClamp"},
 	}
 }
@@ -462,8 +462,8 @@ type CablePole struct {
 	MountPoints    []Point `json:"mountPoints"`
 }
 
-func NewCablePole() CablePole {
-	return CablePole{
+func NewCablePole() *CablePole {
+	return &CablePole{
 		EcBase: EcBase{Type: "GIM/EC/CablePole"},
 	}
 }
@@ -475,8 +475,8 @@ type GroundFlatIron struct {
 	Thickness float64 `json:"thickness"`
 }
 
-func NewGroundFlatIron() GroundFlatIron {
-	return GroundFlatIron{
+func NewGroundFlatIron() *GroundFlatIron {
+	return &GroundFlatIron{
 		EcBase: EcBase{Type: "GIM/EC/GroundFlatIron"},
 	}
 }
@@ -490,8 +490,8 @@ type EmbeddedPart struct {
 	LowerLength    float64 `json:"lowerLength"`
 }
 
-func NewEmbeddedPart() EmbeddedPart {
-	return EmbeddedPart{
+func NewEmbeddedPart() *EmbeddedPart {
+	return &EmbeddedPart{
 		EcBase: EcBase{Type: "GIM/EC/EmbeddedPart"},
 	}
 }
@@ -504,8 +504,8 @@ type UShapedRing struct {
 	Length    float64 `json:"length"`
 }
 
-func NewUShapedRing() UShapedRing {
-	return UShapedRing{
+func NewUShapedRing() *UShapedRing {
+	return &UShapedRing{
 		EcBase: EcBase{Type: "GIM/EC/UShapedRing"},
 	}
 }
@@ -517,8 +517,8 @@ type LiftingEye struct {
 	PipeDiameter float64 `json:"pipeDiameter"`
 }
 
-func NewLiftingEye() LiftingEye {
-	return LiftingEye{
+func NewLiftingEye() *LiftingEye {
+	return &LiftingEye{
 		EcBase: EcBase{Type: "GIM/EC/LiftingEye"},
 	}
 }
@@ -538,137 +538,175 @@ type CornerWell struct {
 	CushionThickness float64 `json:"cushionThickness"`
 }
 
-func NewCornerWell() CornerWell {
-	return CornerWell{
+func NewCornerWell() *CornerWell {
+	return &CornerWell{
 		EcBase: EcBase{Type: "GIM/EC/CornerWell"},
 	}
 }
 
-type TunnelWell struct {
-	EcBase
-	WellType           WellType    `json:"wellType"`
-	Length             float64     `json:"length"`
-	Width              float64     `json:"width"`
-	Height             float64     `json:"height"`
-	TopThickness       float64     `json:"topThickness"`
-	BottomThickness    float64     `json:"bottomThickness"`
-	OuterWallThickness float64     `json:"outerWallThickness"`
-	CushionExtension   float64     `json:"cushionExtension"`
-	CushionThickness   float64     `json:"cushionThickness"`
-	LeftSectionType    SectionType `json:"leftSectionType"`
-	LeftLength         float64     `json:"leftLength"`
-	LeftWidth          float64     `json:"leftWidth"`
-	LeftHeight         float64     `json:"leftHeight"`
-	LeftArcHeight      float64     `json:"leftArcHeight"`
-	RightSectionType   SectionType `json:"rightSectionType"`
-	RightLength        float64     `json:"rightLength"`
-	RightWidth         float64     `json:"rightWidth"`
-	RightHeight        float64     `json:"rightHeight"`
-	RightArcHeight     float64     `json:"rightArcHeight"`
-	Radius             float64     `json:"radius"`
-	InnerWallThickness float64     `json:"innerWallThickness"`
+type TunnelWellType string
+
+const (
+	TunnelWellStraight       TunnelWellType = "STRAIGHT"
+	TunnelWellStraightTunnel TunnelWellType = "STRAIGHT_TUNNEL"
+)
+
+func (t TunnelWellType) ToInt() int {
+	switch t {
+	case TunnelWellStraight:
+		return 1
+	case TunnelWellStraightTunnel:
+		return 2
+	}
+	return 1
 }
 
-func NewTunnelWell() TunnelWell {
-	return TunnelWell{
+type TunnelWell struct {
+	EcBase
+	WellType           TunnelWellType `json:"wellType"`
+	Length             float64        `json:"length"`
+	Width              float64        `json:"width"`
+	Height             float64        `json:"height"`
+	TopThickness       float64        `json:"topThickness"`
+	BottomThickness    float64        `json:"bottomThickness"`
+	OuterWallThickness float64        `json:"outerWallThickness"`
+	CushionExtension   float64        `json:"cushionExtension"`
+	CushionThickness   float64        `json:"cushionThickness"`
+	LeftSectionType    SectionType    `json:"leftSectionType"`
+	LeftLength         float64        `json:"leftLength"`
+	LeftWidth          float64        `json:"leftWidth"`
+	LeftHeight         float64        `json:"leftHeight"`
+	LeftArcHeight      float64        `json:"leftArcHeight"`
+	RightSectionType   SectionType    `json:"rightSectionType"`
+	RightLength        float64        `json:"rightLength"`
+	RightWidth         float64        `json:"rightWidth"`
+	RightHeight        float64        `json:"rightHeight"`
+	RightArcHeight     float64        `json:"rightArcHeight"`
+	Radius             float64        `json:"radius"`
+	InnerWallThickness float64        `json:"innerWallThickness"`
+}
+
+func NewTunnelWell() *TunnelWell {
+	return &TunnelWell{
 		EcBase: EcBase{Type: "GIM/EC/TunnelWell"},
 	}
 }
 
 type ThreeWayWell struct {
 	EcBase
-	WellType               WellType    `json:"wellType"`
-	CornerType             CornerType  `json:"cornerType"`
-	ShaftType              ShaftType   `json:"shaftType"`
-	Length                 float64     `json:"length"`
-	Width                  float64     `json:"width"`
-	Height                 float64     `json:"height"`
-	ShaftRadius            float64     `json:"shaftRadius"`
-	CornerRadius           float64     `json:"cornerRadius"`
-	CornerLength           float64     `json:"cornerLength"`
-	CornerWidth            float64     `json:"cornerWidth"`
-	BranchLength           float64     `json:"branchLength"`
-	BranchLeftLength       float64     `json:"branchLeftLength"`
-	BranchWidth            float64     `json:"branchWidth"`
-	TopThickness           float64     `json:"topThickness"`
-	BottomThickness        float64     `json:"bottomThickness"`
-	LeftSectionStyle       SectionType `json:"leftSectionStyle"`
-	LeftSectionLength      float64     `json:"leftSectionLength"`
-	LeftSectionWidth       float64     `json:"leftSectionWidth"`
-	LeftSectionHeight      float64     `json:"leftSectionHeight"`
-	LeftSectionArcHeight   float64     `json:"leftSectionArcHeight"`
-	RightSectionStyle      SectionType `json:"rightSectionStyle"`
-	RightSectionLength     float64     `json:"rightSectionLength"`
-	RightSectionWidth      float64     `json:"rightSectionWidth"`
-	RightSectionHeight     float64     `json:"rightSectionHeight"`
-	RightSectionArcHeight  float64     `json:"rightSectionArcHeight"`
-	BranchSectionStyle     SectionType `json:"branchSectionStyle"`
-	BranchSectionLength    float64     `json:"branchSectionLength"`
-	BranchSectionWidth     float64     `json:"branchSectionWidth"`
-	BranchSectionHeight    float64     `json:"branchSectionHeight"`
-	BranchSectionArcHeight float64     `json:"branchSectionArcHeight"`
-	OuterWallThickness     float64     `json:"outerWallThickness"`
-	InnerWallThickness     float64     `json:"innerWallThickness"`
-	IsDoubleShaft          bool        `json:"isDoubleShaft"`
-	DoubleShaftSpacing     float64     `json:"doubleShaftSpacing"`
-	OuterWallExtension     float64     `json:"outerWallExtension"`
-	InnerWallExtension     float64     `json:"innerWallExtension"`
-	CushionExtension       float64     `json:"cushionExtension"`
-	CushionThickness       float64     `json:"cushionThickness"`
-	InnerBottomThickness   float64     `json:"innerBottomThickness"`
-	OuterBottomThickness   float64     `json:"outerBottomThickness"`
-	Angle                  float64     `json:"angle"`
+	WellType               ThreeWayWellType `json:"wellType"`
+	CornerType             CornerType       `json:"cornerType"`
+	ShaftType              ShaftType        `json:"shaftType"`
+	Length                 float64          `json:"length"`
+	Width                  float64          `json:"width"`
+	Height                 float64          `json:"height"`
+	ShaftRadius            float64          `json:"shaftRadius"`
+	CornerRadius           float64          `json:"cornerRadius"`
+	CornerLength           float64          `json:"cornerLength"`
+	CornerWidth            float64          `json:"cornerWidth"`
+	BranchLength           float64          `json:"branchLength"`
+	BranchLeftLength       float64          `json:"branchLeftLength"`
+	BranchWidth            float64          `json:"branchWidth"`
+	TopThickness           float64          `json:"topThickness"`
+	BottomThickness        float64          `json:"bottomThickness"`
+	LeftSectionStyle       SectionType      `json:"leftSectionStyle"`
+	LeftSectionLength      float64          `json:"leftSectionLength"`
+	LeftSectionWidth       float64          `json:"leftSectionWidth"`
+	LeftSectionHeight      float64          `json:"leftSectionHeight"`
+	LeftSectionArcHeight   float64          `json:"leftSectionArcHeight"`
+	RightSectionStyle      SectionType      `json:"rightSectionStyle"`
+	RightSectionLength     float64          `json:"rightSectionLength"`
+	RightSectionWidth      float64          `json:"rightSectionWidth"`
+	RightSectionHeight     float64          `json:"rightSectionHeight"`
+	RightSectionArcHeight  float64          `json:"rightSectionArcHeight"`
+	BranchSectionStyle     SectionType      `json:"branchSectionStyle"`
+	BranchSectionLength    float64          `json:"branchSectionLength"`
+	BranchSectionWidth     float64          `json:"branchSectionWidth"`
+	BranchSectionHeight    float64          `json:"branchSectionHeight"`
+	BranchSectionArcHeight float64          `json:"branchSectionArcHeight"`
+	OuterWallThickness     float64          `json:"outerWallThickness"`
+	InnerWallThickness     float64          `json:"innerWallThickness"`
+	IsDoubleShaft          bool             `json:"isDoubleShaft"`
+	DoubleShaftSpacing     float64          `json:"doubleShaftSpacing"`
+	OuterWallExtension     float64          `json:"outerWallExtension"`
+	InnerWallExtension     float64          `json:"innerWallExtension"`
+	CushionExtension       float64          `json:"cushionExtension"`
+	CushionThickness       float64          `json:"cushionThickness"`
+	InnerBottomThickness   float64          `json:"innerBottomThickness"`
+	OuterBottomThickness   float64          `json:"outerBottomThickness"`
+	Angle                  float64          `json:"angle"`
 }
 
-func NewThreeWayWell() ThreeWayWell {
-	return ThreeWayWell{
+func NewThreeWayWell() *ThreeWayWell {
+	return &ThreeWayWell{
 		EcBase: EcBase{Type: "GIM/EC/ThreeWayWell"},
+	}
+}
+
+type FourWayWellType string
+
+const (
+	FourWayWellTypeWorking           FourWayWellType = "WORKING_WELL"
+	FourWayWellTypeOpenCutTunnel     FourWayWellType = "OPEN_CUT_TUNNEL"
+	FourWayWellTypeUnderGroundTunnel FourWayWellType = "UNDERGROUND_TUNNEL"
+)
+
+func (t FourWayWellType) ToInt() int {
+	switch t {
+	case FourWayWellTypeWorking:
+		return 1
+	case FourWayWellTypeOpenCutTunnel:
+		return 2
+	case FourWayWellTypeUnderGroundTunnel:
+		return 3
+	default:
+		return 1
 	}
 }
 
 type FourWayWell struct {
 	EcBase
-	WellType                WellType    `json:"wellType"`
-	Length                  float64     `json:"length"`
-	Width                   float64     `json:"width"`
-	Height                  float64     `json:"height"`
-	CornerStyle             CornerType  `json:"cornerStyle"`
-	CornerRadius            float64     `json:"cornerRadius"`
-	BranchLength            float64     `json:"branchLength"`
-	BranchWidth             float64     `json:"branchWidth"`
-	TopThickness            float64     `json:"topThickness"`
-	BottomThickness         float64     `json:"bottomThickness"`
-	OuterWallThickness      float64     `json:"outerWallThickness"`
-	InnerWallThickness      float64     `json:"innerWallThickness"`
-	CushionExtension        float64     `json:"cushionExtension"`
-	CushionThickness        float64     `json:"cushionThickness"`
-	LeftSectionStyle        SectionType `json:"leftSectionStyle"`
-	LeftSectionLength       float64     `json:"leftSectionLength"`
-	LeftSectionWidth        float64     `json:"leftSectionWidth"`
-	LeftSectionHeight       float64     `json:"leftSectionHeight"`
-	LeftSectionArcHeight    float64     `json:"leftSectionArcHeight"`
-	RightSectionStyle       SectionType `json:"rightSectionStyle"`
-	RightSectionLength      float64     `json:"rightSectionLength"`
-	RightSectionWidth       float64     `json:"rightSectionWidth"`
-	RightSectionHeight      float64     `json:"rightSectionHeight"`
-	RightSectionArcHeight   float64     `json:"rightSectionArcHeight"`
-	BranchSection1Style     SectionType `json:"branchSection1Style"`
-	BranchSection1Length    float64     `json:"branchSection1Length"`
-	BranchSection1Width     float64     `json:"branchSection1Width"`
-	BranchSection1Height    float64     `json:"branchSection1Height"`
-	BranchSection1ArcHeight float64     `json:"branchSection1ArcHeight"`
-	BranchSection2Style     SectionType `json:"branchSection2Style"`
-	BranchSection2Length    float64     `json:"branchSection2Length"`
-	BranchSection2Width     float64     `json:"branchSection2Width"`
-	BranchSection2Height    float64     `json:"branchSection2Height"`
-	BranchSection2ArcHeight float64     `json:"branchSection2ArcHeight"`
-	ShaftRadius             float64     `json:"shaftRadius"`
-	CornerLength            float64     `json:"cornerLength"`
-	CornerWidth             float64     `json:"cornerWidth"`
+	WellType                FourWayWellType `json:"wellType"`
+	Length                  float64         `json:"length"`
+	Width                   float64         `json:"width"`
+	Height                  float64         `json:"height"`
+	CornerStyle             CornerType      `json:"cornerStyle"`
+	CornerRadius            float64         `json:"cornerRadius"`
+	BranchLength            float64         `json:"branchLength"`
+	BranchWidth             float64         `json:"branchWidth"`
+	TopThickness            float64         `json:"topThickness"`
+	BottomThickness         float64         `json:"bottomThickness"`
+	OuterWallThickness      float64         `json:"outerWallThickness"`
+	InnerWallThickness      float64         `json:"innerWallThickness"`
+	CushionExtension        float64         `json:"cushionExtension"`
+	CushionThickness        float64         `json:"cushionThickness"`
+	LeftSectionStyle        SectionType     `json:"leftSectionStyle"`
+	LeftSectionLength       float64         `json:"leftSectionLength"`
+	LeftSectionWidth        float64         `json:"leftSectionWidth"`
+	LeftSectionHeight       float64         `json:"leftSectionHeight"`
+	LeftSectionArcHeight    float64         `json:"leftSectionArcHeight"`
+	RightSectionStyle       SectionType     `json:"rightSectionStyle"`
+	RightSectionLength      float64         `json:"rightSectionLength"`
+	RightSectionWidth       float64         `json:"rightSectionWidth"`
+	RightSectionHeight      float64         `json:"rightSectionHeight"`
+	RightSectionArcHeight   float64         `json:"rightSectionArcHeight"`
+	BranchSection1Style     SectionType     `json:"branchSection1Style"`
+	BranchSection1Length    float64         `json:"branchSection1Length"`
+	BranchSection1Width     float64         `json:"branchSection1Width"`
+	BranchSection1Height    float64         `json:"branchSection1Height"`
+	BranchSection1ArcHeight float64         `json:"branchSection1ArcHeight"`
+	BranchSection2Style     SectionType     `json:"branchSection2Style"`
+	BranchSection2Length    float64         `json:"branchSection2Length"`
+	BranchSection2Width     float64         `json:"branchSection2Width"`
+	BranchSection2Height    float64         `json:"branchSection2Height"`
+	BranchSection2ArcHeight float64         `json:"branchSection2ArcHeight"`
+	ShaftRadius             float64         `json:"shaftRadius"`
+	CornerLength            float64         `json:"cornerLength"`
+	CornerWidth             float64         `json:"cornerWidth"`
 }
 
-func NewFourWayWell() FourWayWell {
-	return FourWayWell{
+func NewFourWayWell() *FourWayWell {
+	return &FourWayWell{
 		EcBase: EcBase{Type: "GIM/EC/FourWayWell"},
 	}
 }
@@ -696,8 +734,8 @@ type PipeRow struct {
 	PointIndexs           []ChannelPointIndex `json:"pointIndexs"`
 }
 
-func NewPipeRow() PipeRow {
-	return PipeRow{
+func NewPipeRow() *PipeRow {
+	return &PipeRow{
 		EcBase: EcBase{Type: "GIM/EC/PipeRow"},
 	}
 }
@@ -718,8 +756,8 @@ type CableTrench struct {
 	PointIndexs      []ChannelPointIndex `json:"pointIndexs"`
 }
 
-func NewCableTrench() CableTrench {
-	return CableTrench{
+func NewCableTrench() *CableTrench {
+	return &CableTrench{
 		EcBase: EcBase{Type: "GIM/EC/CableTrench"},
 	}
 }
@@ -741,8 +779,8 @@ type CableTunnel struct {
 	PointIndexs          []ChannelPointIndex `json:"pointIndexs"`
 }
 
-func NewCableTunnel() CableTunnel {
-	return CableTunnel{
+func NewCableTunnel() *CableTunnel {
+	return &CableTunnel{
 		EcBase: EcBase{Type: "GIM/EC/CableTunnel"},
 	}
 }
@@ -758,7 +796,6 @@ type CableTray struct {
 	TopPlateHeight      float64             `json:"topPlateHeight"`
 	ArcHeight           float64             `json:"arcHeight"`
 	WallThickness       float64             `json:"wallThickness"`
-	PipeCount           int                 `json:"pipeCount"`
 	PipePositions       []Point2            `json:"pipePositions"`
 	PipeInnerDiameters  []float64           `json:"pipeInnerDiameters"`
 	PipeWallThicknesses []float64           `json:"pipeWallThicknesses"`
@@ -767,8 +804,8 @@ type CableTray struct {
 	PointIndexs         []ChannelPointIndex `json:"pointIndexs"`
 }
 
-func NewCableTray() CableTray {
-	return CableTray{
+func NewCableTray() *CableTray {
+	return &CableTray{
 		EcBase: EcBase{Type: "GIM/EC/CableTray"},
 	}
 }
@@ -780,8 +817,8 @@ type CableLBeam struct {
 	Height float64 `json:"height"`
 }
 
-func NewCableLBeam() CableLBeam {
-	return CableLBeam{
+func NewCableLBeam() *CableLBeam {
+	return &CableLBeam{
 		EcBase: EcBase{Type: "GIM/EC/CableLBeam"},
 	}
 }
@@ -795,8 +832,8 @@ type Manhole struct {
 	WallThickness float64      `json:"wallThickness"`
 }
 
-func NewManhole() Manhole {
-	return Manhole{
+func NewManhole() *Manhole {
+	return &Manhole{
 		EcBase: EcBase{Type: "GIM/EC/Manhole"},
 	}
 }
@@ -809,8 +846,8 @@ type ManholeCover struct {
 	Thickness float64      `json:"thickness"`
 }
 
-func NewManholeCover() ManholeCover {
-	return ManholeCover{
+func NewManholeCover() *ManholeCover {
+	return &ManholeCover{
 		EcBase: EcBase{Type: "GIM/EC/ManholeCover"},
 	}
 }
@@ -822,8 +859,8 @@ type Ladder struct {
 	Thickness float64 `json:"thickness"`
 }
 
-func NewLadder() Ladder {
-	return Ladder{
+func NewLadder() *Ladder {
+	return &Ladder{
 		EcBase: EcBase{Type: "GIM/EC/Ladder"},
 	}
 }
@@ -836,8 +873,8 @@ type Sump struct {
 	BottomThickness float64 `json:"bottomThickness"`
 }
 
-func NewSump() Sump {
-	return Sump{
+func NewSump() *Sump {
+	return &Sump{
 		EcBase: EcBase{Type: "GIM/EC/Sump"},
 	}
 }
@@ -850,8 +887,8 @@ type Footpath struct {
 	PointIndexs []ChannelPointIndex `json:"pointIndexs"`
 }
 
-func NewFootpath() Footpath {
-	return Footpath{
+func NewFootpath() *Footpath {
+	return &Footpath{
 		EcBase: EcBase{Type: "GIM/EC/Footpath"},
 	}
 }
@@ -868,8 +905,8 @@ type ShaftChamber struct {
 	InnerWallThickness   float64 `json:"innerWallThickness"`
 }
 
-func NewShaftChamber() ShaftChamber {
-	return ShaftChamber{
+func NewShaftChamber() *ShaftChamber {
+	return &ShaftChamber{
 		EcBase: EcBase{Type: "GIM/EC/ShaftChamber"},
 	}
 }
@@ -880,8 +917,8 @@ type TunnelCompartmentPartition struct {
 	Thickness float64 `json:"thickness"`
 }
 
-func NewTunnelCompartmentPartition() TunnelCompartmentPartition {
-	return TunnelCompartmentPartition{
+func NewTunnelCompartmentPartition() *TunnelCompartmentPartition {
+	return &TunnelCompartmentPartition{
 		EcBase: EcBase{Type: "GIM/EC/TunnelCompartmentPartition"},
 	}
 }
@@ -899,8 +936,8 @@ type VentilationPavilion struct {
 	BaseHeight   float64 `json:"baseHeight"`
 }
 
-func NewVentilationPavilion() VentilationPavilion {
-	return VentilationPavilion{
+func NewVentilationPavilion() *VentilationPavilion {
+	return &VentilationPavilion{
 		EcBase: EcBase{Type: "GIM/EC/VentilationPavilion"},
 	}
 }
@@ -918,8 +955,8 @@ type TunnelPartitionBoard struct {
 	HoleWidths    []float64           `json:"holeWidths"`
 }
 
-func NewTunnelPartitionBoard() TunnelPartitionBoard {
-	return TunnelPartitionBoard{
+func NewTunnelPartitionBoard() *TunnelPartitionBoard {
+	return &TunnelPartitionBoard{
 		EcBase: EcBase{Type: "GIM/EC/TunnelPartitionBoard"},
 	}
 }
@@ -931,8 +968,8 @@ type StraightVentilationDuct struct {
 	Height        float64 `json:"height"`
 }
 
-func NewStraightVentilationDuct() StraightVentilationDuct {
-	return StraightVentilationDuct{
+func NewStraightVentilationDuct() *StraightVentilationDuct {
+	return &StraightVentilationDuct{
 		EcBase: EcBase{Type: "GIM/EC/StraightVentilationDuct"},
 	}
 }
@@ -958,8 +995,8 @@ type ObliqueVentilationDuct struct {
 	BaseRoomHeight        float64 `json:"baseRoomHeight"`
 }
 
-func NewObliqueVentilationDuct() ObliqueVentilationDuct {
-	return ObliqueVentilationDuct{
+func NewObliqueVentilationDuct() *ObliqueVentilationDuct {
+	return &ObliqueVentilationDuct{
 		EcBase: EcBase{Type: "GIM/EC/ObliqueVentilationDuct"},
 	}
 }
@@ -976,8 +1013,8 @@ type DrainageWell struct {
 	WallThickness    float64 `json:"wallThickness"`
 }
 
-func NewDrainageWell() DrainageWell {
-	return DrainageWell{
+func NewDrainageWell() *DrainageWell {
+	return &DrainageWell{
 		EcBase: EcBase{Type: "GIM/EC/DrainageWell"},
 	}
 }
@@ -985,7 +1022,6 @@ func NewDrainageWell() DrainageWell {
 type PipeSupport struct {
 	EcBase
 	Style     PipeSupportStyle `json:"style"`
-	Count     int              `json:"count"`
 	Positions []Point2         `json:"positions"`
 	Radii     []float64        `json:"radii"`
 	Length    float64          `json:"length"`
@@ -993,8 +1029,8 @@ type PipeSupport struct {
 	Height    float64          `json:"height"`
 }
 
-func NewPipeSupport() PipeSupport {
-	return PipeSupport{
+func NewPipeSupport() *PipeSupport {
+	return &PipeSupport{
 		EcBase: EcBase{Type: "GIM/EC/PipeSupport"},
 	}
 }
@@ -1009,8 +1045,8 @@ type CoverPlate struct {
 	Thickness   float64         `json:"thickness"`
 }
 
-func NewCoverPlate() CoverPlate {
-	return CoverPlate{
+func NewCoverPlate() *CoverPlate {
+	return &CoverPlate{
 		EcBase: EcBase{Type: "GIM/EC/CoverPlate"},
 	}
 }
@@ -1024,8 +1060,8 @@ type CableRay struct {
 	CoverThickness float64 `json:"coverThickness"`
 }
 
-func NewCableRay() CableRay {
-	return CableRay{
+func NewCableRay() *CableRay {
+	return &CableRay{
 		EcBase: EcBase{Type: "GIM/EC/CableRay"},
 	}
 }

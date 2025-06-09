@@ -398,6 +398,7 @@ func NewPrecastConcreteSupportBase() *PrecastConcreteSupportBase {
 // TransmissionLine represents a transmission line
 type TransmissionLine struct {
 	GtBase
+	TransmissionLineType    string  `json:"transmissionLineType"`
 	SectionalArea           float64 `json:"sectionalArea"`
 	OutsideDiameter         float64 `json:"outsideDiameter"`
 	WireWeight              float64 `json:"wireWeight"`
@@ -521,6 +522,7 @@ func (s StringType) ToInt() int {
 // Insulator represents an insulator
 type Insulator struct {
 	GtBase
+	InsulatorType  string           `json:"insulatorType"` // 绝缘子类型
 	SubNum         int              `json:"subNum"`        // 子串数量
 	SubType        int              `json:"subType"`       // 子串类型
 	SplitDistance  float64          `json:"splitDistance"` // 分裂间距
@@ -678,7 +680,6 @@ type SingleHookAnchor struct {
 	AnchorLength       float64         `json:"anchorLength"`       // 锚固长度
 	HookStraightLength float64         `json:"hookStraightLength"` // 钩直段长度
 	HookDiameter       float64         `json:"hookDiameter"`       // 钩直径
-	AnchorBarDiameter  float64         `json:"anchorBarDiameter"`  // 锚筋直径
 }
 
 func NewSingleHookAnchor() *SingleHookAnchor {
@@ -703,6 +704,7 @@ type TripleHookAnchor struct {
 	HookStraightLengthA float64         `json:"hookStraightLengthA"` // 钩直段长度A
 	HookStraightLengthB float64         `json:"hookStraightLengthB"` // 钩直段长度B
 	HookDiameter        float64         `json:"hookDiameter"`        // 钩直径
+	AnchorBarDiameter   float64         `json:"anchorBarDiameter"`   // 锚固棒直径
 }
 
 func NewTripleHookAnchor() *TripleHookAnchor {
