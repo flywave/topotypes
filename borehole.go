@@ -10,6 +10,7 @@ type TopoBorehole struct {
 	Topos
 	geology.Borehole
 	Materials map[string]*TopoMaterial `json:"materials,omitempty"`
+	UpDir     *[3]float64              `json:"upDir,omitempty"`
 }
 
 func NewBorehole() *TopoBorehole {
