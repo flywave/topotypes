@@ -40,7 +40,7 @@ func (c CableClampType) ToInt() int {
 	case CableClampSeparateTriple:
 		return 4
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -61,7 +61,7 @@ func (c CableTerminalSort) ToInt() int {
 	case CableTerminalDry:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -82,7 +82,7 @@ func (s SectionType) ToInt() int {
 	case SectionCircular:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -121,7 +121,7 @@ func (c CornerType) ToInt() int {
 	case CornerAngled:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -139,7 +139,7 @@ func (s ShaftType) ToInt() int {
 	case ShaftRectangular:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -157,7 +157,7 @@ func (p PipeType) ToInt() int {
 	case PipePull:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -178,7 +178,7 @@ func (t TunnelStyle) ToInt() int {
 	case TunnelCircular:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -196,7 +196,7 @@ func (c CableTrayStyle) ToInt() int {
 	case CableTrayBeam:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -214,7 +214,7 @@ func (m ManholeStyle) ToInt() int {
 	case ManholeRectangular:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -232,7 +232,7 @@ func (p PartitionBoardStyle) ToInt() int {
 	case PartitionRectangular:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -250,7 +250,7 @@ func (p PipeSupportStyle) ToInt() int {
 	case PipeSupportDoubleSided:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -394,7 +394,7 @@ func (c CableAccessoryType) ToInt() int {
 	case CableAccessoryCrossInterconnect:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -712,7 +712,7 @@ func NewFourWayWell() *FourWayWell {
 }
 
 type ChannelPointIndex struct {
-	Index int              `json:"end"`
+	Index int              `json:"index"`
 	Type  ChannelPointType `json:"type"`
 }
 type PipeRow struct {

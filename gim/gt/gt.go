@@ -428,7 +428,7 @@ func (a ArrangementType) ToInt() int {
 	case ArrangementVertical:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -450,7 +450,7 @@ func (m MaterialType) ToInt() int {
 	case MaterialComposite:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -496,7 +496,7 @@ func (a Application) ToInt() int {
 	case ApplicationGroundWire:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -515,7 +515,7 @@ func (s StringType) ToInt() int {
 	case StringTypeTension:
 		return 2
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -561,7 +561,7 @@ func (m MemberType) ToInt() int {
 	case MemberTypeTaperedTube:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -622,7 +622,7 @@ func (a AttachmentType) ToInt() int {
 	case AttachmentTypeJumper:
 		return 3
 	default:
-		return 0
+		return 1
 	}
 }
 
@@ -661,7 +661,7 @@ func (w WasherShapeType) ToInt() int {
 	case WasherShapeSquare:
 		return 1
 	default:
-		return 0
+		return 1
 	}
 }
 

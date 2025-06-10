@@ -64,17 +64,17 @@ const (
 func (s SegmentType) ToInt() int {
 	switch s {
 	case SegmentTypeLine:
-		return 1
+		return 0
 	case SegmentTypeThreePointArc:
-		return 2
-	case SegmentTypeCircleCenterArc:
-		return 3
-	case SegmentTypeSpline:
-		return 4
-	case SegmentTypeBezier:
-		return 5
-	default:
 		return 1
+	case SegmentTypeCircleCenterArc:
+		return 2
+	case SegmentTypeSpline:
+		return 3
+	case SegmentTypeBezier:
+		return 4
+	default:
+		return 0
 	}
 }
 
