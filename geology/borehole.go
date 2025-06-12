@@ -17,3 +17,7 @@ type Borehole struct {
 func (t *Borehole) GetSamples() []*BoreholeSample {
 	return t.Samples
 }
+
+func (t *Borehole) GetType() string {
+	return "Borehole"
+}

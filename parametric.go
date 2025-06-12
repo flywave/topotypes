@@ -42,10 +42,6 @@ func NewTopoParametric() *TopoParametric {
 	}
 }
 
-func (t *TopoParametric) IsInstance() bool {
-	return t.Instanced
-}
-
 func (t *TopoParametric) GetShape() ParametricShape {
 	return t.Shape
 }

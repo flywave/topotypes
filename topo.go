@@ -458,6 +458,10 @@ func (tp *Topos) GetType() string {
 	return tp.Type
 }
 
+func (t *Topos) IsInstance() bool {
+	return t.Instanced
+}
+
 func (tp *Topos) GetTransform() *TopoTransform {
 	return tp.Transform
 }

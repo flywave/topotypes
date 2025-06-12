@@ -29,6 +29,16 @@ const (
 	ProgressByDistance ProgressType = "DISTANCE" // 按距离计算进度
 )
 
+func (p ProgressType) ToInt() int {
+	switch p {
+	case ProgressByRatio:
+		return 1
+	case ProgressByDistance:
+		return 2
+	}
+	return 1
+}
+
 type WorkSchedule struct {
 	ID          string       `json:"id"`
 	Layer       string       `json:"layer,omitempty"`

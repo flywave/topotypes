@@ -35,9 +35,8 @@ func (sp *TopoCrossMultiPoint) SetModel(fileid string) {
 
 type TopoCrossPoint struct {
 	Topos
-	Model     string                  `json:"model"`
-	Instanced bool                    `json:"instanced"`
-	Links     []anchor.TopoAnchorLink `json:"links,omitempty"`
+	Model string                  `json:"model"`
+	Links []anchor.TopoAnchorLink `json:"links,omitempty"`
 }
 
 func NewTopoCrossPoint() *TopoCrossPoint {
