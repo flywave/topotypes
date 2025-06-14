@@ -250,6 +250,14 @@ type PipeJoint struct {
 	UpDir        *[3]float64         `json:"upDir,omitempty"`
 }
 
+func (p *PipeJoint) GetIns() []string {
+	return p.Ins
+}
+
+func (p *PipeJoint) GetOuts() []string {
+	return p.Outs
+}
+
 func NewPipeJoint() *PipeJoint {
 	return &PipeJoint{
 		Base: Base{Type: "PipeJoint"},

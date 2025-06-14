@@ -12,3 +12,11 @@ func NewTopoBoard() *TopoBoard {
 	t.Type = TopoTypeToString(TOPO_TYPE_BOARD)
 	return t
 }
+
+func (b *TopoBoard) GetMaterials() map[string]*TopoMaterial {
+	return map[string]*TopoMaterial{}
+}
+func (b *TopoBoard) GetMaterialIds() []string {
+	mtlids := []string{}
+	return mtlids
+}

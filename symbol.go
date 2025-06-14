@@ -42,7 +42,7 @@ func NewTopoSymbolPath(md int) *TopoSymbolPath {
 }
 
 type TopoSymbolSurface struct {
-	TopoSurface
+	Topos
 	Model string     `json:"model"`
 	Mode  string     `json:"mode"`
 	Cell  [2]float64 `json:"cell"`

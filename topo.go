@@ -478,6 +478,11 @@ func (tp *Topos) IsTopoBound() bool {
 	return false
 }
 
+type PipeJointInterface interface {
+	GetIns() []string
+	GetOuts() []string
+}
+
 func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	base := Topos{}
 	e := json.Unmarshal(js, &base)

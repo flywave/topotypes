@@ -18,3 +18,11 @@ func NewTopoDecal() *TopoDecal {
 	t.Type = TopoTypeToString(TOPO_TYPE_DECAL)
 	return t
 }
+
+func (b *TopoDecal) GetMaterials() map[string]*TopoMaterial {
+	return map[string]*TopoMaterial{}
+}
+func (b *TopoDecal) GetMaterialIds() []string {
+	mtlids := []string{}
+	return mtlids
+}
