@@ -31,6 +31,7 @@ const (
 	TOPO_TYPE_MULTI_PIPE
 	TOPO_TYPE_PARAMETRIC
 	TOPO_TYPE_BOREHOLE
+	TOPO_TYPE_FAULT
 )
 
 func TopoTypeToString(tp int) string {
@@ -73,6 +74,8 @@ func TopoTypeToString(tp int) string {
 		return "Parametric"
 	case TOPO_TYPE_BOREHOLE:
 		return "Borehole"
+	case TOPO_TYPE_FAULT:
+		return "Fault"
 	default:
 		return ""
 	}
@@ -118,6 +121,8 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_PARAMETRIC
 	} else if utils.StrEquals(tp, "borehole") {
 		return TOPO_TYPE_BOREHOLE
+	} else if utils.StrEquals(tp, "fault") {
+		return TOPO_TYPE_FAULT
 	}
 	return TOPO_TYPE_NONE
 }
