@@ -32,6 +32,8 @@ const (
 	TOPO_TYPE_PARAMETRIC
 	TOPO_TYPE_BOREHOLE
 	TOPO_TYPE_FAULT
+	TOPO_TYPE_COLLAPSE_PILLAR
+	TOPO_TYPE_SECTION_LINE
 )
 
 func TopoTypeToString(tp int) string {
@@ -76,6 +78,10 @@ func TopoTypeToString(tp int) string {
 		return "Borehole"
 	case TOPO_TYPE_FAULT:
 		return "Fault"
+	case TOPO_TYPE_COLLAPSE_PILLAR:
+		return "CollapsePillar"
+	case TOPO_TYPE_SECTION_LINE:
+		return "SectionLine"
 	default:
 		return ""
 	}
@@ -123,6 +129,10 @@ func StringToTopoType(tp string) int {
 		return TOPO_TYPE_BOREHOLE
 	} else if utils.StrEquals(tp, "fault") {
 		return TOPO_TYPE_FAULT
+	} else if utils.StrEquals(tp, "collapse") {
+		return TOPO_TYPE_COLLAPSE_PILLAR
+	} else if utils.StrEquals(tp, "sectionline") {
+		return TOPO_TYPE_SECTION_LINE
 	}
 	return TOPO_TYPE_NONE
 }
