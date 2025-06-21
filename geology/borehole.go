@@ -1,23 +1,23 @@
 package geology
 
 type BoreholeSample struct {
-	Name      string                 `json:"name,omitempty"`
-	DepthFrom float64                `json:"depthFrom"`
-	DepthTo   float64                `json:"depthTo"`
-	MTL       string                 `json:"mtl,omitempty"`
-	Property  map[string]interface{} `json:"property,omitempty"`
+	ID        string  `json:"id"`        // 地层编号
+	Lithology string  `json:"lithology"` // 岩性描述
+	Top       float64 `json:"top"`       // 顶板相对井口深度
+	Base      float64 `json:"base"`      // 底板相对井口深度
 }
 
 type Borehole struct {
-	Version  int               `json:"version"`
-	Samples  []*BoreholeSample `json:"samples"`
-	Diameter *float64          `json:"diameter,omitempty"`
+	Version         int               `json:"version"`
+	Elevation       float64           `json:"elevation"`       // 井口高程
+	ProspectingLine string            `json:"prospectingLine"` // 勘探线ID
+	Index           int               `json:"index"`           // 勘探线内索引
+	Depth           float64           `json:"depth"`           // 完井深度
+	Azimuth         float64           `json:"azimuth"`         // 方位角(0-360度)
+	Inclination     float64           `json:"inclination"`     // 倾角(0-90度)
+	Samples         []*BoreholeSample `json:"samples"`
 }
 
 func (t *Borehole) GetSamples() []*BoreholeSample {
 	return t.Samples
-}
-
-func (t *Borehole) GetType() string {
-	return "Borehole"
 }

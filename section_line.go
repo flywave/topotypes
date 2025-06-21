@@ -1,7 +1,10 @@
 package topotypes
 
+import "github.com/flywave/topotypes/geology"
+
 type TopoSectionLine struct {
 	Topos
+	geology.SectionLine
 }
 
 func NewTopoSectionLine() *TopoSectionLine {
