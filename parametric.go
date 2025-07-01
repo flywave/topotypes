@@ -102,13 +102,14 @@ func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 	tys := strings.Split(ty, "/")
 	dt, _ := json.Marshal(stu.Shape)
 	if len(tys) > 1 {
-		if tys[0] == gim.Major {
+		switch tys[0] {
+		case gim.Major:
 			shp, err := gim.Unmarshal(ty, dt)
 			if err != nil {
 				return err
 			}
 			t.Shape = shp
-		} else if tys[0] == hydropower.Major {
+		case hydropower.Major:
 			shp, err := hydropower.Unmarshal(ty, dt)
 			if err != nil {
 				return err
