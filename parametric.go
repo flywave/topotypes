@@ -85,6 +85,8 @@ func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
 		MaterialId string                   `json:"mtl_id,omitempty"`
 		Shape      map[string]interface{}   `json:"shape,omitempty"`
+		Work       *topo4d.TopoWork         `json:"works,omitempty"`
+		Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {
@@ -93,6 +95,8 @@ func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 	t.Topos = stu.Topos
 	t.Materials = stu.Materials
 	t.MaterialId = stu.MaterialId
+	t.Work = stu.Work
+	t.Generate = stu.Generate
 
 	ty := stu.Shape["type"].(string)
 	tys := strings.Split(ty, "/")
