@@ -36,3 +36,23 @@ func (sp *TopoCatenary) GetAnchor() [2]*anchor.TopoAnchor {
 func (sp *TopoCatenary) GetProfile() TopoProfile {
 	return sp.Profile
 }
+
+func (t *TopoCatenary) UnmarshalJSON(data []byte) error {
+	stu := struct {
+		Topos
+		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId string                   `json:"mtl_id,omitempty"`
+		Anchors    [2]*anchor.TopoAnchor    `json:"anchors"`
+		catenary.Catenary
+	}{}
+
+	if err := json.Unmarshal(data, &stu); err != nil {
+		return err
+	}
+	t.Topos = stu.Topos
+	t.Materials = stu.Materials
+	t.MaterialId = stu.MaterialId
+	t.Anchors = stu.Anchors
+	t.Catenary = stu.Catenary
+	return nil
+}

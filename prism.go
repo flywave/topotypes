@@ -44,3 +44,25 @@ func PrismUnMarshal(js []byte) (*TopoPrism, error) {
 	}
 	return &pris, nil
 }
+
+func (t *TopoPrism) UnmarshalJSON(data []byte) error {
+	stu := struct {
+		Topos
+		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId string                   `json:"mtl_id,omitempty"`
+		Profile    interface{}              `json:"profile,omitempty"`
+		Direction  [3]float64               `json:"direction"`
+		Height     float64                  `json:"height`
+	}{}
+
+	if err := json.Unmarshal(data, &stu); err != nil {
+		return err
+	}
+	t.Topos = stu.Topos
+	t.Materials = stu.Materials
+	t.MaterialId = stu.MaterialId
+	t.Profile = stu.Profile
+	t.Direction = stu.Direction
+	t.Height = stu.Height
+	return nil
+}

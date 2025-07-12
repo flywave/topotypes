@@ -66,3 +66,28 @@ func PipeUnMarshal(js []byte) (*TopoPipe, error) {
 	}
 	return &pipe, nil
 }
+
+func (t *TopoPipe) UnmarshalJSON(data []byte) error {
+	stu := struct {
+		Topos
+		Materials      map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId     string                   `json:"mtl_id,omitempty"`
+		Anchors        [2]*anchor.TopoAnchor    `json:"anchors"`
+		SegmentType    SegmentType              `json:"segment_type,omitempty"`
+		TransitionMode string                   `json:"transition_mode"`
+		Profile        interface{}              `json:"profile"`
+		InnerProfile   interface{}              `json:"inner_profile,omitempty"`
+	}{}
+
+	if err := json.Unmarshal(data, &stu); err != nil {
+		return err
+	}
+	t.Topos = stu.Topos
+	t.Materials = stu.Materials
+	t.MaterialId = stu.MaterialId
+	t.SegmentType = stu.SegmentType
+	t.TransitionMode = stu.TransitionMode
+	t.Profile = stu.Profile
+	t.InnerProfile = stu.InnerProfile
+	return nil
+}

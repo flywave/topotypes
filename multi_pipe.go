@@ -58,3 +58,31 @@ func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {
 	mp.InnerProfiles = inpros
 	return &mp, nil
 }
+
+func (t *TopoMultiSegmentPipe) UnmarshalJSON(data []byte) error {
+	stu := struct {
+		Topos
+		Materials      map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId     string                   `json:"mtl_id,omitempty"`
+		Profiles       []TopoProfile            `json:"profiles"`
+		InnerProfiles  []TopoProfile            `json:"innerProfiles,omitempty"`
+		SegmentTypes   []SegmentType            `json:"segmentTypes,omitempty"`
+		TransitionMode string                   `json:"transitionMode"`
+		UpDir          *[3]float64              `json:"upDir,omitempty"`
+		Anchors        [2]*anchor.TopoAnchor    `json:"anchors"`
+	}{}
+
+	if err := json.Unmarshal(data, &stu); err != nil {
+		return err
+	}
+	t.Topos = stu.Topos
+	t.Materials = stu.Materials
+	t.MaterialId = stu.MaterialId
+	t.Anchors = stu.Anchors
+	t.Profiles = stu.Profiles
+	t.InnerProfiles = stu.InnerProfiles
+	t.SegmentTypes = stu.SegmentTypes
+	t.TransitionMode = stu.TransitionMode
+	t.UpDir = stu.UpDir
+	return nil
+}

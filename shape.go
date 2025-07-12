@@ -17,6 +17,24 @@ type TopoShape struct {
 	ShapeModel interface{} `json:"shape"`
 }
 
+func (t *TopoShape) UnmarshalJSON(data []byte) error {
+	stu := struct {
+		Topos
+		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
+		MaterialId string                   `json:"mtl_id,omitempty"`
+		ShapeModel interface{}              `json:"shape"`
+	}{}
+
+	if err := json.Unmarshal(data, &stu); err != nil {
+		return err
+	}
+	t.Topos = stu.Topos
+	t.Materials = stu.Materials
+	t.MaterialId = stu.MaterialId
+	t.ShapeModel = stu.ShapeModel
+	return nil
+}
+
 func (sp *TopoShape) IsTopoBound() bool {
 	return true
 }
