@@ -28,13 +28,13 @@ func NewTopoPipeJoint() *TopoPipeJoint {
 func (t *TopoPipeJoint) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-		MaterialId string                   `json:"mtl_id,omitempty"`
-		CenterMode string                   `json:"mode"`
-		In         []string                 `json:"in-pipe-ids,omitempty"`
-		Out        []string                 `json:"out-pipe-ids,omitempty"`
-		Flanged    bool                     `json:"flanged"`
-		UpDir      *[3]float64              `json:"upDir,omitempty"`
+		Materials  TopoMaterialMap `json:"materials,omitempty"`
+		MaterialId string          `json:"mtl_id,omitempty"`
+		CenterMode string          `json:"mode"`
+		In         []string        `json:"in-pipe-ids,omitempty"`
+		Out        []string        `json:"out-pipe-ids,omitempty"`
+		Flanged    bool            `json:"flanged"`
+		UpDir      *[3]float64     `json:"upDir,omitempty"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

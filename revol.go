@@ -38,11 +38,11 @@ func RevolUnMarshal(js []byte) (*TopoRevol, error) {
 func (t *TopoRevol) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-		MaterialId string                   `json:"mtl_id,omitempty"`
-		Profile    interface{}              `json:"profile"`
-		Axis       [2][3]float64            `json:"axis"`
-		Angle      float64                  `json:"angle"`
+		Materials  TopoMaterialMap `json:"materials,omitempty"`
+		MaterialId string          `json:"mtl_id,omitempty"`
+		Profile    interface{}     `json:"profile"`
+		Axis       [2][3]float64   `json:"axis"`
+		Angle      float64         `json:"angle"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

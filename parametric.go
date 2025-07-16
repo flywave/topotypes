@@ -26,11 +26,11 @@ type ParametricShape interface {
 
 type TopoParametric struct {
 	Topos
-	Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-	MaterialId string                   `json:"mtl_id,omitempty"`
-	Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
-	Work       *topo4d.TopoWork         `json:"works,omitempty"`
-	Shape      ParametricShape          `json:"shape,omitempty"`
+	Materials  TopoMaterialMap    `json:"materials,omitempty"`
+	MaterialId string             `json:"mtl_id,omitempty"`
+	Generate   *topo4d.Generate4D `json:"generate,omitempty"`
+	Work       *topo4d.TopoWork   `json:"works,omitempty"`
+	Shape      ParametricShape    `json:"shape,omitempty"`
 }
 
 func NewTopoParametric() *TopoParametric {
@@ -38,7 +38,7 @@ func NewTopoParametric() *TopoParametric {
 		Topos: Topos{
 			Type: TopoTypeToString(TOPO_TYPE_PARAMETRIC),
 		},
-		Materials: map[string]*TopoMaterial{},
+		Materials: make(TopoMaterialMap),
 	}
 }
 

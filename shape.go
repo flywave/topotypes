@@ -20,9 +20,9 @@ type TopoShape struct {
 func (t *TopoShape) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-		MaterialId string                   `json:"mtl_id,omitempty"`
-		ShapeModel interface{}              `json:"shape"`
+		Materials  TopoMaterialMap `json:"materials,omitempty"`
+		MaterialId string          `json:"mtl_id,omitempty"`
+		ShapeModel interface{}     `json:"shape"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

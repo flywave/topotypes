@@ -40,9 +40,9 @@ func (sp *TopoCatenary) GetProfile() TopoProfile {
 func (t *TopoCatenary) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-		MaterialId string                   `json:"mtl_id,omitempty"`
-		Anchors    [2]*anchor.TopoAnchor    `json:"anchors"`
+		Materials  TopoMaterialMap       `json:"materials,omitempty"`
+		MaterialId string                `json:"mtl_id,omitempty"`
+		Anchors    [2]*anchor.TopoAnchor `json:"anchors"`
 		catenary.Catenary
 	}{}
 
