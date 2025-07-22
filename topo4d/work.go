@@ -32,11 +32,11 @@ const (
 func (p ProgressType) ToInt() int {
 	switch p {
 	case ProgressByRatio:
-		return 1
+		return 0
 	case ProgressByDistance:
-		return 2
+		return 1
 	}
-	return 1
+	return 0
 }
 
 type WorkSchedule struct {
