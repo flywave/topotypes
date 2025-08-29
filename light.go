@@ -77,7 +77,7 @@ func NewTopoSpotLight() *TopoSpotLight {
 	return &l
 }
 
-func LightUnMarshal(js []byte) (ToposInterface, error) {
+func LightUnmarshal(js []byte) (ToposInterface, error) {
 	lt := TopoLight{}
 	e := json.Unmarshal(js, &lt)
 	if e != nil {

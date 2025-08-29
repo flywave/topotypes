@@ -1,5 +1,7 @@
 package topotypes
 
+import "github.com/flywave/topotypes/material"
+
 type TopoBoard struct {
 	Topos
 	Size    *[2]float64 `json:"size,omitempty"`
@@ -13,9 +15,10 @@ func NewTopoBoard() *TopoBoard {
 	return t
 }
 
-func (b *TopoBoard) GetMaterials() map[string]*TopoMaterial {
-	return map[string]*TopoMaterial{}
+func (b *TopoBoard) GetMaterials() map[string]*material.Material {
+	return map[string]*material.Material{}
 }
+
 func (b *TopoBoard) GetMaterialIds() []string {
 	mtlids := []string{}
 	return mtlids

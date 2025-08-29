@@ -125,14 +125,14 @@ func NewTopoShapePipe() *TopoShapePipe {
 	return t
 }
 
-func TopoShapePipeUnMarshal(js []byte) (*TopoShapePipe, error) {
+func TopoShapePipeUnmarshal(js []byte) (*TopoShapePipe, error) {
 	pipe := TopoShapePipe{}
 	e := json.Unmarshal(js, &pipe)
 	if e != nil {
 		return nil, e
 	}
 	if pipe.Profile != nil {
-		prof, er := ProfileUnMarshal(pipe.Profile)
+		prof, er := ProfileUnmarshal(pipe.Profile)
 		if er != nil {
 			return nil, er
 		}
@@ -147,7 +147,7 @@ func NewTopoShapeWedge() *TopoShapeWedge {
 	return &TopoShapeWedge{Type: TopoTypeToString(TOPO_TYPE_SHAPE)}
 }
 
-func ShapeUnMarshal(js []byte) (ToposInterface, error) {
+func ShapeUnmarshal(js []byte) (ToposInterface, error) {
 	sp := make(map[string]interface{})
 	e := json.Unmarshal(js, &sp)
 	if e != nil {
@@ -187,7 +187,7 @@ func ShapeUnMarshal(js []byte) (ToposInterface, error) {
 		inter = NewTopoShapeRevolution()
 	case TOPO_SHAPE_MODE_PIPE:
 		var err error
-		if inter, err = TopoShapePipeUnMarshal(js); err != nil {
+		if inter, err = TopoShapePipeUnmarshal(js); err != nil {
 			return nil, err
 		}
 	default:

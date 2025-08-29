@@ -498,7 +498,7 @@ type PipeJointInterface interface {
 	GetOuts() []string
 }
 
-func TopoUnMarshal(js []byte) (ToposInterface, error) {
+func TopoUnmarshal(js []byte) (ToposInterface, error) {
 	base := Topos{}
 	e := json.Unmarshal(js, &base)
 	if e != nil {
@@ -508,13 +508,13 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	ty := StringToTopoType(base.Type)
 	switch ty {
 	case TOPO_TYPE_SHAPE:
-		return ShapeUnMarshal(js)
+		return ShapeUnmarshal(js)
 	case TOPO_TYPE_PRISM:
-		return PrismUnMarshal(js)
+		return PrismUnmarshal(js)
 	case TOPO_TYPE_REVOL:
-		return RevolUnMarshal(js)
+		return RevolUnmarshal(js)
 	case TOPO_TYPE_PIPE:
-		return PipeUnMarshal(js)
+		return PipeUnmarshal(js)
 	case TOPO_TYPE_CROSS_POINT:
 		inter = &TopoCrossPoint{}
 	case TOPO_TYPE_SYMBOL:
@@ -526,7 +526,7 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	case TOPO_TYPE_MASK:
 		inter = &TopoMask{}
 	case TOPO_TYPE_LIGHT:
-		return LightUnMarshal(js)
+		return LightUnmarshal(js)
 	case TOPO_TYPE_CAMERA:
 		inter = &TopoCamera{}
 	case TOPO_TYPE_PIPE_JOINT:
@@ -540,9 +540,9 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 	case TOPO_TYPE_BOARD:
 		inter = &TopoBoard{}
 	case TOPO_TYPE_CATENARY:
-		return CatenaryUnMarshal(js)
+		return CatenaryUnmarshal(js)
 	case TOPO_TYPE_MULTI_PIPE:
-		return MultiPipeUnMarshal(js)
+		return MultiPipeUnmarshal(js)
 	case TOPO_TYPE_PARAMETRIC:
 		mk := TopoParametric{}
 		err := json.Unmarshal(js, &mk)
@@ -551,7 +551,7 @@ func TopoUnMarshal(js []byte) (ToposInterface, error) {
 		}
 		return &mk, nil
 	case TOPO_TYPE_BOREHOLE:
-		return BoreholeUnMarshal(js)
+		return BoreholeUnmarshal(js)
 	default:
 		return nil, errors.New("not support topo type")
 	}

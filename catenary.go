@@ -13,14 +13,14 @@ type TopoCatenary struct {
 	catenary.Catenary
 }
 
-func CatenaryUnMarshal(js []byte) (*TopoCatenary, error) {
+func CatenaryUnmarshal(js []byte) (*TopoCatenary, error) {
 	catenary := TopoCatenary{}
 	e := json.Unmarshal(js, &catenary)
 	if e != nil {
 		return nil, e
 	}
 	if catenary.Profile != nil {
-		prof, er := ProfileUnMarshal(catenary.Profile)
+		prof, er := ProfileUnmarshal(catenary.Profile)
 		if er != nil {
 			return nil, er
 		}

@@ -6,3 +6,7 @@ type Decal struct {
 	Depth   float64    `json:"depth"`
 	Texture string     `json:"texture,omitempty"`
 }
+
+func (d *Decal) GetTexture() []string {
+	return []string{d.Texture}
+}

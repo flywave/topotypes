@@ -55,6 +55,6 @@ func NewTopoPolygon() *TopoPolygon {
 	return &t
 }
 
-func ProfileUnMarshal(inter interface{}) (interface{}, error) {
-	return profile.ProfileUnMarshal(inter)
+func ProfileUnmarshal(inter interface{}) (interface{}, error) {
+	return profile.ProfileUnmarshal(inter)
 }

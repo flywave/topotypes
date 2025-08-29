@@ -15,14 +15,14 @@ type Prism struct {
 	Materials []*material.Material `json:"materials,omitempty"`
 }
 
-func PrismUnMarshal(js []byte) (*Prism, error) {
+func PrismUnmarshal(js []byte) (*Prism, error) {
 	p := Prism{}
 	e := json.Unmarshal(js, &p)
 	if e != nil {
 		return nil, e
 	}
 	if p.Profile != nil {
-		prof, er := profile.ProfileUnMarshal(p.Profile)
+		prof, er := profile.ProfileUnmarshal(p.Profile)
 		if er != nil {
 			return nil, er
 		}

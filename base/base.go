@@ -417,7 +417,7 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			return nil, err
 		}
 		if rel.Profile != nil {
-			rel.Profile, _ = profile.ProfileUnMarshal(rel.Profile)
+			rel.Profile, _ = profile.ProfileUnmarshal(rel.Profile)
 		}
 		return rel, nil
 	case "Prism":
@@ -427,7 +427,7 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			return nil, err
 		}
 		if prism.Profile != nil {
-			prism.Profile, _ = profile.ProfileUnMarshal(prism.Profile)
+			prism.Profile, _ = profile.ProfileUnmarshal(prism.Profile)
 		}
 		return prism, nil
 	case "Pipe":
@@ -438,17 +438,17 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 		}
 
 		if pipe.Profile[0] != nil {
-			pipe.Profile[0], _ = profile.ProfileUnMarshal(pipe.Profile[0])
+			pipe.Profile[0], _ = profile.ProfileUnmarshal(pipe.Profile[0])
 		}
 		if pipe.Profile[1] != nil {
-			pipe.Profile[1], _ = profile.ProfileUnMarshal(pipe.Profile[1])
+			pipe.Profile[1], _ = profile.ProfileUnmarshal(pipe.Profile[1])
 		}
 		if pipe.InnerProfile != nil {
 			if pipe.InnerProfile[0] != nil {
-				pipe.InnerProfile[0], _ = profile.ProfileUnMarshal(pipe.InnerProfile[0])
+				pipe.InnerProfile[0], _ = profile.ProfileUnmarshal(pipe.InnerProfile[0])
 			}
 			if pipe.InnerProfile[1] != nil {
-				pipe.InnerProfile[1], _ = profile.ProfileUnMarshal(pipe.InnerProfile[1])
+				pipe.InnerProfile[1], _ = profile.ProfileUnmarshal(pipe.InnerProfile[1])
 			}
 		}
 		return pipe, nil
@@ -459,10 +459,10 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			return nil, err
 		}
 		for i := range pipe.Profiles {
-			pipe.Profiles[i], _ = profile.ProfileUnMarshal(pipe.Profiles[i])
+			pipe.Profiles[i], _ = profile.ProfileUnmarshal(pipe.Profiles[i])
 		}
 		for i := range pipe.InnerProfiles {
-			pipe.InnerProfiles[i], _ = profile.ProfileUnMarshal(pipe.InnerProfiles[i])
+			pipe.InnerProfiles[i], _ = profile.ProfileUnmarshal(pipe.InnerProfiles[i])
 		}
 		return pipe, nil
 	case "MultiLayerExtrusionStructure":
@@ -473,10 +473,10 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 		}
 		for i := range extrusion.Layers {
 			for j := range extrusion.Layers[i].Profiles {
-				extrusion.Layers[i].Profiles[j], _ = profile.ProfileUnMarshal(extrusion.Layers[i].Profiles[j])
+				extrusion.Layers[i].Profiles[j], _ = profile.ProfileUnmarshal(extrusion.Layers[i].Profiles[j])
 			}
 			for j := range extrusion.Layers[i].InnerProfiles {
-				extrusion.Layers[i].InnerProfiles[j], _ = profile.ProfileUnMarshal(extrusion.Layers[i].InnerProfiles[j])
+				extrusion.Layers[i].InnerProfiles[j], _ = profile.ProfileUnmarshal(extrusion.Layers[i].InnerProfiles[j])
 			}
 		}
 		return extrusion, nil
@@ -491,7 +491,7 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			return nil, err
 		}
 		if catenary.Profile != nil {
-			catenary.Profile, _ = profile.ProfileUnMarshal(catenary.Profile)
+			catenary.Profile, _ = profile.ProfileUnmarshal(catenary.Profile)
 		}
 		return catenary, nil
 	case "BoxShape":
@@ -529,7 +529,7 @@ func Unmarshal(ty string, dt []byte) (Shape, error) {
 			return nil, err
 		}
 		if shape.Profile != nil {
-			shape.Profile, _ = profile.ProfileUnMarshal(shape.Profile)
+			shape.Profile, _ = profile.ProfileUnmarshal(shape.Profile)
 		}
 		return shape, nil
 	case "StepShape":

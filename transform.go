@@ -1,9 +1,9 @@
 package topotypes
 
 import (
-	dmat4 "github.com/flywave/go3d/float64/mat4"
-	"github.com/flywave/go3d/float64/quaternion"
-	dvec3 "github.com/flywave/go3d/float64/vec3"
+	mat4d "github.com/flywave/go3d/float64/mat4"
+	quatd "github.com/flywave/go3d/float64/quaternion"
+	vec3d "github.com/flywave/go3d/float64/vec3"
 )
 
 type TopoTransform struct {
@@ -16,7 +16,7 @@ func NewTopoTransform() *TopoTransform {
 	return &TopoTransform{Scale: &[3]float64{1.0, 1.0, 1.0}}
 }
 
-func (t *TopoTransform) Compose() *dmat4.T {
+func (t *TopoTransform) Compose() *mat4d.T {
 	if t.Translate == nil {
 		t.Translate = &[3]float64{}
 	}
@@ -26,5 +26,5 @@ func (t *TopoTransform) Compose() *dmat4.T {
 	if t.Rotation == nil {
 		t.Rotation = &[4]float64{0, 0, 0, 1}
 	}
-	return dmat4.Compose((*dvec3.T)(t.Translate), (*quaternion.T)(t.Rotation), (*dvec3.T)(t.Scale))
+	return mat4d.Compose((*vec3d.T)(t.Translate), (*quatd.T)(t.Rotation), (*vec3d.T)(t.Scale))
 }

@@ -17,14 +17,14 @@ type Catenary struct {
 	Direction [3]float64           `json:"direction"`
 }
 
-func CatenaryUnMarshal(js []byte) (*Catenary, error) {
+func CatenaryUnmarshal(js []byte) (*Catenary, error) {
 	catenary := Catenary{}
 	e := json.Unmarshal(js, &catenary)
 	if e != nil {
 		return nil, e
 	}
 	if catenary.Profile != nil {
-		prof, er := profile.ProfileUnMarshal(catenary.Profile)
+		prof, er := profile.ProfileUnmarshal(catenary.Profile)
 		if er != nil {
 			return nil, er
 		}

@@ -18,7 +18,7 @@ func NewBorehole() *TopoBorehole {
 	return t
 }
 
-func BoreholeUnMarshal(js []byte) (*TopoBorehole, error) {
+func BoreholeUnmarshal(js []byte) (*TopoBorehole, error) {
 	mp := TopoBorehole{}
 	e := json.Unmarshal(js, &mp)
 	if e != nil {

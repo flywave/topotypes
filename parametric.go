@@ -7,6 +7,7 @@ import (
 	"github.com/flywave/topotypes/base"
 	"github.com/flywave/topotypes/gim"
 	"github.com/flywave/topotypes/hydropower"
+	"github.com/flywave/topotypes/material"
 	"github.com/flywave/topotypes/topo4d"
 )
 
@@ -50,11 +51,11 @@ func (t *TopoParametric) GetGenerate() *topo4d.Generate4D {
 	return t.Generate
 }
 
-func (t *TopoParametric) GetMaterials() map[string]*TopoMaterial {
+func (t *TopoParametric) GetMaterials() map[string]*material.Material {
 	if t.Materials == nil {
-		return map[string]*TopoMaterial{}
+		return map[string]*material.Material{}
 	}
-	return (map[string]*TopoMaterial)(t.Materials)
+	return t.Materials
 }
 
 func (t *TopoParametric) GetMaterialIds() []string {
@@ -82,11 +83,11 @@ func (t *TopoParametric) SetTopoWork(work *topo4d.TopoWork) {
 func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 	stu := struct {
 		Topos
-		Materials  map[string]*TopoMaterial `json:"materials,omitempty"`
-		MaterialId string                   `json:"mtl_id,omitempty"`
-		Shape      map[string]interface{}   `json:"shape,omitempty"`
-		Work       *topo4d.TopoWork         `json:"works,omitempty"`
-		Generate   *topo4d.Generate4D       `json:"generate,omitempty"`
+		Materials  map[string]*material.Material `json:"materials,omitempty"`
+		MaterialId string                        `json:"mtl_id,omitempty"`
+		Shape      map[string]interface{}        `json:"shape,omitempty"`
+		Work       *topo4d.TopoWork              `json:"works,omitempty"`
+		Generate   *topo4d.Generate4D            `json:"generate,omitempty"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

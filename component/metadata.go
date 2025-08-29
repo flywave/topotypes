@@ -19,33 +19,33 @@ type Metadata struct {
 	Components  []Component `json:"components,omitempty"`
 }
 
-func MetadataUnMarshal(js []byte) (*Metadata, error) {
+func MetadataUnmarshal(js []byte) (*Metadata, error) {
 	base := Metadata{}
 	e := json.Unmarshal(js, &base)
 	if e != nil {
 		return nil, e
 	}
-	base.Components, e = ComponentsUnMarshal(base.Components)
+	base.Components, e = ComponentsUnmarshal(base.Components)
 	if e != nil {
 		return nil, e
 	}
 	return &base, nil
 }
 
-func ComponentsUnMarshalMetadata(js []byte) (*Metadata, error) {
+func ComponentsUnmarshalMetadata(js []byte) (*Metadata, error) {
 	var cmps []Component
 	err := json.Unmarshal(js, &cmps)
 	if err != nil {
 		return nil, err
 	}
-	cmps, err = ComponentsUnMarshal(cmps)
+	cmps, err = ComponentsUnmarshal(cmps)
 	if err != nil {
 		return nil, err
 	}
 	return &Metadata{Components: cmps}, nil
 }
 
-func ComponentsUnMarshal(components []Component) ([]Component, error) {
+func ComponentsUnmarshal(components []Component) ([]Component, error) {
 	for i := range components {
 		switch pro := components[i].(type) {
 		case map[string]interface{}:
@@ -60,7 +60,7 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 			switch com_t {
 			case COMPONENT_TYPE_SHAPE:
 				var err error
-				c, err = ShapeUnMarshal(js2)
+				c, err = ShapeUnmarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -68,7 +68,7 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				continue
 			case COMPONENT_TYPE_PRISM:
 				var err error
-				c, err = PrismUnMarshal(js2)
+				c, err = PrismUnmarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -76,7 +76,7 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				continue
 			case COMPONENT_TYPE_REVOL:
 				var err error
-				c, err = RevolUnMarshal(js2)
+				c, err = RevolUnmarshal(js2)
 				if err != nil {
 					return nil, err
 				}
@@ -94,7 +94,7 @@ func ComponentsUnMarshal(components []Component) ([]Component, error) {
 				c = &Spec{}
 			case COMPONENT_TYPE_CATENARY:
 				var err error
-				c, err = CatenaryUnMarshal(js2)
+				c, err = CatenaryUnmarshal(js2)
 				if err != nil {
 					return nil, err
 				}

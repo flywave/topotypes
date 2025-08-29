@@ -120,7 +120,7 @@ func NewPolygon() *Polygon {
 	return &t
 }
 
-func ProfileUnMarshal(inter interface{}) (interface{}, error) {
+func ProfileUnmarshal(inter interface{}) (interface{}, error) {
 	switch pro := inter.(type) {
 	case map[string]interface{}:
 		v, ok := pro["type"]
@@ -162,7 +162,7 @@ func ProfileUnMarshal(inter interface{}) (interface{}, error) {
 		var pros []interface{}
 		for _, p := range pro {
 			if p != nil {
-				p, err := ProfileUnMarshal(p)
+				p, err := ProfileUnmarshal(p)
 				if err != nil {
 					return nil, err
 				}

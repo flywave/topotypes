@@ -31,7 +31,7 @@ func (sp *TopoMultiSegmentPipe) GetAnchor() [2]*anchor.TopoAnchor {
 	return sp.Anchors
 }
 
-func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {
+func MultiPipeUnmarshal(js []byte) (*TopoMultiSegmentPipe, error) {
 	mp := TopoMultiSegmentPipe{}
 	e := json.Unmarshal(js, &mp)
 	if e != nil {
@@ -40,7 +40,7 @@ func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {
 
 	var pros []TopoProfile
 	for _, prof := range mp.Profiles {
-		p, er := ProfileUnMarshal(prof)
+		p, er := ProfileUnmarshal(prof)
 		if er != nil {
 			return nil, er
 		}
@@ -49,7 +49,7 @@ func MultiPipeUnMarshal(js []byte) (*TopoMultiSegmentPipe, error) {
 	mp.Profiles = pros
 	var inpros []TopoProfile
 	for _, prof := range mp.InnerProfiles {
-		p, er := ProfileUnMarshal(prof)
+		p, er := ProfileUnmarshal(prof)
 		if er != nil {
 			return nil, er
 		}

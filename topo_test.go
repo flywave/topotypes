@@ -7,5 +7,5 @@ import (
 
 func TestMk(t *testing.T) {
 	bt, _ := ioutil.ReadFile("tests/cat.json")
-	CatenaryUnMarshal(bt)
+	CatenaryUnmarshal(bt)
 }

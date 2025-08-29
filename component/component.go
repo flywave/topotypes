@@ -66,6 +66,10 @@ func StringToComponentType(tp string) int {
 type Component interface {
 }
 
+type TextureComponent interface {
+	GetTexture() []string
+}
+
 type BaseComponent struct {
 	Id        string `json:"id"`
 	Name      string `json:"name,omitempty"`

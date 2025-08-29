@@ -194,14 +194,14 @@ func NewPipe() *Pipe {
 	return t
 }
 
-func PipeUnMarshal(js []byte) (*Pipe, error) {
+func PipeUnmarshal(js []byte) (*Pipe, error) {
 	pipe := Pipe{}
 	e := json.Unmarshal(js, &pipe)
 	if e != nil {
 		return nil, e
 	}
 	if pipe.Profile != nil {
-		prof, er := profile.ProfileUnMarshal(pipe.Profile)
+		prof, er := profile.ProfileUnmarshal(pipe.Profile)
 		if er != nil {
 			return nil, er
 		}
@@ -228,7 +228,7 @@ func NewWedge() *Wedge {
 	return &Wedge{Type: ShapeTypeToString(MODE_WEDGE)}
 }
 
-func ShapeUnMarshal(inter interface{}) (interface{}, string, error) {
+func ShapeUnmarshal(inter interface{}) (interface{}, string, error) {
 	switch pro := inter.(type) {
 	case map[string]interface{}:
 		v, ok := pro["type"]
@@ -258,7 +258,7 @@ func ShapeUnMarshal(inter interface{}) (interface{}, string, error) {
 			inter = NewRevolution()
 		case MODE_PIPE:
 			var err error
-			if inter, err = PipeUnMarshal(js); err != nil {
+			if inter, err = PipeUnmarshal(js); err != nil {
 				return nil, "", err
 			}
 			return inter, ShapeTypeToString(pro_t), nil

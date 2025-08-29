@@ -15,14 +15,14 @@ type Revol struct {
 	Materials []*material.Material `json:"materials,omitempty"`
 }
 
-func RevolUnMarshal(js []byte) (*Revol, error) {
+func RevolUnmarshal(js []byte) (*Revol, error) {
 	r := Revol{}
 	e := json.Unmarshal(js, &r)
 	if e != nil {
 		return nil, e
 	}
 	if r.Profile != nil {
-		prof, er := profile.ProfileUnMarshal(r.Profile)
+		prof, er := profile.ProfileUnmarshal(r.Profile)
 		if er != nil {
 			return nil, er
 		}

@@ -12,7 +12,7 @@ type TopoPrism struct {
 	TopoParametric
 	Profile   interface{} `json:"profile,omitempty"`
 	Direction [3]float64  `json:"direction"`
-	Height    float64     `json:"height`
+	Height    float64     `json:"height"`
 }
 
 func NewTopoPrism() *TopoPrism {
@@ -29,14 +29,14 @@ func (sp *TopoPrism) IsTopoBound() bool {
 	return true
 }
 
-func PrismUnMarshal(js []byte) (*TopoPrism, error) {
+func PrismUnmarshal(js []byte) (*TopoPrism, error) {
 	pris := TopoPrism{}
 	e := json.Unmarshal(js, &pris)
 	if e != nil {
 		return nil, e
 	}
 	if pris.Profile != nil {
-		prof, er := ProfileUnMarshal(pris.Profile)
+		prof, er := ProfileUnmarshal(pris.Profile)
 		if er != nil {
 			return nil, er
 		}
@@ -52,7 +52,7 @@ func (t *TopoPrism) UnmarshalJSON(data []byte) error {
 		MaterialId string          `json:"mtl_id,omitempty"`
 		Profile    interface{}     `json:"profile,omitempty"`
 		Direction  [3]float64      `json:"direction"`
-		Height     float64         `json:"height`
+		Height     float64         `json:"height"`
 	}{}
 
 	if err := json.Unmarshal(data, &stu); err != nil {

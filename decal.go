@@ -1,5 +1,7 @@
 package topotypes
 
+import "github.com/flywave/topotypes/material"
+
 type TopoDecalRef struct {
 	Ref string `json:"ref"`
 }
@@ -19,9 +21,10 @@ func NewTopoDecal() *TopoDecal {
 	return t
 }
 
-func (b *TopoDecal) GetMaterials() map[string]*TopoMaterial {
-	return map[string]*TopoMaterial{}
+func (b *TopoDecal) GetMaterials() map[string]*material.Material {
+	return map[string]*material.Material{}
 }
+
 func (b *TopoDecal) GetMaterialIds() []string {
 	mtlids := []string{}
 	return mtlids

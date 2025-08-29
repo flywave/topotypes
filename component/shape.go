@@ -14,14 +14,14 @@ type Shape struct {
 	Materials  []*material.Material `json:"materials,omitempty"`
 }
 
-func ShapeUnMarshal(js []byte) (*Shape, error) {
+func ShapeUnmarshal(js []byte) (*Shape, error) {
 	r := Shape{}
 	e := json.Unmarshal(js, &r)
 	if e != nil {
 		return nil, e
 	}
 	if r.ShapeModel != nil {
-		shp, tp, er := shape.ShapeUnMarshal(r.ShapeModel)
+		shp, tp, er := shape.ShapeUnmarshal(r.ShapeModel)
 		if er != nil {
 			return nil, er
 		}

@@ -43,14 +43,14 @@ func (sp *TopoPipe) GetProfile() TopoProfile {
 	return sp.Profile
 }
 
-func PipeUnMarshal(js []byte) (*TopoPipe, error) {
+func PipeUnmarshal(js []byte) (*TopoPipe, error) {
 	pipe := TopoPipe{}
 	e := json.Unmarshal(js, &pipe)
 	if e != nil {
 		return nil, e
 	}
 	if pipe.Profile != nil {
-		prof, er := ProfileUnMarshal(pipe.Profile)
+		prof, er := ProfileUnmarshal(pipe.Profile)
 		if er != nil {
 			return nil, er
 		}
@@ -58,7 +58,7 @@ func PipeUnMarshal(js []byte) (*TopoPipe, error) {
 	}
 
 	if pipe.InnerProfile != nil {
-		prof, er := ProfileUnMarshal(pipe.InnerProfile)
+		prof, er := ProfileUnmarshal(pipe.InnerProfile)
 		if er != nil {
 			return nil, er
 		}
