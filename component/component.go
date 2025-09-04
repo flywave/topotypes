@@ -12,7 +12,7 @@ const (
 	COMPONENT_TYPE_CATENARY
 	COMPONENT_TYPE_DECAL
 	COMPONENT_TYPE_BOARD
-	COMPONENT_TYPE_SPEC
+	COMPONENT_TYPE_PARAMETRIC
 )
 
 func ComponentTypeToString(tp int) string {
@@ -33,8 +33,8 @@ func ComponentTypeToString(tp int) string {
 		return "decal"
 	case COMPONENT_TYPE_BOARD:
 		return "board"
-	case COMPONENT_TYPE_SPEC:
-		return "spec"
+	case COMPONENT_TYPE_PARAMETRIC:
+		return "parametric"
 	default:
 		return ""
 	}
@@ -57,8 +57,8 @@ func StringToComponentType(tp string) int {
 		return COMPONENT_TYPE_DECAL
 	} else if utils.StrEquals(tp, "board") {
 		return COMPONENT_TYPE_BOARD
-	} else if utils.StrEquals(tp, "spec") {
-		return COMPONENT_TYPE_SPEC
+	} else if utils.StrEquals(tp, "parametric") {
+		return COMPONENT_TYPE_PARAMETRIC
 	}
 	return COMPONENT_TYPE_NONE
 }

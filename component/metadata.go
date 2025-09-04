@@ -90,8 +90,8 @@ func ComponentsUnmarshal(components []Component) ([]Component, error) {
 				c = &Decal{}
 			case COMPONENT_TYPE_BOARD:
 				c = &Board{}
-			case COMPONENT_TYPE_SPEC:
-				c = &Spec{}
+			case COMPONENT_TYPE_PARAMETRIC:
+				c = &Parametric{}
 			case COMPONENT_TYPE_CATENARY:
 				var err error
 				c, err = CatenaryUnmarshal(js2)
