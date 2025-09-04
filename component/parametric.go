@@ -3,6 +3,8 @@ package component
 import (
 	"encoding/json"
 
+	geom "github.com/flywave/go-geom"
+
 	"github.com/flywave/topotypes/material"
 )
 
@@ -14,6 +16,7 @@ type Parametric struct {
 	BaseComponent
 	Materials  map[string]*material.Material `json:"materials,omitempty"`
 	MaterialId string                        `json:"mtl_id,omitempty"`
+	Geom       geom.Geometry                 `json:"geom,omitempty"`
 	Shape      ParametricShape               `json:"shape,omitempty"`
 }
 

@@ -1,4 +1,14 @@
+github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/flywave/go-geom v0.0.0-20250812085320-09c966d3245c h1:SBICfMt2fu/xld4DR5e6mD5Z0zhYDUUrWNk43g3KLuA=
+github.com/flywave/go-geom v0.0.0-20250812085320-09c966d3245c/go.mod h1:EAH4/X0Z0EVeNHeAkNMZpG5JvmrbDwiCMWM2qikdlSI=
 github.com/flywave/go-mst v0.0.0-20210524052845-1ca7cc6c246f h1:BvZEL12yMzzx1yH7juy+gj5v9ppAhSJmutW3rd9HIrY=
 github.com/flywave/go-mst v0.0.0-20210524052845-1ca7cc6c246f/go.mod h1:mdJ5VMpy1BtnDy0u/UL9w2AURmgCGTnxpoJ4uKKdUSA=
-github.com/flywave/go3d v0.0.0-20220728100441-e65a6f6f7288 h1:/SaifXhSj3ivL+5Yh22Dah0hWu77YYZr3UrJy8QRg78=
-github.com/flywave/go3d v0.0.0-20220728100441-e65a6f6f7288/go.mod h1:bvblxPT+cF0zgDi71CuusPPWCwqU0SikE9ySl2NzeQw=
+github.com/flywave/go3d v0.0.0-20250314015505-bf0fda02e242 h1:XU3CfYUCsQoAlTGMmbIWwUc7h4oPP6f7BjzffaObwP8=
+github.com/flywave/go3d v0.0.0-20250314015505-bf0fda02e242/go.mod h1:bvblxPT+cF0zgDi71CuusPPWCwqU0SikE9ySl2NzeQw=
+github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
+github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
+gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
