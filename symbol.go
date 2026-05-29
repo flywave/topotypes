@@ -7,10 +7,10 @@ import (
 
 type TopoSymbol struct {
 	Topos
-	Model              string                                      `json:"model"`
-	Metadata           *component.Metadata                         `json:"metadata,omitempty"`
-	Matrixs            map[int][16]float64                         `json:"matrixs,omitempty"`
-	InstanceJointState map[int]map[string]joint.JointInstanceState `json:"instanceJointStates,omitempty"`
+	Model    string                                      `json:"model"`
+	Metadata *component.Metadata                         `json:"metadata,omitempty"`
+	Matrixs  map[int][16]float64                         `json:"matrixs,omitempty"`
+	States   map[int]map[string]joint.JointInstanceState `json:"states,omitempty"`
 }
 
 func (sp *TopoSymbol) GetModel() string {
