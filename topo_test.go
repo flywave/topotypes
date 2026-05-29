@@ -1,11 +1,11 @@
 package topotypes
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestMk(t *testing.T) {
-	bt, _ := ioutil.ReadFile("tests/cat.json")
+	bt, _ := os.ReadFile("tests/cat.json")
 	CatenaryUnmarshal(bt)
 }
