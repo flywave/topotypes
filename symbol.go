@@ -1,12 +1,16 @@
 package topotypes
 
-import "github.com/flywave/topotypes/component"
+import (
+	"github.com/flywave/topotypes/component"
+	"github.com/flywave/topotypes/joint"
+)
 
 type TopoSymbol struct {
 	Topos
-	Model    string               `json:"model"`
-	Metadata *component.Metadata  `json:"metadata,omitempty"`
-	Matrixs  map[int][16]float64  `json:"matrixs,omitempty"`
+	Model              string                                      `json:"model"`
+	Metadata           *component.Metadata                         `json:"metadata,omitempty"`
+	Matrixs            map[int][16]float64                         `json:"matrixs,omitempty"`
+	InstanceJointState map[int]map[string]joint.JointInstanceState `json:"instanceJointStates,omitempty"`
 }
 
 func (sp *TopoSymbol) GetModel() string {
@@ -25,10 +29,10 @@ func NewTopoSymbol() *TopoSymbol {
 
 type TopoSymbolPath struct {
 	Topos
-	Model    string               `json:"model"`
-	Metadata *component.Metadata  `json:"metadata,omitempty"`
-	Mode     string               `json:"mode"`
-	Density  float64              `json:"density"`
+	Model    string              `json:"model"`
+	Metadata *component.Metadata `json:"metadata,omitempty"`
+	Mode     string              `json:"mode"`
+	Density  float64             `json:"density"`
 }
 
 func (sp *TopoSymbolPath) GetModel() string {
@@ -47,10 +51,10 @@ func NewTopoSymbolPath(md int) *TopoSymbolPath {
 
 type TopoSymbolSurface struct {
 	Topos
-	Model    string               `json:"model"`
-	Metadata *component.Metadata  `json:"metadata,omitempty"`
-	Mode     string               `json:"mode"`
-	Cell     [2]float64           `json:"cell"`
+	Model    string              `json:"model"`
+	Metadata *component.Metadata `json:"metadata,omitempty"`
+	Mode     string              `json:"mode"`
+	Cell     [2]float64          `json:"cell"`
 }
 
 func NewTopoSymbolSurface(md int) *TopoSymbolSurface {

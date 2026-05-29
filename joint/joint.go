@@ -1,6 +1,7 @@
 package joint
 
 import (
+	"fmt"
 	"math"
 
 	mat4d "github.com/flywave/go3d/float64/mat4"
@@ -101,7 +102,20 @@ type TopoJoint struct {
 	SecondaryAxis *[3]float64           `json:"secondaryAxis,omitempty"`
 	Limits        *TopoJointLimits      `json:"limits,omitempty"`
 	Path          *TopoJointPath        `json:"path,omitempty"`
-	Value         *float64              `json:"value,omitempty"`
+	// Value is the single-DOF physical value (radians for rotary, meters for prismatic).
+	// For 1-DOF joints (FIXED, REVOLUTE, PRISMATIC, CURVE). Superseded by Values when both are set.
+	Value  *float64 `json:"value,omitempty"`
+	// Values holds per-DOF physical values for multi-DOF joints (CYLINDRICAL, PLANAR, SPHERICAL, UNIVERSAL).
+	// Takes priority over Value in Compute(). Length should match the joint type's DOF count.
+	Values []float64 `json:"values,omitempty"`
+}
+
+// JointInstanceState holds per-instance state for a single joint.
+// Either Ratio (normalized [0,1], all DOFs proportional) or Values
+// (independent physical DOF values) is used; Ratio takes precedence.
+type JointInstanceState struct {
+	Ratio  *float64  `json:"ratio,omitempty"`
+	Values []float64 `json:"values,omitempty"`
 }
 
 func NewTopoJoint() *TopoJoint {
@@ -115,12 +129,12 @@ type TopoJointRef struct {
 	Ref string `json:"ref"`
 }
 
-// Compute returns the child's local 4x4 transform using the joint's stored Value.
-//
-// For 1-DOF joints (REVOLUTE, PRISMATIC, CURVE, FIXED) the stored Value is used.
-// For multi-DOF joints (CYLINDRICAL, PLANAR, SPHERICAL, UNIVERSAL) secondary DOFs
-// default to 0. Use ComputeWith for full control.
+// Compute returns the child's local 4x4 transform using the joint's stored
+// Values (multi-DOF) or Value (1-DOF), falling back to zero defaults.
 func (j *TopoJoint) Compute() *mat4d.T {
+	if len(j.Values) > 0 {
+		return j.ComputeWith(j.Values)
+	}
 	if j.Value != nil {
 		return j.ComputeWith([]float64{*j.Value})
 	}
@@ -248,6 +262,254 @@ func (j *TopoJoint) ComputeWith(values []float64) *mat4d.T {
 	}
 }
 
+// dofCount returns the number of DOFs for this joint type.
+func (j *TopoJoint) dofCount() int {
+	switch j.Type {
+	case TopoJointFixed:
+		return 0
+	case TopoJointRevolute, TopoJointPrismatic, TopoJointCurve:
+		return 1
+	case TopoJointCylindrical, TopoJointUniversal:
+		return 2
+	case TopoJointPlanar, TopoJointSpherical:
+		return 3
+	}
+	return 0
+}
+
+// ValidateValues checks that Values length matches the joint type's DOF count.
+// Returns nil when Values is nil or length is correct.
+func (j *TopoJoint) ValidateValues() error {
+	if len(j.Values) == 0 {
+		return nil
+	}
+	n := j.dofCount()
+	if len(j.Values) != n {
+		return fmt.Errorf("joint %q: type %s expects %d DOF values, got %d", j.Id, j.Type, n, len(j.Values))
+	}
+	return nil
+}
+
+// closestAxis returns 0 (X), 1 (Y), or 2 (Z) — the cardinal axis that v is closest to.
+func closestAxis(v [3]float64) int {
+	abs := [3]float64{math.Abs(v[0]), math.Abs(v[1]), math.Abs(v[2])}
+	if abs[0] >= abs[1] && abs[0] >= abs[2] {
+		return 0
+	}
+	if abs[1] >= abs[0] && abs[1] >= abs[2] {
+		return 1
+	}
+	return 2
+}
+
+var axisLimitNames = [3]string{"RotateX", "RotateY", "RotateZ"}
+var transLimitNames = [3]string{"TranslateX", "TranslateY", "TranslateZ"}
+
+// pickLimit returns the limit axis from lim matching the given cardinal axis index,
+// or nil if the limit is not set.
+func pickLimit(lim *TopoJointLimits, axisIdx int, rot bool) *TopoJointLimitAxis {
+	if lim == nil {
+		return nil
+	}
+	if rot {
+		switch axisIdx {
+		case 0:
+			return lim.RotateX
+		case 1:
+			return lim.RotateY
+		case 2:
+			return lim.RotateZ
+		}
+	} else {
+		switch axisIdx {
+		case 0:
+			return lim.TranslateX
+		case 1:
+			return lim.TranslateY
+		case 2:
+			return lim.TranslateZ
+		}
+	}
+	return nil
+}
+
+// defaultLimit returns the default [min, max] range for a joint type when no Limits are set.
+// For rotary DOFs the range is [0, 2π], for linear DOFs [0, 1].
+func (j *TopoJoint) defaultRange() (min, max []float64) {
+	switch j.Type {
+	case TopoJointFixed:
+		return nil, nil
+	case TopoJointRevolute:
+		return []float64{0}, []float64{2 * math.Pi}
+	case TopoJointPrismatic:
+		return []float64{0}, []float64{1}
+	case TopoJointCylindrical:
+		return []float64{0, 0}, []float64{2 * math.Pi, 1}
+	case TopoJointPlanar:
+		return []float64{0, 0, 0}, []float64{1, 1, 2 * math.Pi}
+	case TopoJointSpherical:
+		return []float64{0, 0, 0}, []float64{2 * math.Pi, 2 * math.Pi, 2 * math.Pi}
+	case TopoJointUniversal:
+		return []float64{0, 0}, []float64{2 * math.Pi, 2 * math.Pi}
+	case TopoJointCurve:
+		return []float64{0}, []float64{1}
+	}
+	return nil, nil
+}
+
+// dofRanges returns the per-DOF [min, max] ranges for this joint.
+// Uses Limits when set, matching the limit axis to the closest cardinal axis of j.Axis.
+// Falls back to defaultRange when Limits are nil.
+func (j *TopoJoint) dofRanges() (min, max []float64) {
+	defMin, defMax := j.defaultRange()
+	lim := j.Limits
+
+	pick := func(axis *TopoJointLimitAxis, def float64) float64 {
+		if axis != nil && axis.Min != nil {
+			return *axis.Min
+		}
+		return def
+	}
+	pickMax := func(axis *TopoJointLimitAxis, def float64) float64 {
+		if axis != nil && axis.Max != nil {
+			return *axis.Max
+		}
+		return def
+	}
+
+	// Determine which cardinal axis this joint's Axis is closest to, for limit matching.
+	axIdx := closestAxis(j.Axis)
+
+	switch j.Type {
+	case TopoJointFixed:
+		return nil, nil
+
+	case TopoJointRevolute:
+		l := pickLimit(lim, axIdx, true)
+		return []float64{pick(l, defMin[0])}, []float64{pickMax(l, defMax[0])}
+
+	case TopoJointPrismatic:
+		l := pickLimit(lim, axIdx, false)
+		return []float64{pick(l, defMin[0])}, []float64{pickMax(l, defMax[0])}
+
+	case TopoJointCylindrical:
+		lr := pickLimit(lim, axIdx, true)
+		lt := pickLimit(lim, axIdx, false)
+		return []float64{pick(lr, defMin[0]), pick(lt, defMin[1])},
+			[]float64{pickMax(lr, defMax[0]), pickMax(lt, defMax[1])}
+
+	case TopoJointPlanar:
+		// For PLANAR, the normal is j.Axis. Find two perpendicular in-plane axes.
+		// We map tx→Translate of in-plane axis 0, ty→Translate of in-plane axis 1,
+		// rot→Rotate of the normal axis.
+		normIdx := -1
+		nv := (*vec3d.T)(&j.Axis)
+		if !nv.IsZero() {
+			normIdx = closestAxis(j.Axis)
+		}
+		inPlane0, inPlane1 := (normIdx+1)%3, (normIdx+2)%3
+		l0 := pickLimit(lim, inPlane0, false)
+		l1 := pickLimit(lim, inPlane1, false)
+		lr := pickLimit(lim, normIdx, true)
+		return []float64{pick(l0, defMin[0]), pick(l1, defMin[1]), pick(lr, defMin[2])},
+			[]float64{pickMax(l0, defMax[0]), pickMax(l1, defMax[1]), pickMax(lr, defMax[2])}
+
+	case TopoJointSpherical:
+		l0 := pickLimit(lim, 0, true)
+		l1 := pickLimit(lim, 1, true)
+		l2 := pickLimit(lim, 2, true)
+		return []float64{pick(l0, defMin[0]), pick(l1, defMin[1]), pick(l2, defMin[2])},
+			[]float64{pickMax(l0, defMax[0]), pickMax(l1, defMax[1]), pickMax(l2, defMax[2])}
+
+	case TopoJointUniversal:
+		a1 := j.Axis
+		idx1 := closestAxis(a1)
+		idx2 := 0
+		if j.SecondaryAxis != nil {
+			idx2 = closestAxis(*j.SecondaryAxis)
+		} else {
+			idx2 = (idx1 + 1) % 3
+		}
+		l1 := pickLimit(lim, idx1, true)
+		l2 := pickLimit(lim, idx2, true)
+		return []float64{pick(l1, defMin[0]), pick(l2, defMin[1])},
+			[]float64{pickMax(l1, defMax[0]), pickMax(l2, defMax[1])}
+
+	case TopoJointCurve:
+		l := pickLimit(lim, axIdx, false)
+		return []float64{pick(l, defMin[0])}, []float64{pickMax(l, defMax[0])}
+	}
+	return nil, nil
+}
+
+// ComputeNormalized computes the child's local 4x4 transform from a ratio ∈ [0, 1].
+// Each DOF value is mapped as: physical = min + ratio * (max - min).
+// When Limits are not set, sensible defaults are used:
+//   rotary DOFs → [0, 2π], linear DOFs → [0, 1].
+func (j *TopoJoint) ComputeNormalized(ratio float64) *mat4d.T {
+	if ratio < 0 {
+		ratio = 0
+	}
+	if ratio > 1 {
+		ratio = 1
+	}
+	mn, mx := j.dofRanges()
+	vals := make([]float64, len(mn))
+	for i := range vals {
+		vals[i] = mn[i] + ratio*(mx[i]-mn[i])
+	}
+	return j.ComputeWith(vals)
+}
+
+// ResolveValues returns the effective DOF values for this joint.
+// Priority: instanceState → joint.Values → joint.Value → default minimums.
+func (j *TopoJoint) ResolveValues(instanceState *JointInstanceState) []float64 {
+	if instanceState != nil {
+		if instanceState.Values != nil {
+			return instanceState.Values
+		}
+		if instanceState.Ratio != nil {
+			mn, mx := j.dofRanges()
+			vals := make([]float64, len(mn))
+			r := *instanceState.Ratio
+			if r < 0 {
+				r = 0
+			}
+			if r > 1 {
+				r = 1
+			}
+			for i := range vals {
+				vals[i] = mn[i] + r*(mx[i]-mn[i])
+			}
+			return vals
+		}
+	}
+	if len(j.Values) > 0 {
+		return j.Values
+	}
+	if j.Value != nil {
+		return []float64{*j.Value}
+	}
+	mn, _ := j.dofRanges()
+	out := make([]float64, len(mn))
+	copy(out, mn)
+	return out
+}
+
+// InstanceValue resolves the effective DOF values for this joint given
+// per-instance overrides. The returned slice contains physical DOF values.
+func (j *TopoJoint) InstanceValue(states map[int]map[string]JointInstanceState, idx int) []float64 {
+	var state *JointInstanceState
+	if states != nil {
+		if m, ok := states[idx]; ok {
+			if s, ok := m[j.Id]; ok {
+				state = &s
+			}
+		}
+	}
+	return j.ResolveValues(state)
+}
+
 // Validate reports whether the joint's stored Value is within its limit constraints.
 // Returns true for joint types that do not define limits.
 func (j *TopoJoint) Validate() bool {
@@ -285,109 +547,62 @@ func (j *TopoJoint) ValidateWith(values []float64) bool {
 		return true
 	}
 
+	axIdx := closestAxis(j.Axis)
+
 	switch j.Type {
 	case TopoJointFixed:
 		return true
 
 	case TopoJointRevolute:
-		val := v(0, 0)
-		if limits.RotateX != nil && !check(limits.RotateX, val) {
-			return false
-		}
-		if limits.RotateY != nil && !check(limits.RotateY, val) {
-			return false
-		}
-		if limits.RotateZ != nil && !check(limits.RotateZ, val) {
-			return false
-		}
-		return true
+		l := pickLimit(limits, axIdx, true)
+		return check(l, v(0, 0))
 
 	case TopoJointPrismatic:
-		val := v(0, 0)
-		if limits.TranslateX != nil && !check(limits.TranslateX, val) {
-			return false
-		}
-		if limits.TranslateY != nil && !check(limits.TranslateY, val) {
-			return false
-		}
-		if limits.TranslateZ != nil && !check(limits.TranslateZ, val) {
-			return false
-		}
-		return true
+		l := pickLimit(limits, axIdx, false)
+		return check(l, v(0, 0))
 
 	case TopoJointCylindrical:
-		rot := v(0, 0)
-		trans := v(1, 0)
-		if limits.RotateX != nil && !check(limits.RotateX, rot) {
-			return false
-		}
-		if limits.RotateY != nil && !check(limits.RotateY, rot) {
-			return false
-		}
-		if limits.RotateZ != nil && !check(limits.RotateZ, rot) {
-			return false
-		}
-		if limits.TranslateX != nil && !check(limits.TranslateX, trans) {
-			return false
-		}
-		if limits.TranslateY != nil && !check(limits.TranslateY, trans) {
-			return false
-		}
-		if limits.TranslateZ != nil && !check(limits.TranslateZ, trans) {
-			return false
-		}
-		return true
+		lr := pickLimit(limits, axIdx, true)
+		lt := pickLimit(limits, axIdx, false)
+		return check(lr, v(0, 0)) && check(lt, v(1, 0))
 
 	case TopoJointPlanar:
-		if limits.TranslateX != nil && !check(limits.TranslateX, v(0, 0)) {
-			return false
+		normIdx := -1
+		nv := (*vec3d.T)(&j.Axis)
+		if !nv.IsZero() {
+			normIdx = closestAxis(j.Axis)
 		}
-		if limits.TranslateY != nil && !check(limits.TranslateY, v(1, 0)) {
-			return false
-		}
-		if limits.RotateZ != nil && !check(limits.RotateZ, v(2, 0)) {
-			return false
-		}
-		return true
+		in0, in1 := (normIdx+1)%3, (normIdx+2)%3
+		l0 := pickLimit(limits, in0, false)
+		l1 := pickLimit(limits, in1, false)
+		lr := pickLimit(limits, normIdx, true)
+		return check(l0, v(0, 0)) && check(l1, v(1, 0)) && check(lr, v(2, 0))
 
 	case TopoJointSpherical:
-		if limits.RotateX != nil && !check(limits.RotateX, v(0, 0)) {
-			return false
-		}
-		if limits.RotateY != nil && !check(limits.RotateY, v(1, 0)) {
-			return false
-		}
-		if limits.RotateZ != nil && !check(limits.RotateZ, v(2, 0)) {
-			return false
-		}
-		return true
+		l0 := pickLimit(limits, 0, true)
+		l1 := pickLimit(limits, 1, true)
+		l2 := pickLimit(limits, 2, true)
+		return check(l0, v(0, 0)) && check(l1, v(1, 0)) && check(l2, v(2, 0))
 
 	case TopoJointUniversal:
-		if limits.RotateX != nil && !check(limits.RotateX, v(0, 0)) {
-			return false
+		idx1 := closestAxis(j.Axis)
+		idx2 := 0
+		if j.SecondaryAxis != nil {
+			idx2 = closestAxis(*j.SecondaryAxis)
+		} else {
+			idx2 = (idx1 + 1) % 3
 		}
-		if limits.RotateY != nil && !check(limits.RotateY, v(1, 0)) {
-			return false
-		}
-		return true
+		l1 := pickLimit(limits, idx1, true)
+		l2 := pickLimit(limits, idx2, true)
+		return check(l1, v(0, 0)) && check(l2, v(1, 0))
 
 	case TopoJointCurve:
-		if limits.TranslateX != nil || limits.TranslateY != nil || limits.TranslateZ != nil {
-			t := v(0, 0)
-			if t < 0 || t > 1 {
-				return false
-			}
-			if limits.TranslateX != nil && !check(limits.TranslateX, t) {
-				return false
-			}
-			if limits.TranslateY != nil && !check(limits.TranslateY, t) {
-				return false
-			}
-			if limits.TranslateZ != nil && !check(limits.TranslateZ, t) {
-				return false
-			}
+		l := pickLimit(limits, axIdx, false)
+		t := v(0, 0)
+		if t < 0 || t > 1 {
+			return false
 		}
-		return true
+		return check(l, t)
 	}
 	return true
 }

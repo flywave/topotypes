@@ -1,6 +1,7 @@
 package joint
 
 import (
+	"encoding/json"
 	"math"
 	"testing"
 
@@ -483,16 +484,634 @@ func TestValidateNilLimits(t *testing.T) {
 }
 
 func TestValidateWithPartialLimits(t *testing.T) {
-	j := revoluteJoint()
+	j := revoluteJoint() // Axis=(0,0,1) → Z
 	j.Limits = &TopoJointLimits{
-		RotateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(1)},
+		RotateZ: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(1)},
 	}
-	// when only RotateX has limits, value must satisfy it
 	if j.ValidateWith([]float64{100}) {
-		t.Error("should fail: RotateX limit [0,1] violated by 100")
+		t.Error("should fail: RotateZ limit [0,1] violated by 100")
 	}
 	if !j.ValidateWith([]float64{0.5}) {
 		t.Error("should pass: 0.5 within [0,1]")
+	}
+}
+
+func TestComputeNormalizedRevolute(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointRevolute,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 0, 1},
+	}
+	// ratio=0 → angle=0 → (1,0,0) stays (1,0,0)
+	mat0 := j.ComputeNormalized(0)
+	v := vec3d.T{1, 0, 0}
+	rv0 := mat0.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv0), [3]float64{1, 0, 0})
+
+	// ratio=0.5 → angle=π → (1,0,0) → (-1,0,0)
+	mat05 := j.ComputeNormalized(0.5)
+	rv05 := mat05.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv05), [3]float64{-1, 0, 0})
+
+	// ratio=1 → angle=2π → (1,0,0) → (1,0,0)
+	mat1 := j.ComputeNormalized(1)
+	rv1 := mat1.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv1), [3]float64{1, 0, 0})
+}
+
+func TestComputeNormalizedRevoluteWithLimits(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointRevolute,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 0, 1},
+		Limits: &TopoJointLimits{
+			RotateZ: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	// ratio=0 → 0, ratio=0.5 → π/2, ratio=1 → π
+	v := vec3d.T{1, 0, 0}
+	mat := j.ComputeNormalized(0.5)
+	rv := mat.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv), [3]float64{0, 1, 0})
+
+	mat2 := j.ComputeNormalized(1)
+	rv2 := mat2.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv2), [3]float64{-1, 0, 0})
+}
+
+func TestComputeNormalizedPrismatic(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointPrismatic,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{1, 0, 0},
+	}
+	// ratio=0 → distance=0, ratio=0.5 → 0.5, ratio=1 → 1 (default range [0,1])
+	mat0 := j.ComputeNormalized(0)
+	almostEq(t, extractTranslate(mat0), [3]float64{0, 0, 0})
+
+	mat05 := j.ComputeNormalized(0.5)
+	almostEq(t, extractTranslate(mat05), [3]float64{0.5, 0, 0})
+
+	mat1 := j.ComputeNormalized(1)
+	almostEq(t, extractTranslate(mat1), [3]float64{1, 0, 0})
+}
+
+func TestComputeNormalizedPrismaticWithLimits(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointPrismatic,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{1, 0, 0},
+		Limits: &TopoJointLimits{
+			TranslateX: &TopoJointLimitAxis{Min: floatPtr(-5), Max: floatPtr(5)},
+		},
+	}
+	// ratio=0 → -5, ratio=0.5 → 0, ratio=1 → 5
+	mat0 := j.ComputeNormalized(0)
+	almostEq(t, extractTranslate(mat0), [3]float64{-5, 0, 0})
+
+	mat05 := j.ComputeNormalized(0.5)
+	almostEq(t, extractTranslate(mat05), [3]float64{0, 0, 0})
+
+	mat1 := j.ComputeNormalized(1)
+	almostEq(t, extractTranslate(mat1), [3]float64{5, 0, 0})
+}
+
+func TestComputeNormalizedCylindrical(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointCylindrical,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 1, 0}, // Y axis
+		Limits: &TopoJointLimits{
+			RotateY:    &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+			TranslateY: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(10)},
+		},
+	}
+	// ratio=0 → angle=0, dist=0
+	mat0 := j.ComputeNormalized(0)
+	almostEq(t, extractTranslate(mat0), [3]float64{0, 0, 0})
+	v := vec3d.T{1, 0, 0}
+	rv0 := mat0.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv0), [3]float64{1, 0, 0})
+
+	// ratio=0.5 → angle=π/2, dist=5
+	mat05 := j.ComputeNormalized(0.5)
+	almostEq(t, extractTranslate(mat05), [3]float64{0, 5, 0})
+	rv05 := mat05.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv05), [3]float64{0, 0, -1})
+}
+
+func TestComputeNormalizedCurve(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointCurve,
+		Origin: [3]float64{0, 0, 0},
+		Path: &TopoJointPath{
+			Type:   TopoJointPathLine,
+			Points: [][3]float64{{0, 0, 0}, {100, 0, 0}},
+		},
+	}
+	// ratio=0 → t=0 → (0,0,0)
+	mat0 := j.ComputeNormalized(0)
+	almostEq(t, extractTranslate(mat0), [3]float64{0, 0, 0})
+	// ratio=0.5 → t=0.5 → (50,0,0)
+	mat05 := j.ComputeNormalized(0.5)
+	almostEq(t, extractTranslate(mat05), [3]float64{50, 0, 0})
+	// ratio=1 → t=1 → (100,0,0)
+	mat1 := j.ComputeNormalized(1)
+	almostEq(t, extractTranslate(mat1), [3]float64{100, 0, 0})
+}
+
+func TestComputeNormalizedClamp(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointRevolute,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 0, 1},
+	}
+	v := vec3d.T{1, 0, 0}
+	matNeg := j.ComputeNormalized(-0.5)
+	// clamped to 0 → angle=0 → no rotation
+	rvNeg := matNeg.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rvNeg), [3]float64{1, 0, 0})
+
+	matOver := j.ComputeNormalized(1.5)
+	// clamped to 1 → angle=2π → full rotation, back to identity
+	rvOver := matOver.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rvOver), [3]float64{1, 0, 0})
+}
+
+func TestComputeNormalizedFixed(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointFixed,
+		Origin: [3]float64{5, 10, 15},
+	}
+	mat := j.ComputeNormalized(0.5)
+	almostEq(t, extractTranslate(mat), [3]float64{5, 10, 15})
+	mat2 := j.ComputeNormalized(0)
+	almostEq(t, extractTranslate(mat2), [3]float64{5, 10, 15})
+}
+
+func TestComputeWithValuesMultiDOF(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointCylindrical,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 1, 0},
+		Values: []float64{math.Pi / 2, 4},
+	}
+	mat := j.Compute()
+	pos := extractTranslate(mat)
+	almostEq(t, pos, [3]float64{0, 4, 0})
+	v := vec3d.T{1, 0, 0}
+	rv := mat.MulVec3W(&v, 0)
+	almostEq(t, [3]float64(rv), [3]float64{0, 0, -1})
+}
+
+func TestComputeValuesPrecedence(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointRevolute,
+		Origin: [3]float64{0, 0, 0},
+		Axis:   [3]float64{0, 0, 1},
+		Value:  floatPtr(0.5),
+		Values: []float64{1.57},
+	}
+	// Values should take priority over Value
+	mat := j.Compute()
+	v := vec3d.T{1, 0, 0}
+	rv := mat.MulVec3W(&v, 0)
+	if math.Abs(rv[0]-math.Cos(1.57)) > 1e-5 || math.Abs(rv[1]-math.Sin(1.57)) > 1e-5 {
+		t.Errorf("expected Values precedence: got %v", rv)
+	}
+}
+
+func TestResolveValuesFromJointValue(t *testing.T) {
+	j := &TopoJoint{
+		Type:  TopoJointRevolute,
+		Value: floatPtr(1.0),
+	}
+	vals := j.ResolveValues(nil)
+	if len(vals) != 1 || vals[0] != 1.0 {
+		t.Errorf("expected [1], got %v", vals)
+	}
+}
+
+func TestResolveValuesFromJointValues(t *testing.T) {
+	j := &TopoJoint{
+		Type:   TopoJointCylindrical,
+		Values: []float64{0.5, 3.0},
+	}
+	vals := j.ResolveValues(nil)
+	if len(vals) != 2 || vals[0] != 0.5 || vals[1] != 3.0 {
+		t.Errorf("expected [0.5, 3], got %v", vals)
+	}
+}
+
+func TestResolveValuesFromInstanceStateRatio(t *testing.T) {
+	j := &TopoJoint{
+		Id:   "test",
+		Type: TopoJointRevolute,
+	}
+	state := &JointInstanceState{Ratio: floatPtr(0.5)}
+	vals := j.ResolveValues(state)
+	// default range [0, 2π], ratio 0.5 → π
+	if len(vals) != 1 || math.Abs(vals[0]-math.Pi) > 1e-10 {
+		t.Errorf("expected [π], got %v", vals)
+	}
+}
+
+func TestResolveValuesFromInstanceStateValues(t *testing.T) {
+	j := &TopoJoint{
+		Id:   "test",
+		Type: TopoJointCylindrical,
+	}
+	state := &JointInstanceState{Values: []float64{1.0, 5.0}}
+	vals := j.ResolveValues(state)
+	if len(vals) != 2 || vals[0] != 1.0 || vals[1] != 5.0 {
+		t.Errorf("expected [1, 5], got %v", vals)
+	}
+}
+
+func TestResolveValuesInstanceOverridesJoint(t *testing.T) {
+	j := &TopoJoint{
+		Id:    "j1",
+		Type:  TopoJointRevolute,
+		Value: floatPtr(999),
+	}
+	state := &JointInstanceState{Ratio: floatPtr(0.25)}
+	vals := j.ResolveValues(state)
+	// instance Ratio overrides joint's Value
+	// default range [0, 2π], ratio 0.25 → π/2
+	if math.Abs(vals[0]-math.Pi/2) > 1e-10 {
+		t.Errorf("expected [π/2], got %v", vals)
+	}
+}
+
+func TestResolveValuesDefaults(t *testing.T) {
+	j := &TopoJoint{Type: TopoJointRevolute}
+	vals := j.ResolveValues(nil)
+	// default minimums: [0]
+	if len(vals) != 1 || vals[0] != 0 {
+		t.Errorf("expected [0], got %v", vals)
+	}
+}
+
+func TestInstanceValueLookup(t *testing.T) {
+	j := &TopoJoint{
+		Id:   "elbow",
+		Type: TopoJointRevolute,
+	}
+	states := map[int]map[string]JointInstanceState{
+		2: {
+			"elbow": {Ratio: floatPtr(0.75)},
+		},
+	}
+	vals := j.InstanceValue(states, 2)
+	if len(vals) != 1 || math.Abs(vals[0]-1.5*math.Pi) > 1e-10 {
+		t.Errorf("instance 2 elbow: expected [1.5π], got %v", vals)
+	}
+	// instance 0 has no override → falls back to joint defaults → [0]
+	vals0 := j.InstanceValue(states, 0)
+	if len(vals0) != 1 || vals0[0] != 0 {
+		t.Errorf("instance 0: expected [0], got %v", vals0)
+	}
+}
+
+func TestInstanceValueWithPhysicalValues(t *testing.T) {
+	j := &TopoJoint{
+		Id:   "piston",
+		Type: TopoJointCylindrical,
+	}
+	states := map[int]map[string]JointInstanceState{
+		0: {
+			"piston": {Values: []float64{0.5, 3.0}},
+		},
+	}
+	vals := j.InstanceValue(states, 0)
+	if len(vals) != 2 || vals[0] != 0.5 || vals[1] != 3.0 {
+		t.Errorf("expected [0.5, 3], got %v", vals)
+	}
+}
+
+func TestJointInstanceStateRoundTrip(t *testing.T) {
+	r := 0.75
+	state := JointInstanceState{Ratio: &r}
+	data, err := json.Marshal(state)
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	var got JointInstanceState
+	if err := json.Unmarshal(data, &got); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if got.Ratio == nil || *got.Ratio != 0.75 {
+		t.Errorf("Ratio: got %v", got.Ratio)
+	}
+	if got.Values != nil {
+		t.Error("Values should be nil")
+	}
+}
+
+func TestJointInstanceStateValuesRoundTrip(t *testing.T) {
+	state := JointInstanceState{Values: []float64{1.0, 2.0, 3.0}}
+	data, err := json.Marshal(state)
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	var got JointInstanceState
+	if err := json.Unmarshal(data, &got); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if got.Ratio != nil {
+		t.Error("Ratio should be nil")
+	}
+	if len(got.Values) != 3 || got.Values[0] != 1.0 || got.Values[1] != 2.0 || got.Values[2] != 3.0 {
+		t.Errorf("Values: got %v", got.Values)
+	}
+}
+
+// --- ValidateValues tests ---
+
+func TestValidateValuesCorrectLength(t *testing.T) {
+	tests := []struct {
+		typ   TopoJointType
+		vals  []float64
+		valid bool
+	}{
+		{TopoJointFixed, []float64{}, true},
+		{TopoJointFixed, []float64{1}, false},
+		{TopoJointRevolute, []float64{1.0}, true},
+		{TopoJointRevolute, []float64{1.0, 2.0}, false},
+		{TopoJointPrismatic, []float64{0.5}, true},
+		{TopoJointPrismatic, nil, true},
+		{TopoJointCylindrical, []float64{0.5, 3.0}, true},
+		{TopoJointCylindrical, []float64{0.5}, false},
+		{TopoJointCylindrical, []float64{0.5, 3.0, 7.0}, false},
+		{TopoJointPlanar, []float64{1, 2, 3}, true},
+		{TopoJointPlanar, []float64{1, 2}, false},
+		{TopoJointSpherical, []float64{0.1, 0.2, 0.3}, true},
+		{TopoJointSpherical, []float64{0.1, 0.2, 0.3, 0.4}, false},
+		{TopoJointUniversal, []float64{0.5, 1.0}, true},
+		{TopoJointUniversal, []float64{0.5}, false},
+		{TopoJointCurve, []float64{0.5}, true},
+		{TopoJointCurve, []float64{0.5, 0.6}, false},
+	}
+	for _, tt := range tests {
+		j := &TopoJoint{Id: "t", Type: tt.typ, Values: tt.vals}
+		err := j.ValidateValues()
+		if tt.valid && err != nil {
+			t.Errorf("type %s values=%v: expected OK, got %v", tt.typ, tt.vals, err)
+		}
+		if !tt.valid && err == nil {
+			t.Errorf("type %s values=%v: expected error", tt.typ, tt.vals)
+		}
+	}
+}
+
+func TestValidateValuesJointWithValueNoValues(t *testing.T) {
+	j := &TopoJoint{Id: "r", Type: TopoJointRevolute, Value: floatPtr(1.0)}
+	if err := j.ValidateValues(); err != nil {
+		t.Errorf("Value-only joint should validate: %v", err)
+	}
+}
+
+// --- closestAxis limit matching tests ---
+
+func TestDofRangesMatchesRevoluteAxis(t *testing.T) {
+	// Axis=Z → only RotateZ should affect range
+	j := &TopoJoint{
+		Type: TopoJointRevolute,
+		Axis: [3]float64{0, 0, 1},
+		Limits: &TopoJointLimits{
+			RotateX: &TopoJointLimitAxis{Min: floatPtr(-999), Max: floatPtr(-999)},
+			RotateZ: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 1 || mn[0] != 0 {
+		t.Errorf("expected min=0 from RotateZ, got %v", mn)
+	}
+	if len(mx) != 1 || mx[0] != math.Pi {
+		t.Errorf("expected max=π from RotateZ, got %v", mx)
+	}
+}
+
+func TestDofRangesIgnoresNonMatchingAxis(t *testing.T) {
+	// Axis=X → RotateY and RotateZ limits are ignored
+	j := &TopoJoint{
+		Type: TopoJointRevolute,
+		Axis: [3]float64{1, 0, 0},
+		Limits: &TopoJointLimits{
+			RotateY: &TopoJointLimitAxis{Min: floatPtr(-999), Max: floatPtr(-999)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	// RotateY doesn't match Axis=X → falls back to default [0, 2π]
+	if len(mn) != 1 || mn[0] != 0 {
+		t.Errorf("expected default min=0, got %v", mn)
+	}
+	if len(mx) != 1 || mx[0] != 2*math.Pi {
+		t.Errorf("expected default max=2π, got %v", mx)
+	}
+}
+
+func TestValidateWithAxisMatchedLimit(t *testing.T) {
+	// Axis=Z, only RotateZ has limits → validation against RotateZ
+	j := &TopoJoint{
+		Type: TopoJointRevolute,
+		Axis: [3]float64{0, 0, 1},
+		Limits: &TopoJointLimits{
+			RotateZ: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(1)},
+		},
+	}
+	if !j.ValidateWith([]float64{0.5}) {
+		t.Error("0.5 should be within [0,1]")
+	}
+	if j.ValidateWith([]float64{5}) {
+		t.Error("5 should exceed [0,1]")
+	}
+}
+
+func TestValidateWithNonMatchingLimitIgnored(t *testing.T) {
+	// Axis=Z, only RotateX has limits → RotateX is ignored for Z-axis joint
+	j := &TopoJoint{
+		Type: TopoJointRevolute,
+		Axis: [3]float64{0, 0, 1},
+		Limits: &TopoJointLimits{
+			RotateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(1)},
+		},
+	}
+	// RotateX doesn't match Z → no limit applies → any value passes
+	if !j.ValidateWith([]float64{999}) {
+		t.Error("non-matching limit should be ignored")
+	}
+}
+
+func TestDofRangesCylindricalMatchesAxis(t *testing.T) {
+	// Axis=Y → rotation uses RotateY, translation uses TranslateY
+	j := &TopoJoint{
+		Type: TopoJointCylindrical,
+		Axis: [3]float64{0, 1, 0},
+		Limits: &TopoJointLimits{
+			RotateY:    &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+			TranslateY: &TopoJointLimitAxis{Min: floatPtr(-5), Max: floatPtr(5)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 2 || mn[0] != 0 || mn[1] != -5 {
+		t.Errorf("mn: got %v, want [0, -5]", mn)
+	}
+	if len(mx) != 2 || mx[0] != math.Pi || mx[1] != 5 {
+		t.Errorf("mx: got %v, want [π, 5]", mx)
+	}
+}
+
+func TestDofRangesPlanarNormalZ(t *testing.T) {
+	// normal=Z → tx=TranslateX, ty=TranslateY, rot=RotateZ
+	j := &TopoJoint{
+		Type: TopoJointPlanar,
+		Axis: [3]float64{0, 0, 1},
+		Limits: &TopoJointLimits{
+			TranslateX: &TopoJointLimitAxis{Min: floatPtr(-10), Max: floatPtr(10)},
+			TranslateY: &TopoJointLimitAxis{Min: floatPtr(-5), Max: floatPtr(5)},
+			RotateZ:    &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 3 || mn[0] != -10 || mn[1] != -5 || mn[2] != 0 {
+		t.Errorf("mn: got %v", mn)
+	}
+	if len(mx) != 3 || mx[0] != 10 || mx[1] != 5 || mx[2] != math.Pi {
+		t.Errorf("mx: got %v", mx)
+	}
+}
+
+func TestDofRangesPlanarNormalX(t *testing.T) {
+	// normal=X → in-plane axes are Y and Z, rotation around X
+	j := &TopoJoint{
+		Type: TopoJointPlanar,
+		Axis: [3]float64{1, 0, 0},
+		Limits: &TopoJointLimits{
+			TranslateY: &TopoJointLimitAxis{Min: floatPtr(-10), Max: floatPtr(10)},
+			TranslateZ: &TopoJointLimitAxis{Min: floatPtr(-5), Max: floatPtr(5)},
+			RotateX:    &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 3 || mn[0] != -10 || mn[1] != -5 || mn[2] != 0 {
+		t.Errorf("normal=X mn: got %v, want [-10, -5, 0]", mn)
+	}
+	if len(mx) != 3 || mx[0] != 10 || mx[1] != 5 || mx[2] != math.Pi {
+		t.Errorf("normal=X mx: got %v, want [10, 5, π]", mx)
+	}
+}
+
+func TestDofRangesSphericalUsesAllAxes(t *testing.T) {
+	j := &TopoJoint{
+		Type: TopoJointSpherical,
+		Limits: &TopoJointLimits{
+			RotateX: &TopoJointLimitAxis{Min: floatPtr(-1), Max: floatPtr(1)},
+			RotateY: &TopoJointLimitAxis{Min: floatPtr(-2), Max: floatPtr(2)},
+			RotateZ: &TopoJointLimitAxis{Min: floatPtr(-3), Max: floatPtr(3)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 3 || mn[0] != -1 || mn[1] != -2 || mn[2] != -3 {
+		t.Errorf("mn: got %v", mn)
+	}
+	if len(mx) != 3 || mx[0] != 1 || mx[1] != 2 || mx[2] != 3 {
+		t.Errorf("mx: got %v", mx)
+	}
+}
+
+func TestDofRangesUniversalMatchesAxes(t *testing.T) {
+	sec := [3]float64{0, 1, 0}
+	j := &TopoJoint{
+		Type:          TopoJointUniversal,
+		Axis:          [3]float64{1, 0, 0},
+		SecondaryAxis: &sec,
+		Limits: &TopoJointLimits{
+			RotateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi / 2)},
+			RotateY: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	mn, mx := j.dofRanges()
+	if len(mn) != 2 || mn[0] != 0 || mn[1] != 0 {
+		t.Errorf("mn: got %v", mn)
+	}
+	if len(mx) != 2 || mx[0] != math.Pi/2 || mx[1] != math.Pi {
+		t.Errorf("mx: got %v, want [π/2, π]", mx)
+	}
+}
+
+func TestResolveValuesFullPriorityChain(t *testing.T) {
+	j := &TopoJoint{
+		Id:     "chain",
+		Type:   TopoJointRevolute,
+		Value:  floatPtr(0.1),
+		Values: []float64{0.2},
+	}
+	// Level 0: nil state → joint.Values wins
+	vals := j.ResolveValues(nil)
+	if len(vals) != 1 || vals[0] != 0.2 {
+		t.Errorf("expected joint.Values=[0.2], got %v", vals)
+	}
+	// Level 1: state with Values → state.Values wins
+	vals2 := j.ResolveValues(&JointInstanceState{Values: []float64{0.3}})
+	if len(vals2) != 1 || vals2[0] != 0.3 {
+		t.Errorf("expected state.Values=[0.3], got %v", vals2)
+	}
+	// Level 2: state with Ratio → state.Ratio mapped through range
+	vals3 := j.ResolveValues(&JointInstanceState{Ratio: floatPtr(0.5)})
+	if len(vals3) != 1 || math.Abs(vals3[0]-math.Pi) > 1e-10 {
+		t.Errorf("expected state.Ratio=0.5→π, got %v", vals3)
+	}
+}
+
+func TestComputeNormalizedUsesAxisMatchedDefaults(t *testing.T) {
+	// REVOLUTE around Y, Limits only on RotateX → no matching limit → defaults [0, 2π]
+	j := &TopoJoint{
+		Type: TopoJointRevolute,
+		Axis: [3]float64{0, 1, 0},
+		Limits: &TopoJointLimits{
+			RotateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(math.Pi)},
+		},
+	}
+	// ratio=0.25 → default [0, 2π] → π/2
+	mat := j.ComputeNormalized(0.25)
+	v := vec3d.T{0, 0, 1}
+	rv := mat.MulVec3W(&v, 0)
+	// Rotate around Y by π/2: (0,0,1) → (1,0,0)
+	almostEq(t, [3]float64(rv), [3]float64{1, 0, 0})
+}
+
+func TestValidatePrismaticAxisMatched(t *testing.T) {
+	// Axis=Y → only TranslateY matters
+	j := &TopoJoint{
+		Type: TopoJointPrismatic,
+		Axis: [3]float64{0, 1, 0},
+		Limits: &TopoJointLimits{
+			TranslateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(1)},
+			TranslateY: &TopoJointLimitAxis{Min: floatPtr(-5), Max: floatPtr(5)},
+		},
+	}
+	if j.ValidateWith([]float64{10}) {
+		t.Error("TranslateY limit [ -5,5] violated by 10")
+	}
+	if !j.ValidateWith([]float64{0}) {
+		t.Error("0 should be within [-5,5]")
+	}
+}
+
+func TestCurveValidationWithLimits(t *testing.T) {
+	j := &TopoJoint{
+		Type: TopoJointCurve,
+		Axis: [3]float64{1, 0, 0},
+		Limits: &TopoJointLimits{
+			TranslateX: &TopoJointLimitAxis{Min: floatPtr(0), Max: floatPtr(0.8)},
+		},
+	}
+	if !j.ValidateWith([]float64{0.5}) {
+		t.Error("0.5 should pass")
+	}
+	if j.ValidateWith([]float64{0.9}) {
+		t.Error("0.9 should fail: exceeds TranslateX max 0.8")
 	}
 }
 
