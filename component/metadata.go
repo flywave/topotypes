@@ -3,6 +3,8 @@ package component
 import (
 	"encoding/json"
 	"errors"
+
+	"github.com/flywave/topotypes/joint"
 )
 
 type Metadata struct {
@@ -14,9 +16,10 @@ type Metadata struct {
 		Translate *[3]float64 `json:"translate,omitempty"`
 		Scale     *[3]float64 `json:"scale,omitempty"`
 	} `json:"transform,omitempty"`
-	Anchors     []*Anchor   `json:"anchors,omitempty"`
-	AnchorCount int         `json:"anchorcount,omitempty"`
-	Components  []Component `json:"components,omitempty"`
+	Anchors     []*Anchor          `json:"anchors,omitempty"`
+	AnchorCount int                `json:"anchorcount,omitempty"`
+	Joints      []*joint.TopoJoint `json:"joints,omitempty"`
+	Components  []Component        `json:"components,omitempty"`
 }
 
 func MetadataUnmarshal(js []byte) (*Metadata, error) {
