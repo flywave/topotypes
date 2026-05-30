@@ -2,15 +2,13 @@ package topotypes
 
 import (
 	"github.com/flywave/topotypes/component"
-	"github.com/flywave/topotypes/joint"
 )
 
 type TopoSymbol struct {
 	Topos
-	Model               string                                      `json:"model"`
-	Metadata            *component.Metadata                         `json:"metadata,omitempty"`
-	Matrixs             map[int][16]float64                         `json:"matrixs,omitempty"`
-	InstanceJointState  map[int]map[string]joint.JointInstanceState `json:"instanceJointState,omitempty"`
+	Model    string              `json:"model"`
+	Metadata *component.Metadata `json:"metadata,omitempty"`
+	Matrixs  map[int][16]float64 `json:"matrixs,omitempty"`
 }
 
 func (sp *TopoSymbol) GetModel() string {
