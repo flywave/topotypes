@@ -138,6 +138,9 @@ func MtlToMeshMtl(mtl *Material) mst.MeshMaterial {
 		if mtl.AmbientOcclusion != nil {
 			mt.AmbientOcclusion = float32(*mtl.AmbientOcclusion)
 		}
+		if mtl.Transparency > 0 {
+			mt.Transparency = float32(mtl.Transparency)
+		}
 		return mt
 	case TYPE_LAMBERT:
 		mt := &mst.LambertMaterial{}
