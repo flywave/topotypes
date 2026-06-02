@@ -40,10 +40,34 @@ func NewRodInsulator() *RodInsulator {
 	}
 }
 
+// CrossArm represents a cross arm (横担)
+type CrossArm struct {
+	Base
+	BeamLength    float64 `json:"beamLength"`
+	BeamHeight    float64 `json:"beamHeight"`
+	BeamWidth     float64 `json:"beamWidth"`
+	BeamThickness float64 `json:"beamThickness"`
+	BeamSpacing   float64 `json:"beamSpacing"`
+	BraceDiameter float64 `json:"braceDiameter"`
+	BoltSpacing   float64 `json:"boltSpacing"`
+	BoltDiameter  float64 `json:"boltDiameter"`
+	BoltCount     int     `json:"boltCount"`
+}
+
+func NewCrossArm() *CrossArm {
+	return &CrossArm{
+		Base: Base{Type: "RAILWAY/CrossArm"},
+	}
+}
+
 func Unmarshal(ty string, bt []byte) (Shape, error) {
 	switch ty {
 	case "RAILWAY/RodInsulator":
 		shape := RodInsulator{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/CrossArm":
+		shape := CrossArm{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	default:
