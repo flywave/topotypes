@@ -7,6 +7,7 @@ import (
 	"github.com/flywave/topotypes/base"
 	"github.com/flywave/topotypes/gim"
 	"github.com/flywave/topotypes/hydropower"
+	"github.com/flywave/topotypes/railway"
 	"github.com/flywave/topotypes/material"
 	"github.com/flywave/topotypes/topo4d"
 )
@@ -112,6 +113,12 @@ func (t *TopoParametric) UnmarshalJSON(data []byte) error {
 			t.Shape = shp
 		case hydropower.Major:
 			shp, err := hydropower.Unmarshal(ty, dt)
+			if err != nil {
+				return err
+			}
+			t.Shape = shp
+		case railway.Major:
+			shp, err := railway.Unmarshal(ty, dt)
 			if err != nil {
 				return err
 			}
