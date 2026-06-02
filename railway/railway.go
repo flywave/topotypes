@@ -60,6 +60,87 @@ func NewCrossArm() *CrossArm {
 	}
 }
 
+// LevelCantilever represents a level cantilever (平腕臂)
+type LevelCantilever struct {
+	Base
+	Length        float64 `json:"length"`
+	OuterDiameter float64 `json:"outerDiameter"`
+	WallThickness float64 `json:"wallThickness"`
+	RiseAngle     float64 `json:"riseAngle"`
+}
+
+func NewLevelCantilever() *LevelCantilever {
+	return &LevelCantilever{
+		Base: Base{Type: "RAILWAY/LevelCantilever"},
+	}
+}
+
+// SlantCantilever represents a slanted cantilever (斜腕臂)
+type SlantCantilever struct {
+	Base
+	Length        float64 `json:"length"`
+	OuterDiameter float64 `json:"outerDiameter"`
+	WallThickness float64 `json:"wallThickness"`
+	SlantAngle    float64 `json:"slantAngle"`
+}
+
+func NewSlantCantilever() *SlantCantilever {
+	return &SlantCantilever{
+		Base: Base{Type: "RAILWAY/SlantCantilever"},
+	}
+}
+
+// CantileverBrace represents a cantilever brace (斜撑)
+type CantileverBrace struct {
+	Base
+	Length        float64 `json:"length"`
+	OuterDiameter float64 `json:"outerDiameter"`
+	WallThickness float64 `json:"wallThickness"`
+	SlantAngle    float64 `json:"slantAngle"`
+}
+
+func NewCantileverBrace() *CantileverBrace {
+	return &CantileverBrace{
+		Base: Base{Type: "RAILWAY/CantileverBrace"},
+	}
+}
+
+// RegArmBracket represents a registration arm bracket (定位器底座 L型金具)
+type RegArmBracket struct {
+	Base
+	TubeDiameter      float64 `json:"tubeDiameter"`
+	BandWidth         float64 `json:"bandWidth"`
+	BandThickness     float64 `json:"bandThickness"`
+	BracketHeight     float64 `json:"bracketHeight"`
+	BracketThickness  float64 `json:"bracketThickness"`
+	BracketWidth      float64 `json:"bracketWidth"`
+	MountHoleDiameter float64 `json:"mountHoleDiameter"`
+}
+
+func NewRegArmBracket() *RegArmBracket {
+	return &RegArmBracket{
+		Base: Base{Type: "RAILWAY/RegArmBracket"},
+	}
+}
+
+// RegistrationArm represents a registration arm (定位器)
+type RegistrationArm struct {
+	Base
+	Type          int     `json:"type"`
+	Length        float64 `json:"length"`
+	TubeWidth     float64 `json:"tubeWidth"`
+	TubeHeight    float64 `json:"tubeHeight"`
+	WallThickness float64 `json:"wallThickness"`
+	Angle         float64 `json:"angle"`
+	IsReverse     bool    `json:"isReverse"`
+}
+
+func NewRegistrationArm() *RegistrationArm {
+	return &RegistrationArm{
+		Base: Base{Type: "RAILWAY/RegistrationArm"},
+	}
+}
+
 func Unmarshal(ty string, bt []byte) (Shape, error) {
 	switch ty {
 	case "RAILWAY/RodInsulator":
@@ -68,6 +149,26 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "RAILWAY/CrossArm":
 		shape := CrossArm{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/LevelCantilever":
+		shape := LevelCantilever{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/SlantCantilever":
+		shape := SlantCantilever{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/CantileverBrace":
+		shape := CantileverBrace{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/RegArmBracket":
+		shape := RegArmBracket{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/RegistrationArm":
+		shape := RegistrationArm{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	default:
