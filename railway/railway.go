@@ -217,6 +217,23 @@ func NewGuyWire() *GuyWire {
 	}
 }
 
+// Dropper represents a dropper (吊弦)
+type Dropper struct {
+	Base
+	Length         float64 `json:"length"`
+	WireDiameter   float64 `json:"wireDiameter"`
+	ClampLength    float64 `json:"clampLength"`
+	ClampWidth     float64 `json:"clampWidth"`
+	ClampThickness float64 `json:"clampThickness"`
+	Conductive     bool    `json:"conductive"`
+}
+
+func NewDropper() *Dropper {
+	return &Dropper{
+		Base: Base{Type: "RAILWAY/Dropper"},
+	}
+}
+
 // OcsFoundation represents an OCS foundation (支柱基础)
 type OcsFoundation struct {
 	Base
@@ -338,6 +355,10 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "RAILWAY/GuyWire":
 		shape := GuyWire{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/Dropper":
+		shape := Dropper{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	case "RAILWAY/MastBracket":
