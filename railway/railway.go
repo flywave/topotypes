@@ -105,6 +105,26 @@ func NewCantileverBrace() *CantileverBrace {
 	}
 }
 
+// CurvedArm represents a curved arm (弯臂)
+type CurvedArm struct {
+	Base
+	VerticalLength   float64 `json:"verticalLength"`
+	HorizontalLength float64 `json:"horizontalLength"`
+	BendRadius       float64 `json:"bendRadius"`
+	BendAngle        float64 `json:"bendAngle"`
+	OuterDiameter    float64 `json:"outerDiameter"`
+	WallThickness    float64 `json:"wallThickness"`
+	FlangeThickness  float64 `json:"flangeThickness"`
+	BoltSpacing      float64 `json:"boltSpacing"`
+	BoltDiameter     float64 `json:"boltDiameter"`
+}
+
+func NewCurvedArm() *CurvedArm {
+	return &CurvedArm{
+		Base: Base{Type: "RAILWAY/CurvedArm"},
+	}
+}
+
 // RegArmBracket represents a registration arm bracket (定位器底座 L型金具)
 type RegArmBracket struct {
 	Base
@@ -161,6 +181,10 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "RAILWAY/CantileverBrace":
 		shape := CantileverBrace{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/CurvedArm":
+		shape := CurvedArm{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	case "RAILWAY/RegArmBracket":
