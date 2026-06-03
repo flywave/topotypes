@@ -177,6 +177,109 @@ func NewMessengerWire() *MessengerWire {
 	}
 }
 
+// MastBracket represents a mast bracket (支柱连接座)
+type MastBracket struct {
+	Base
+	BoltSpacing          float64 `json:"boltSpacing"`
+	BoltDiameter         float64 `json:"boltDiameter"`
+	Height               float64 `json:"height"`
+	Width                float64 `json:"width"`
+	Thickness            float64 `json:"thickness"`
+	InsulatorBoltSpacing  float64 `json:"insulatorBoltSpacing"`
+	InsulatorBoltDiameter float64 `json:"insulatorBoltDiameter"`
+	MountAngle           float64 `json:"mountAngle"`
+}
+
+func NewMastBracket() *MastBracket {
+	return &MastBracket{
+		Base: Base{Type: "RAILWAY/MastBracket"},
+	}
+}
+
+// GuyWire represents a guy wire (下锚拉线)
+type GuyWire struct {
+	Base
+	Length            float64 `json:"length"`
+	Diameter          float64 `json:"diameter"`
+	Angle             float64 `json:"angle"`
+	RatedTension      float64 `json:"ratedTension"`
+	HasInsulator      bool    `json:"hasInsulator"`
+	InsulatorCount    int     `json:"insulatorCount"`
+	AnchorRodDiameter float64 `json:"anchorRodDiameter"`
+	AnchorRodLength   float64 `json:"anchorRodLength"`
+	AnchorPlateLength float64 `json:"anchorPlateLength"`
+	AnchorPlateWidth  float64 `json:"anchorPlateWidth"`
+}
+
+func NewGuyWire() *GuyWire {
+	return &GuyWire{
+		Base: Base{Type: "RAILWAY/GuyWire"},
+	}
+}
+
+// OcsFoundation represents an OCS foundation (支柱基础)
+type OcsFoundation struct {
+	Base
+	Type            int     `json:"type"`
+	Height          float64 `json:"height"`
+	Width           float64 `json:"width"`
+	Length          float64 `json:"length"`
+	FlangeThickness float64 `json:"flangeThickness"`
+	AnchorCount     int     `json:"anchorCount"`
+	AnchorDiameter  float64 `json:"anchorDiameter"`
+	AnchorLength    float64 `json:"anchorLength"`
+	AnchorSpacing   float64 `json:"anchorSpacing"`
+}
+
+func NewOcsFoundation() *OcsFoundation {
+	return &OcsFoundation{
+		Base: Base{Type: "RAILWAY/OcsFoundation"},
+	}
+}
+
+// SteelMast represents a steel mast (钢支柱)
+type SteelMast struct {
+	Base
+	Type            int     `json:"type"`
+	Height          float64 `json:"height"`
+	TopWidth        float64 `json:"topWidth"`
+	BottomWidth     float64 `json:"bottomWidth"`
+	WallThickness   float64 `json:"wallThickness"`
+	FlangeThickness float64 `json:"flangeThickness"`
+	FlangeWidth     float64 `json:"flangeWidth"`
+	AnchorSpacing   float64 `json:"anchorSpacing"`
+	AnchorDiameter  float64 `json:"anchorDiameter"`
+	SegmentCount    int     `json:"segmentCount"`
+}
+
+func NewSteelMast() *SteelMast {
+	return &SteelMast{
+		Base: Base{Type: "RAILWAY/SteelMast"},
+	}
+}
+
+// ConcreteMast represents a concrete mast (混凝土支柱)
+type ConcreteMast struct {
+	Base
+	SectionType     int     `json:"sectionType"`
+	Height          float64 `json:"height"`
+	TopWidth        float64 `json:"topWidth"`
+	BottomWidth     float64 `json:"bottomWidth"`
+	WallThickness   float64 `json:"wallThickness"`
+	HoleDiameter    float64 `json:"holeDiameter"`
+	HoleSpacingV    float64 `json:"holeSpacingV"`
+	HoleSpacingH    float64 `json:"holeSpacingH"`
+	FirstHoleOffset float64 `json:"firstHoleOffset"`
+	HoleRowCount    int     `json:"holeRowCount"`
+	HolesPerRow     int     `json:"holesPerRow"`
+}
+
+func NewConcreteMast() *ConcreteMast {
+	return &ConcreteMast{
+		Base: Base{Type: "RAILWAY/ConcreteMast"},
+	}
+}
+
 // RegistrationArm represents a registration arm (定位器)
 type RegistrationArm struct {
 	Base
@@ -231,6 +334,22 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "RAILWAY/MessengerWire":
 		shape := MessengerWire{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/GuyWire":
+		shape := GuyWire{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/MastBracket":
+		shape := MastBracket{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/SteelMast":
+		shape := SteelMast{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/ConcreteMast":
+		shape := ConcreteMast{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	case "RAILWAY/RegistrationArm":
