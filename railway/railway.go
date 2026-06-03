@@ -143,6 +143,40 @@ func NewRegArmBracket() *RegArmBracket {
 	}
 }
 
+// ContactWire represents a contact wire (接触线)
+type ContactWire struct {
+	Base
+	SectionalArea float64 `json:"sectionalArea"`
+	Diameter      float64 `json:"diameter"`
+	RatedTension  float64 `json:"ratedTension"`
+	GrooveDepth   float64 `json:"grooveDepth"`
+	GrooveWidth   float64 `json:"grooveWidth"`
+	BottomRadius  float64 `json:"bottomRadius"`
+	TopRadius     float64 `json:"topRadius"`
+	Sag           float64 `json:"sag"`
+}
+
+func NewContactWire() *ContactWire {
+	return &ContactWire{
+		Base: Base{Type: "RAILWAY/ContactWire"},
+	}
+}
+
+// MessengerWire represents a messenger wire (承力索)
+type MessengerWire struct {
+	Base
+	Diameter         float64 `json:"diameter"`
+	RatedTension     float64 `json:"ratedTension"`
+	StructuralHeight float64 `json:"structuralHeight"`
+	Sag              float64 `json:"sag"`
+}
+
+func NewMessengerWire() *MessengerWire {
+	return &MessengerWire{
+		Base: Base{Type: "RAILWAY/MessengerWire"},
+	}
+}
+
 // RegistrationArm represents a registration arm (定位器)
 type RegistrationArm struct {
 	Base
@@ -189,6 +223,14 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "RAILWAY/RegArmBracket":
 		shape := RegArmBracket{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/ContactWire":
+		shape := ContactWire{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "RAILWAY/MessengerWire":
+		shape := MessengerWire{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	case "RAILWAY/RegistrationArm":
