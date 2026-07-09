@@ -50,6 +50,7 @@ const (
 	TunnelStyleCityOpening TunnelStyle = "CITYOPENING"
 	TunnelStyleCircular    TunnelStyle = "CIRCULAR"
 	TunnelStyleHorseshoe   TunnelStyle = "HORSESHOE"
+	TunnelStylePolygon     TunnelStyle = "POLYGON"
 )
 
 func (t TunnelStyle) ToInt() int {
@@ -62,6 +63,8 @@ func (t TunnelStyle) ToInt() int {
 		return 3
 	case TunnelStyleHorseshoe:
 		return 4
+	case TunnelStylePolygon:
+		return 5
 	default:
 		return 1
 	}
@@ -74,7 +77,7 @@ type PointIndex struct {
 
 type WaterTunnel struct {
 	Base
-	Style                TunnelStyle     `json:"style"`                          // 'RECTANGULAR' | 'CITYOPENING' | 'CIRCULAR' | 'HORSESHOE'
+	Style                TunnelStyle     `json:"style"`                          // 'RECTANGULAR' | 'CITYOPENING' | 'CIRCULAR' | 'HORSESHOE' | 'POLYGON'
 	Width                float64         `json:"width"`                          // Width of the tunnel
 	Height               float64         `json:"height"`                         // Height of the tunnel
 	TopThickness         float64         `json:"topThickness"`                   // Thickness of the top part
@@ -87,6 +90,7 @@ type WaterTunnel struct {
 	BottomPlatformHeight float64         `json:"bottomPlatformHeight,omitempty"` // Height of bottom platform
 	CushionExtension     float64         `json:"cushionExtension,omitempty"`     // Extension of cushion
 	CushionThickness     float64         `json:"cushionThickness,omitempty"`     // Thickness of cushion
+	Polygon              [][3]float64    `json:"polygon,omitempty"`              // Cross-section polygon for POLYGON style
 	Points               []*ChannelPoint `json:"-"`                              // Path points defining the tunnel
 	PointIndexs          []PointIndex    `json:"pointIndex"`                     // Index of points defining the tunnel
 }
