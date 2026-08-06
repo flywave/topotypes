@@ -18,10 +18,133 @@ type Base struct {
 
 func (b *Base) GetType() string { return b.Type }
 
+// 枚举常量, 与 go-topo src/primitives_railway.hh 一一对应
+
+// rod_insulator_type
+const (
+	RodInsulatorSolid  = 1 // 实心棒式
+	RodInsulatorHollow = 2 // 空心棒式
+)
+
+// end_fitting_type
+const (
+	EndFittingFlange = 1 // 法兰式
+	EndFittingBall   = 2 // 球头
+	EndFittingScrew  = 3 // 螺杆式
+)
+
+// cross_arm_type
+const (
+	CrossArmDoubleFork    = 1 // 双叉臂固定横担
+	CrossArmTriangleBrace = 2 // 三角撑横担
+	CrossArmTruss         = 3 // 桁架式横担
+)
+
+// curved_arm_type
+const (
+	CurvedArmArc    = 1 // 弧形弯臂
+	CurvedArmLShape = 2 // L形弯臂
+	CurvedArmDouble = 3 // 双弯臂
+)
+
+// registration_arm_type
+const (
+	RegistrationArmStraight = 1 // 直型
+	RegistrationArmCurved   = 2 // 弯型
+	RegistrationArmExtended = 3 // 加长型
+)
+
+// steel_mast_type
+const (
+	SteelMastLattice = 1 // 格构式钢柱
+	SteelMastHBeam   = 2 // H型钢柱
+)
+
+// concrete_mast_section_type
+const (
+	ConcreteMastCircular         = 1 // 环形
+	ConcreteMastRectangular      = 2 // 矩形
+	ConcreteMastCircularHoled    = 3 // 带孔环形
+	ConcreteMastRectangularHoled = 4 // 矩形挖孔
+)
+
+// foundation_type
+const (
+	FoundationDirectBuried  = 1 // 直埋式
+	FoundationFlange        = 2 // 法兰盘基础
+	FoundationBoredPile     = 3 // 钻孔灌注桩
+	FoundationExcavatedPile = 4 // 挖孔桩
+	FoundationAnchor        = 5 // 锚栓基础
+)
+
+// anchor_fitting_type
+const (
+	AnchorFittingRodAndRing = 1 // 杵环杆
+	AnchorFittingDoubleEar  = 2 // 双耳连接器
+	AnchorFittingWedgeClamp = 3 // 楔形线夹
+)
+
+// beam_section_type (硬横跨梁截面)
+const (
+	BeamSectionBox   = 1 // 箱型
+	BeamSectionHBeam = 2 // H型
+	BeamSectionTruss = 3 // 桁架式
+	BeamSectionCombo = 4 // 组合式
+)
+
+// hanger_post_section_type
+const (
+	HangerPostRound  = 1 // 圆管
+	HangerPostSquare = 2 // 方管
+	HangerPostHBeam  = 3 // H型钢
+)
+
+// aux_bracket_type
+const (
+	AuxBracketCrossArm   = 1 // 横担式
+	AuxBracketWallMount  = 2 // 壁挂式
+	AuxBracketDoubleMast = 3 // 双支柱式
+)
+
+// sleeper_shape_type
+const (
+	SleeperRectangular = 1 // 矩形 (木枕/简易)
+	SleeperTrapezoidal = 2 // 梯形收腰 (混凝土枕)
+)
+
+// mast_assembly 支柱/腕臂/补偿装置类型
+const (
+	MastAssemblyLattice  = 1 // 格构式钢柱
+	MastAssemblyConcrete = 2 // 混凝土柱
+
+	CantileverNone   = 0 // 无腕臂
+	CantileverSingle = 1 // 单臂
+	CantileverDouble = 2 // 双臂
+
+	CompensatorNone    = 0 // 无补偿
+	CompensatorRatchet = 1 // 棘轮
+	CompensatorPulley  = 2 // 滑轮
+)
+
+// retarder_point 减速顶安装侧/设备类型/安装方式
+const (
+	RetarderSideLeft  = 1
+	RetarderSideRight = 2
+	RetarderSideBoth  = 3
+
+	RetarderDeviceHydraulic    = 1 // 液压
+	RetarderDeviceFriction     = 2 // 摩擦
+	RetarderDeviceControllable = 3 // 可控
+
+	RetarderMountInner = 1 // 轨内侧
+	RetarderMountOuter = 2 // 轨外侧
+	RetarderMountBoth  = 3 // 双轨双侧
+)
+
 // RodInsulator represents a rod insulator (棒式绝缘子)
 type RodInsulator struct {
 	Base
-	Type               int     `json:"type"` // rod_insulator_type: 1=SOLID, 2=HOLLOW
+	InsulatorType      int     `json:"insulatorType"` // rod_insulator_type: 1=SOLID, 2=HOLLOW
 	Height             float64 `json:"height"`
 	OuterDiameter      float64 `json:"outerDiameter"`
 	InnerDiameter      float64 `json:"innerDiameter"`
@@ -43,12 +166,15 @@ func NewRodInsulator() *RodInsulator {
 // CrossArm represents a cross arm (横担)
 type CrossArm struct {
 	Base
+	CrossArmType  int     `json:"crossArmType"` // cross_arm_type: 1=双叉臂, 2=三角撑, 3=桁架式
 	BeamLength    float64 `json:"beamLength"`
 	BeamHeight    float64 `json:"beamHeight"`
 	BeamWidth     float64 `json:"beamWidth"`
 	BeamThickness float64 `json:"beamThickness"`
 	BeamSpacing   float64 `json:"beamSpacing"`
+	BraceLength   float64 `json:"braceLength"`
 	BraceDiameter float64 `json:"braceDiameter"`
+	MountHeight   float64 `json:"mountHeight"`
 	BoltSpacing   float64 `json:"boltSpacing"`
 	BoltDiameter  float64 `json:"boltDiameter"`
 	BoltCount     int     `json:"boltCount"`
@@ -66,6 +192,7 @@ type LevelCantilever struct {
 	Length        float64 `json:"length"`
 	OuterDiameter float64 `json:"outerDiameter"`
 	WallThickness float64 `json:"wallThickness"`
+	MountHeight   float64 `json:"mountHeight"`
 	RiseAngle     float64 `json:"riseAngle"`
 }
 
@@ -108,6 +235,7 @@ func NewCantileverBrace() *CantileverBrace {
 // CurvedArm represents a curved arm (弯臂)
 type CurvedArm struct {
 	Base
+	CurvedArmType    int     `json:"curvedArmType"` // curved_arm_type: 1=弧形, 2=L形, 3=双弯臂
 	VerticalLength   float64 `json:"verticalLength"`
 	HorizontalLength float64 `json:"horizontalLength"`
 	BendRadius       float64 `json:"bendRadius"`
@@ -180,14 +308,15 @@ func NewMessengerWire() *MessengerWire {
 // MastBracket represents a mast bracket (支柱连接座)
 type MastBracket struct {
 	Base
-	BoltSpacing          float64 `json:"boltSpacing"`
-	BoltDiameter         float64 `json:"boltDiameter"`
-	Height               float64 `json:"height"`
-	Width                float64 `json:"width"`
-	Thickness            float64 `json:"thickness"`
+	BoltSpacing           float64 `json:"boltSpacing"`
+	BoltDiameter          float64 `json:"boltDiameter"`
+	Height                float64 `json:"height"`
+	Width                 float64 `json:"width"`
+	Thickness             float64 `json:"thickness"`
 	InsulatorBoltSpacing  float64 `json:"insulatorBoltSpacing"`
 	InsulatorBoltDiameter float64 `json:"insulatorBoltDiameter"`
-	MountAngle           float64 `json:"mountAngle"`
+	MountAngle            float64 `json:"mountAngle"`
+	MastDiameter          float64 `json:"mastDiameter"`
 }
 
 func NewMastBracket() *MastBracket {
@@ -237,7 +366,7 @@ func NewDropper() *Dropper {
 // OcsFoundation represents an OCS foundation (支柱基础)
 type OcsFoundation struct {
 	Base
-	Type            int     `json:"type"`
+	FoundationType  int     `json:"foundationType"` // foundation_type: 1=直埋, 2=法兰盘, 3=钻孔灌注桩, 4=挖孔桩, 5=锚栓
 	Height          float64 `json:"height"`
 	Width           float64 `json:"width"`
 	Length          float64 `json:"length"`
@@ -257,7 +386,7 @@ func NewOcsFoundation() *OcsFoundation {
 // SteelMast represents a steel mast (钢支柱)
 type SteelMast struct {
 	Base
-	Type            int     `json:"type"`
+	MastType        int     `json:"mastType"` // steel_mast_type: 1=格构式, 2=H型钢
 	Height          float64 `json:"height"`
 	TopWidth        float64 `json:"topWidth"`
 	BottomWidth     float64 `json:"bottomWidth"`
@@ -289,6 +418,7 @@ type ConcreteMast struct {
 	FirstHoleOffset float64 `json:"firstHoleOffset"`
 	HoleRowCount    int     `json:"holeRowCount"`
 	HolesPerRow     int     `json:"holesPerRow"`
+	HoleLength      float64 `json:"holeLength"`
 }
 
 func NewConcreteMast() *ConcreteMast {
@@ -300,7 +430,7 @@ func NewConcreteMast() *ConcreteMast {
 // RegistrationArm represents a registration arm (定位器)
 type RegistrationArm struct {
 	Base
-	Type          int     `json:"type"`
+	ArmType       int     `json:"armType"` // registration_arm_type: 1=直型, 2=弯型, 3=加长型
 	Length        float64 `json:"length"`
 	TubeWidth     float64 `json:"tubeWidth"`
 	TubeHeight    float64 `json:"tubeHeight"`
@@ -315,69 +445,123 @@ func NewRegistrationArm() *RegistrationArm {
 	}
 }
 
+// Unmarshal 按 "RAILWAY/Xxx" 判别串反序列化; Base.Type 是唯一 "type" 字段
 func Unmarshal(ty string, bt []byte) (Shape, error) {
+	var shape Shape
 	switch ty {
 	case "RAILWAY/RodInsulator":
-		shape := RodInsulator{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &RodInsulator{}
 	case "RAILWAY/CrossArm":
-		shape := CrossArm{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &CrossArm{}
 	case "RAILWAY/LevelCantilever":
-		shape := LevelCantilever{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &LevelCantilever{}
 	case "RAILWAY/SlantCantilever":
-		shape := SlantCantilever{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &SlantCantilever{}
 	case "RAILWAY/CantileverBrace":
-		shape := CantileverBrace{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &CantileverBrace{}
 	case "RAILWAY/CurvedArm":
-		shape := CurvedArm{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &CurvedArm{}
 	case "RAILWAY/RegArmBracket":
-		shape := RegArmBracket{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &RegArmBracket{}
 	case "RAILWAY/ContactWire":
-		shape := ContactWire{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &ContactWire{}
 	case "RAILWAY/MessengerWire":
-		shape := MessengerWire{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &MessengerWire{}
 	case "RAILWAY/GuyWire":
-		shape := GuyWire{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &GuyWire{}
 	case "RAILWAY/Dropper":
-		shape := Dropper{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &Dropper{}
 	case "RAILWAY/MastBracket":
-		shape := MastBracket{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &MastBracket{}
 	case "RAILWAY/SteelMast":
-		shape := SteelMast{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &SteelMast{}
 	case "RAILWAY/ConcreteMast":
-		shape := ConcreteMast{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &ConcreteMast{}
+	case "RAILWAY/OcsFoundation":
+		shape = &OcsFoundation{}
 	case "RAILWAY/RegistrationArm":
-		shape := RegistrationArm{}
-		err := json.Unmarshal(bt, &shape)
-		return &shape, err
+		shape = &RegistrationArm{}
+	case "RAILWAY/CantileverBase":
+		shape = &CantileverBase{}
+	case "RAILWAY/MWSaddle":
+		shape = &MWSaddle{}
+	case "RAILWAY/BalanceWeight":
+		shape = &BalanceWeight{}
+	case "RAILWAY/WeightRod":
+		shape = &WeightRod{}
+	case "RAILWAY/AnchorFitting":
+		shape = &AnchorFitting{}
+	case "RAILWAY/Crossing":
+		shape = &Crossing{}
+	case "RAILWAY/HeadSpan":
+		shape = &HeadSpan{}
+	case "RAILWAY/TransverseSpan":
+		shape = &TransverseSpan{}
+	case "RAILWAY/HangerPost":
+		shape = &HangerPost{}
+	case "RAILWAY/PortalFrame":
+		shape = &PortalFrame{}
+	case "RAILWAY/SuspensionHardSpan":
+		shape = &SuspensionHardSpan{}
+	case "RAILWAY/PositioningCable":
+		shape = &PositioningCable{}
+	case "RAILWAY/AuxBracket":
+		shape = &AuxBracket{}
+	case "RAILWAY/Rail":
+		shape = &Rail{}
+	case "RAILWAY/Sleeper":
+		shape = &Sleeper{}
+	case "RAILWAY/Ballast":
+		shape = &Ballast{}
+	case "RAILWAY/TrackSlab":
+		shape = &TrackSlab{}
+	case "RAILWAY/Fastener":
+		shape = &Fastener{}
+	case "RAILWAY/GuardRail":
+		shape = &GuardRail{}
+	case "RAILWAY/MastAssembly":
+		shape = &MastAssembly{}
+	case "RAILWAY/WeightStack":
+		shape = &WeightStack{}
+	case "RAILWAY/RatchetCompensator":
+		shape = &RatchetCompensator{}
+	case "RAILWAY/AuxiliaryWire":
+		shape = &AuxiliaryWire{}
+	case "RAILWAY/Disconnector":
+		shape = &Disconnector{}
+	case "RAILWAY/Arrester":
+		shape = &Arrester{}
+	case "RAILWAY/PulleyCompensator":
+		shape = &PulleyCompensator{}
+	case "RAILWAY/SleeveConnector":
+		shape = &SleeveConnector{}
+	case "RAILWAY/SleeveEar":
+		shape = &SleeveEar{}
+	case "RAILWAY/SwitchRail":
+		shape = &SwitchRail{}
+	case "RAILWAY/Frog":
+		shape = &Frog{}
+	case "RAILWAY/Turnout":
+		shape = &Turnout{}
+	case "RAILWAY/StraightTrack":
+		shape = &StraightTrack{}
+	case "RAILWAY/CurveTrack":
+		shape = &CurveTrack{}
+	case "RAILWAY/RailPair":
+		shape = &RailPair{}
+	case "RAILWAY/SleeperLayout":
+		shape = &SleeperLayout{}
+	case "RAILWAY/RetarderPoint":
+		shape = &RetarderPoint{}
+	case "RAILWAY/AnchorSection":
+		shape = &AnchorSection{}
+	case "RAILWAY/Yard":
+		shape = &Yard{}
 	default:
 		return nil, fmt.Errorf("invalid railway type: %s", ty)
 	}
+	if err := json.Unmarshal(bt, shape); err != nil {
+		return nil, err
+	}
+	return shape, nil
 }
