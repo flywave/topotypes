@@ -343,6 +343,8 @@ type TerminalBlock struct {
 	ColumnCount   int     `json:"columnCount"`
 	RowCount      int     `json:"rowCount"`
 	BottomOffset  float64 `json:"bottomOffset"`
+	// Phase 相位信息，规范取值 A/B/C/N
+	Phase string `json:"phase,omitempty"`
 }
 
 func NewTerminalBlock() *TerminalBlock {
@@ -390,15 +392,16 @@ func NewCircularFixedPlate() *CircularFixedPlate {
 }
 
 // Wire represents a wire
+// 规范参数（Q/GDW 11809—2018 附录 B 表 Wire）：StartCoord/EndCoord/StartVector/EndVector/Sag/D/FitCoordArray
 type Wire struct {
 	GsBase
-	StartPoint [3]float64   `json:"-"`
-	EndPoint   [3]float64   `json:"-"`
-	StartDir   *[3]float64  `json:"startDir"`
-	EndDir     *[3]float64  `json:"endDir"`
+	StartPoint [3]float64   `json:"startCoord"`
+	EndPoint   [3]float64   `json:"endCoord"`
+	StartDir   *[3]float64  `json:"startVector"`
+	EndDir     *[3]float64  `json:"endVector"`
 	Sag        float64      `json:"sag"`
 	Diameter   float64      `json:"diameter"`
-	FitPoints  [][3]float64 `json:"-"`
+	FitPoints  [][3]float64 `json:"fitCoordArray,omitempty"`
 }
 
 func NewWire() *Wire {
@@ -408,12 +411,13 @@ func NewWire() *Wire {
 }
 
 // Cable represents a cable
+// 规范参数（Q/GDW 11809—2018 附录 B 表 Cable）：StartCoord/EndCoord/InflectionCoordArray/IRArray/D
 type Cable struct {
 	GsBase
-	StartPoint       [3]float64   `json:"-"`
-	EndPoint         [3]float64   `json:"-"`
-	InflectionPoints [][3]float64 `json:"inflectionPoints"`
-	Radii            []float64    `json:"radii"`
+	StartPoint       [3]float64   `json:"startCoord"`
+	EndPoint         [3]float64   `json:"endCoord"`
+	InflectionPoints [][3]float64 `json:"inflectionCoordArray,omitempty"`
+	Radii            []float64    `json:"irArray,omitempty"`
 	Diameter         float64      `json:"diameter"`
 }
 
@@ -652,6 +656,78 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return &shape, err
 	case "GIM/GS/TSteel":
 		shape := TSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/EquilateralAngleSteel":
+		shape := EquilateralAngleSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/ScaleneAngleSteel":
+		shape := ScaleneAngleSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/I-Beam":
+		shape := IBeamSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/ILightbeams":
+		shape := ILightBeamSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/H-beam":
+		shape := HBeamSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/BeamChannel":
+		shape := BeamChannelSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/LightBeamChannel":
+		shape := LightBeamChannelSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/FlatSteel":
+		shape := FlatSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/L-Steel":
+		shape := LSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/T-Steel":
+		shape := TSectionSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/RoundSteel":
+		shape := RoundSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/RoundSteelTube":
+		shape := RoundSteelTube{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/RectangularSteelTube":
+		shape := RectangularSteelTube{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/SquareSteelTube":
+		shape := SquareSteelTube{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/DoubleChannelSteel":
+		shape := DoubleChannelSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/EquilateralDoubleAngleSteel":
+		shape := EquilateralDoubleAngleSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/UnequalAngleSteel":
+		shape := UnequalAngleSteel{}
+		err := json.Unmarshal(bt, &shape)
+		return &shape, err
+	case "GIM/GS/PolygonRoundSteelTube":
+		shape := PolygonRoundSteelTube{}
 		err := json.Unmarshal(bt, &shape)
 		return &shape, err
 	default:

@@ -590,6 +590,15 @@ type PoleTowerBodyLeg struct {
 	CommonHeight   float64              `json:"commonHeight"`   // 通用高度
 	SpecificHeight float64              `json:"specificHeight"` // 特定高度
 	Nodes          []*PoleTowerBodyNode `json:"nodes"`
+	// SubLegs 长短腿子腿（规范关键字 subleg，子腿高度为负）
+	SubLegs []*PoleTowerSubLeg `json:"subLegs,omitempty"`
+}
+
+// PoleTowerSubLeg 杆塔长短腿子腿（规范附录 A：SubLeg 段，HSubleg 高度为负）
+type PoleTowerSubLeg struct {
+	Id     string               `json:"id"`
+	Height float64              `json:"height"` // 子腿高度，为负
+	Nodes  []*PoleTowerBodyNode `json:"nodes"`
 }
 
 type PoleTowerBody struct {
@@ -847,6 +856,66 @@ func NewStubTube() *StubTube {
 	}
 }
 
+// CrossingPoint 交叉跨越物节点（规范附录 A：POINTn=编号,X,Y,Z,节点代码）
+type CrossingPoint struct {
+	Id       int        `json:"id"`
+	Position [3]float64 `json:"position"` // 坐标（mm），附录 A 格式
+	NodeCode int        `json:"nodeCode"` // 节点代码（规范附录 D.2：13-地面点 41-空中点 42-杆顶点）
+}
+
+// CrossingObject 重要交叉跨越物（Q/GDW 11810.2 附录 A：CODE/POINTNUM/POINT + 连线）
+type CrossingObject struct {
+	GtBase
+	Code   int             `json:"code"` // 地物类型代码（规范附录 D.1）
+	Points []CrossingPoint `json:"points"`
+	// Lines 节点间连线，按顺序记录节点编号；闭合区域首尾点相同
+	Lines [][]int `json:"lines,omitempty"`
+}
+
+func NewCrossingObject() *CrossingObject {
+	return &CrossingObject{
+		GtBase: GtBase{Type: "GIM/GT/CrossingObject"},
+	}
+}
+
+// AnchorBoltItem 单个地脚螺栓（规范附录 A：Boltn=X,Y,Z,规格,材质）
+type AnchorBoltItem struct {
+	Position      [3]float64 `json:"position"`      // 坐标相对于模型原点（mm）
+	Specification string     `json:"specification"` // 规格如 M22
+	Material      string     `json:"material"`      // 材质如 35#
+}
+
+// AnchorBolt 基础地脚螺栓组（Q/GDW 11810.2 附录 A 基础地脚螺栓 MOD 格式）
+type AnchorBolt struct {
+	GtBase
+	Bolts []AnchorBoltItem `json:"bolts"`
+}
+
+func NewAnchorBolt() *AnchorBolt {
+	return &AnchorBolt{
+		GtBase: GtBase{Type: "GIM/GT/AnchorBolt"},
+	}
+}
+
+// StringWirePoint 单个绝缘子串接线点（规范表 4：G,编号,X,Y,Z）
+type StringWirePoint struct {
+	Id       int        `json:"id"`
+	Position [3]float64 `json:"position"` // 坐标相对于模型原点（mm）
+}
+
+// StringWirePoints 绝缘子串接线点（Q/GDW 11810.2 §5.2：接线点采用参数化描述，
+// 单独 *.mod 文件经 PHM 层挂接；编号从 0 顺序编号，分裂线夹单号为一组、双号为一组）
+type StringWirePoints struct {
+	GtBase
+	Points []StringWirePoint `json:"points"`
+}
+
+func NewStringWirePoints() *StringWirePoints {
+	return &StringWirePoints{
+		GtBase: GtBase{Type: "GIM/GT/StringWirePoints"},
+	}
+}
+
 type Shape interface {
 	GetType() string
 }
@@ -969,6 +1038,18 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		tube := &StubTube{}
 		err := json.Unmarshal(bt, tube)
 		return tube, err
+	case "GIM/GT/CrossingObject":
+		obj := &CrossingObject{}
+		err := json.Unmarshal(bt, obj)
+		return obj, err
+	case "GIM/GT/AnchorBolt":
+		bolt := &AnchorBolt{}
+		err := json.Unmarshal(bt, bolt)
+		return bolt, err
+	case "GIM/GT/StringWirePoints":
+		wps := &StringWirePoints{}
+		err := json.Unmarshal(bt, wps)
+		return wps, err
 	default:
 		return nil, fmt.Errorf("invalid type: %s", ty)
 	}

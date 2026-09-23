@@ -1066,6 +1066,20 @@ func NewCableRay() *CableRay {
 	}
 }
 
+// TemperatureFiber 测温光纤（T/CEC 5056.3 §4.3.2：应采用参数化建模，
+// 几何细度表 A.1.9.1：型号 TYPE、外径 OUTSIDEDIAMETER，敷设路径以点列描述）
+type TemperatureFiber struct {
+	EcBase
+	Points          []Point `json:"points"`
+	OutsideDiameter float64 `json:"outsideDiameter"`
+}
+
+func NewTemperatureFiber() *TemperatureFiber {
+	return &TemperatureFiber{
+		EcBase: EcBase{Type: "GIM/EC/TemperatureFiber"},
+	}
+}
+
 type Shape interface {
 	GetType() string
 }
@@ -1214,6 +1228,10 @@ func Unmarshal(ty string, bt []byte) (Shape, error) {
 		return t, e
 	case "GIM/EC/CableRay":
 		t := &CableRay{}
+		e := json.Unmarshal(bt, t)
+		return t, e
+	case "GIM/EC/TemperatureFiber":
+		t := &TemperatureFiber{}
 		e := json.Unmarshal(bt, t)
 		return t, e
 
